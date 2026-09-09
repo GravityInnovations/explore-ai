@@ -1,4 +1,4 @@
-import { loadState, newState, updateState, requireThat, WorkflowError, snapshot } from "./workflow-store.mjs";
+import { loadState, newState, updateState, requireThat, WorkflowError, snapshot, briefDigest } from "./workflow-store.mjs";
 
 export const QUESTIONS = {
   audience: "Who is this experience for, and what should it help them do?",
@@ -35,11 +35,59 @@ export async function workflowStatus(root) {
     decisions: state.decisions, acceptance: state.acceptance };
 }
 
+export function inputFields(input, names) {
+  requireThat(input && typeof input === "object" && !Array.isArray(input), "INVALID_INPUT", "Input must be a JSON object");
+  requireThat(Object.keys(input).every(k => names.includes(k)), "INVALID_INPUT", "Unknown input field");
+  for (const name of names) requireThat(input[name] !== undefined, "INVALID_INPUT", `Missing input field: ${name}`);
+}
+export function textValue(value, name) {
+  requireThat(typeof value === "string" && value.trim().length > 0, "INVALID_INPUT", `${name} must contain text`);
+  return value.trim();
+}
+function atStage(state, allowed) {
+  requireThat(state, "NOT_STARTED", "Run start before changing designer progress");
+  requireThat(allowed.includes(state.stage), "INVALID_TRANSITION", `Cannot perform this action during ${state.stage}`);
+}
+function agreement(input, fingerprint) {
+  requireThat(input.fingerprint === fingerprint, "STALE_REVIEW", "Review the current revision before agreeing");
+  return { fingerprint, statement: textValue(input.statement, "User's explicit agreement"), at: new Date().toISOString() };
+}
+
 export async function runWorkflow(root, command, input = {}, expected) {
   if (command === "status") return workflowStatus(root);
   if (command === "start") {
     if (!(await loadState(root))) await updateState(root, null, () => newState());
     return workflowStatus(root);
   }
-  throw new WorkflowError("UNKNOWN_COMMAND", `Unknown workflow command: ${command}`);
+  const handlers = {
+    answer(state) {
+      atStage(state, ["interview"]);
+      inputFields(input, ["key", "value", "source", "evidence"]);
+      requireThat(Object.hasOwn(QUESTIONS, input.key), "INVALID_INPUT", "Unknown interview decision");
+      requireThat(["user", "delegated", "proposed"].includes(input.source), "INVALID_INPUT", "Identify user, delegated or proposed decisions");
+      state.decisions[input.key] = { value: textValue(input.value, "Answer"), source: input.source,
+        evidence: textValue(input.evidence, "Decision evidence") };
+      return state;
+    },
+    brief(state) {
+      atStage(state, ["interview"]);
+      inputFields(input, ["summary"]);
+      const missing = Object.keys(QUESTIONS).filter(k => !state.decisions[k]);
+      requireThat(!missing.length, "MISSING_DECISIONS", `Resolve these decisions first: ${missing.join(", ")}`);
+      state.brief = { summary: textValue(input.summary, "Brief"), fingerprint: "", agreement: null };
+      state.brief.fingerprint = briefDigest(state);
+      state.stage = "brief-review";
+      return state;
+    },
+    agree(state) {
+      atStage(state, ["brief-review"]);
+      inputFields(input, ["fingerprint", "statement"]);
+      state.brief.agreement = agreement(input, state.brief.fingerprint);
+      state.stage = "design";
+      return state;
+    },
+  };
+  requireThat(Object.hasOwn(handlers, command), "UNKNOWN_COMMAND", `Unknown workflow command: ${command}`);
+  await updateState(root, expected, state => handlers[command](state));
+  return workflowStatus(root);
 }

@@ -31,7 +31,10 @@ export async function cli(args) {
     for (const blocker of result.blockers) console.log(`- ${blocker}`);
     console.log(`Next: ${result.next}`);
     if (result.question) console.log(`${result.question.key}: ${result.question.text}`);
-    if (result.stage === "brief-review") console.log(`Brief to review: ${result.brief.summary}\nFingerprint: ${result.brief.fingerprint}`);
+    if (result.stage === "brief-review") {
+      console.log(`Brief to review: ${result.brief.summary}\nFingerprint: ${result.brief.fingerprint}`);
+      for (const [key, decision] of Object.entries(result.decisions)) console.log(`${key} [${decision.source}]: ${decision.value}`);
+    }
     if (result.stage === "design-review") console.log(`Preview to review: ${result.preview.url}\nFingerprint: ${result.preview.fingerprint}`);
   }
   return result;
