@@ -77,7 +77,13 @@ async function contractCheck(root, state) {
 }
 
 export async function runWorkflow(root, command, input = {}, expected) {
+  if (["status", "start", "preflight"].includes(command)) inputFields(input, []);
   if (command === "status") return workflowStatus(root);
+  if (command === "preflight") {
+    const status = await workflowStatus(root);
+    requireThat(status.topicReady, "DESIGN_NOT_ACCEPTED", status.blockers.join("; "));
+    return status;
+  }
   if (command === "start") {
     if (!(await loadState(root))) await updateState(root, null, () => newState());
     return workflowStatus(root);
@@ -149,6 +155,15 @@ export async function runWorkflow(root, command, input = {}, expected) {
       await contractCheck(root, state);
       requireThat(qaComplete(state), "QA_BLOCKED", "Complete the pending checks and resolve failed QA before asking for acceptance");
       state.stage = "design-review";
+      return state;
+    },
+    async accept(state) {
+      atStage(state, ["design-review"]);
+      inputFields(input, ["fingerprint", "statement"]);
+      await contractCheck(root, state);
+      requireThat(qaComplete(state), "QA_BLOCKED", "Resolve QA findings before accepting the design");
+      state.acceptance = agreement(input, state.preview.fingerprint);
+      state.stage = "accepted";
       return state;
     },
     revise(state) {

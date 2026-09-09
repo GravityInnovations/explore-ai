@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { runWorkflow, QUESTIONS } from "../skills/explain-ai/scripts/workflow-actions.mjs";
 import { fixture } from "./fixtures.mjs";
+import { QA_CHECKS, loadState, assertState } from "../skills/explain-ai/scripts/workflow-store.mjs";
 
 export async function previewFixture(root) {
   const f = fixture();
@@ -37,6 +38,35 @@ test("brief agreement cannot skip decisions or target an old revision", async ()
     s = await runWorkflow(root, "agree", { fingerprint: s.brief.fingerprint, statement: "Test customer agrees to the reviewed proposals" }, s.revision);
     assert.equal(s.stage, "design");
     assert.equal(s.topicReady, false);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test("topic preflight requires explicit current acceptance and invalidates edited preview scopes", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "workflow-accept-"));
+  try {
+    await assert.rejects(runWorkflow(root, "preflight"), { code: "DESIGN_NOT_ACCEPTED" });
+    await previewFixture(root);
+    let s = await agreeBrief(root);
+    await assert.rejects(runWorkflow(root, "accept", { fingerprint: s.brief.fingerprint, statement: "Agree" }, s.revision), { code: "INVALID_TRANSITION" });
+    s = await runWorkflow(root, "preview", { url: "http://localhost:3100", paths: ["preview.html"] }, s.revision);
+    for (const check of QA_CHECKS.filter(c => c !== "contracts")) s = await runWorkflow(root, "qa",
+      { check, result: "pass", evidence: `Fixture observed ${check}`, fingerprint: s.preview.fingerprint }, s.revision);
+    s = await runWorkflow(root, "review", {}, s.revision);
+    await assert.rejects(runWorkflow(root, "preflight"), { code: "DESIGN_NOT_ACCEPTED" });
+    await assert.rejects(runWorkflow(root, "accept", { fingerprint: "0".repeat(64), statement: "Agree" }, s.revision), { code: "STALE_REVIEW" });
+    s = await runWorkflow(root, "accept", { fingerprint: s.preview.fingerprint, statement: "Test customer explicitly accepts this reviewed preview" }, s.revision);
+    assert.equal((await runWorkflow(root, "preflight")).topicReady, true);
+    const corrupt = await loadState(root);
+    corrupt.qa = [];
+    assert.throws(() => assertState(corrupt), { code: "INVALID_STATE" });
+    await writeFile(path.join(root, "preview.html"), "new design");
+    assert.equal((await runWorkflow(root, "status")).topicReady, false);
+    await assert.rejects(runWorkflow(root, "preflight"), { code: "DESIGN_NOT_ACCEPTED" });
+    s = await runWorkflow(root, "revise", { target: "brief", note: "Customer changes the audience" }, s.revision);
+    assert.equal(s.stage, "interview");
+    assert.equal(s.acceptance, null);
+    assert.equal(s.brief, null);
+    assert.equal(s.next, "brief");
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
