@@ -6,6 +6,8 @@ Install it into your project, then ask your own coding agent to establish the de
 
 ## Install from this checkout
 
+To try it without another repository, use [examples/playground](examples/playground/README.md). It is a blank personal target project; generated trial files stay ignored by Git. The packaged JSON examples remain unchanged.
+
 Requires Node.js 22+, npm and a Codex environment supporting local skills. From this repository:
 
 ```sh
@@ -75,8 +77,8 @@ npm ci --prefix skills/explain-ai --ignore-scripts --no-audit --no-fund
 npm run check
 ```
 
-After editing schemas, run `npm run types:generate`. See [the approved plan](IMPLEMENTATION-PLAN.md), [delivery tracker](TASKS.md) and [verification report](VERIFICATION.md) for scope, test evidence and limitations.
+After editing schemas, run `npm run types:generate`. The [lesson specification](skills/explain-ai/references/LESSON-SPEC.md) defines the maintained data/action contract. Use [GitHub issues](https://github.com/GravityInnovations/explore-ai/issues) for work tracking, commit mappings and acceptance evidence.
 
-See [GitHub issue and commit mapping](ISSUES.md) for every local delivery milestone. Folder README files cover contract ownership, generated types, helper commands, runtime integration hotspots, examples and test maintenance.
+Folder README files cover contract ownership, generated types, helper commands, runtime integration hotspots, examples and test maintenance.
 
 The package remains local-first and MIT-licensed. Further storage adapters, action extensions, richer component libraries and plugin distribution can be added explicitly without changing the current project's design ownership.

@@ -15,4 +15,4 @@ Run `npm test` after installing both root and skill dependencies. Run `npm run c
 
 `fixtures.mjs` supplies a deliberately small test-only profile and scene. The installable examples are separate explanatory fixtures. Temporary directories are created and removed by tests; they do not touch a user's existing target project. Runtime compilation uses an ignored `.tmp` directory so imports can resolve development libraries.
 
-Use focused tests for a changed area. Run the full check once at delivery rather than repeating expensive agent/browser trials without a new concern. Independent agent and browser outcomes are recorded in [VERIFICATION.md](../VERIFICATION.md); unit tests do not establish pedagogical accuracy, visual occlusion or assistive-technology compatibility.
+Use focused tests for a changed area. Run the full check when warranted rather than repeating expensive agent/browser trials without a new concern. Record independent agent and browser outcomes in the relevant [GitHub issue](https://github.com/GravityInnovations/explore-ai/issues); unit tests do not establish pedagogical accuracy, visual occlusion or assistive-technology compatibility.

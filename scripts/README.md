@@ -12,4 +12,4 @@ These scripts maintain or install the package. They are not needed by the target
 
 Use Node.js 22+. Development dependencies live at the repository root; installed validation dependencies live in the skill's own package. Keep that separation: importing root modules from installed scripts breaks portability.
 
-`check-discovery` uses an experimental host API and a bounded subprocess timeout. Update it from the installed Codex protocol if the host changes; do not make normal skill operation depend on this diagnostic. See [INSTALL.md](../INSTALL.md) for user-facing setup and [ISSUES.md](../ISSUES.md) for delivery traceability.
+`check-discovery` uses an experimental host API and a bounded subprocess timeout. Update it from the installed Codex protocol if the host changes; do not make normal skill operation depend on this diagnostic. See [INSTALL.md](../INSTALL.md) for user-facing setup and [GitHub issues](https://github.com/GravityInnovations/explore-ai/issues) for delivery traceability.

@@ -3,3 +3,8 @@ node_modules/
 coverage/
 *.tsbuildinfo
 test-results/
+
+# Personal in-repository trial: keep setup instructions, ignore generated output.
+examples/playground/*
+!examples/playground/README.md
+!examples/playground/AGENTS.md

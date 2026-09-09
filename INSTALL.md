@@ -1,5 +1,20 @@
 # Install ExplainAI in a target project
 
+## Try it inside this repository
+
+No separate repository is required. `examples/playground/` is prepared as a blank personal trial project. From this repository root, run:
+
+```powershell
+node scripts/install.mjs ./examples/playground
+npm.cmd ci --prefix ./examples/playground/.agents/skills/explain-ai --ignore-scripts --no-audit --no-fund
+```
+
+Then open `examples/playground/` as the project in Codex (or launch `codex` from that directory). Invoke `$explain-ai designer`, then `$explain-ai explore-a-topic` with your level, subject and topic. Ask it to initialise a Next.js App Router TypeScript application in this target directory if you want to preview the result. See the [playground instructions](examples/playground/README.md) for ready-to-use prompts.
+
+The skill has not been pre-installed and no app has been generated there: this is your installation trial. Generated files, including the copied skill, app, content and dependencies, are ignored by Git. The existing `skills/explain-ai/examples/project/` is a shipped JSON/asset fixture with no renderer; do not use it as your mutable app folder.
+
+This is a copy-based installation. Later source-skill edits do not automatically update the playground copy; follow the update instructions below when you want to retest a newer version.
+
 ## Recommended: local checkout
 
 Use this route while implementation commits remain local. You need Node.js 22+, npm, and a Codex host supporting repository skills. Create or select an existing project directory; installation does not create a Next.js application.

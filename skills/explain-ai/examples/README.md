@@ -8,4 +8,4 @@ From the installed skill folder, run:
 node scripts/validate.mjs --project examples/project --integrated
 ```
 
-The runtime manifest states the capabilities an example renderer would need; this fixture does not include a renderer. Use it to learn the data format and asset reuse, then follow the user's project design. See [EXAMPLES.md](../references/EXAMPLES.md) for interpretation. Actual acceptance evidence is recorded in VERIFICATION.md in the development repository; it is not required by this self-contained installation.
+The runtime manifest states the capabilities an example renderer would need; this fixture does not include a renderer. Use it to learn the data format and asset reuse, then follow the user's project design. See [EXAMPLES.md](../references/EXAMPLES.md) for interpretation. Acceptance evidence is tracked in the development repository's GitHub issues; it is not required by this self-contained installation.
