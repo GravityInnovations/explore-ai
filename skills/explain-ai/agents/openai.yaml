@@ -1,0 +1,4 @@
+interface:
+  display_name: "ExplainAI"
+  short_description: "Design and author interactive 3D learning experiences"
+  default_prompt: "Use $explain-ai to design or generate a lesson in this project."

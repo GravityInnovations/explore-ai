@@ -1,0 +1,30 @@
+---
+name: explain-ai
+description: Create project-specific design profiles and declarative, scroll-driven 3D educational lessons in Next.js projects. Use designer to establish the visual language and explore-a-topic to teach a supplied level, subject and topic using that design and local assets.
+---
+
+# ExplainAI
+
+Work inside the user's target project. This package supplies authoring workflows and validation; the target project's agent builds or extends its runtime. Keep design, lessons and assets local. Preserve the user's MIT licensing and explicit choices; do not add cloud services, accounts, paid APIs or publication steps.
+
+## Select the workflow
+
+- `designer`: read [DESIGNER.md](references/DESIGNER.md). Inspect the project and reference evidence, then establish or explicitly update its design profile.
+- `explore-a-topic`: read [EXPLORE-A-TOPIC.md](references/EXPLORE-A-TOPIC.md). Required inputs are level, subject and topic. Reuse the existing design; route through designer if it is missing or invalid.
+- For existing lesson repair, inspect the lesson and validation failures, then use the relevant topic stages without rewriting unrelated content.
+
+These names select workflows, not shell commands. `$explain-ai designer` and `$explain-ai explore-a-topic` explicitly select this skill. Natural-language requests may also select it.
+
+## Shared working contract
+
+1. Inspect target-project instructions, package configuration and existing assets before choosing output locations. Honour established paths via `explain-ai.config.json`.
+2. Use the installed package's scripts by absolute path; resolve target content from the explicit project root, never from the skill folder. Run `npm ci --ignore-scripts --no-audit --no-fund` in this skill folder once when dependencies are absent.
+3. Validate the design and lesson with [VALIDATION.md](references/VALIDATION.md). Use [LESSON-SPEC.md](references/LESSON-SPEC.md) for authoritative semantics and bundled JSON schemas/types for exact field shapes.
+4. Text explaining an object must declare that semantic target and make it unmistakable in the same step. Validate references; visually inspect the result because JSON cannot prove readability or scientific accuracy.
+5. Search [the local asset library](references/ASSETS.md) before creating assets. Prefer reusable components, semantic actions and inherited design over repeated CSS or animation code.
+6. Read [RUNTIME.md](references/RUNTIME.md) when integrating or extending Three.js/GSAP. Check actual handlers and anatomy, not just a declared capability list. Unsupported actions must be implemented or replaced by an educationally valid supported technique.
+7. Apply the distinct [agent responsibilities](references/AGENT-ROLES.md) as concise stages or bounded subagents when available and authorised. Do not reload every role/reference for a small repair.
+
+Use the [minimal examples](references/EXAMPLES.md) to understand the format, never as a default theme. Do not inject example colours, typefaces, audience or lesson subject into the user's project.
+
+Finish the requested workflow through validation and integration where applicable. State exactly what was generated, tested and still unverified. No upload, push or deployment is implied by lesson generation.

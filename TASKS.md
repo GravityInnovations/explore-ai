@@ -4,7 +4,7 @@ Approved 2026-09-09. Target: **20 meaningful local commits total**, including th
 
 - [x] 1. Inspect and sync repository; propose architecture (`6b68239`).
 - [x] 2. Record approval, concrete task list and maintenance rules.
-- [ ] 3. Package skill entrypoint, metadata and standalone tooling dependencies.
+- [x] 3. Package skill entrypoint, metadata and standalone tooling dependencies.
 - [ ] 4. Build local installer; verify copying, containment and overwrite refusal.
 - [ ] 5. Define project, design and local asset schemas.
 - [ ] 6. Define declarative lesson schema and typed action vocabulary.
