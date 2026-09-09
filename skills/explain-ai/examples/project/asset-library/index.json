@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "assets": [
+    {
+      "id": "equal-parts-diagram",
+      "type": "image",
+      "path": "diagrams/equal-parts.svg",
+      "tags": [
+        "maths",
+        "parts",
+        "equal"
+      ],
+      "description": "Two equal halves of one rectangle",
+      "license": "MIT",
+      "source": "Original ExplainAI example illustration",
+      "semanticTargets": [
+        "shape.left",
+        "shape.right"
+      ]
+    }
+  ]
+}

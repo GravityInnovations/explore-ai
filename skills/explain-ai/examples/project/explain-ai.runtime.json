@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "actions": [
+    "highlight",
+    "compare"
+  ],
+  "cameraModes": [
+    "wide",
+    "close",
+    "best"
+  ],
+  "components": [
+    {
+      "id": "split-rectangle",
+      "actions": [
+        "highlight",
+        "compare"
+      ]
+    },
+    {
+      "id": "rectangle-part",
+      "actions": [
+        "highlight",
+        "compare"
+      ]
+    }
+  ]
+}

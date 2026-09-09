@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0.0",
+  "lessonId": "k2/maths/equal-parts",
+  "level": "k2",
+  "subject": "maths",
+  "topicKey": "equal-parts",
+  "slug": "equal-parts",
+  "title": "Each part is one half",
+  "designId": "example-only",
+  "metadata": {
+    "summary": "A minimal declarative example comparing equal parts of a rectangle.",
+    "objectives": [
+      "Relate one of two equal parts to one half"
+    ],
+    "sources": [
+      {
+        "title": "Original mathematical example",
+        "reference": "Project-authored rectangle divided at its midpoint",
+        "note": "Illustrative fixture; level codes are examples, not curriculum claims."
+      }
+    ]
+  },
+  "objects": [
+    {
+      "id": "shape",
+      "component": "split-rectangle",
+      "label": "Whole rectangle",
+      "description": "One whole rectangle",
+      "material": "base"
+    },
+    {
+      "id": "shape.left",
+      "parent": "shape",
+      "component": "rectangle-part",
+      "label": "Left half",
+      "description": "The left equal part"
+    },
+    {
+      "id": "shape.right",
+      "parent": "shape",
+      "component": "rectangle-part",
+      "label": "Right half",
+      "description": "The right equal part"
+    }
+  ],
+  "steps": [
+    {
+      "id": "whole",
+      "title": "Start with the whole",
+      "text": "This rectangle is one whole shape.",
+      "explains": [
+        "shape"
+      ],
+      "actions": [
+        {
+          "action": "highlight",
+          "target": "shape"
+        }
+      ],
+      "camera": {
+        "mode": "wide",
+        "target": "shape"
+      },
+      "alt": "The outline of the whole rectangle is emphasised."
+    },
+    {
+      "id": "parts",
+      "title": "Compare the parts",
+      "text": "The left and right parts are equal in size. Each is one half of the whole rectangle.",
+      "explains": [
+        "shape.left",
+        "shape.right",
+        "shape"
+      ],
+      "actions": [
+        {
+          "action": "compare",
+          "target": "shape.left",
+          "with": "shape.right"
+        },
+        {
+          "action": "highlight",
+          "target": "shape"
+        }
+      ],
+      "camera": {
+        "mode": "wide",
+        "target": "shape"
+      },
+      "alt": "Both halves are shown side by side inside the rectangle, with matching dimensions."
+    }
+  ],
+  "accessibility": {
+    "summary": "A rectangle split at its midpoint has two equal halves.",
+    "staticDiagramAssetId": "equal-parts-diagram"
+  }
+}

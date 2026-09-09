@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "example-only",
+  "audience": "Illustrative fixture only; do not copy as a project theme",
+  "evidence": [
+    {
+      "source": "Original test fixture",
+      "observation": "Deliberately minimal schematic values for demonstrating the contract; not a design recommendation",
+      "kind": "user-choice"
+    }
+  ],
+  "typography": {
+    "headingFamily": "sans-serif",
+    "bodyFamily": "sans-serif",
+    "baseSize": 16,
+    "lineHeight": 1.5
+  },
+  "spacing": {
+    "unit": 8,
+    "contentWidth": 800
+  },
+  "colors": {
+    "background": "#ffffff",
+    "text": "#111111",
+    "accent": "#1144aa",
+    "muted": "#555555"
+  },
+  "materials": {
+    "base": {
+      "color": "#1144aa",
+      "roughness": 0.7,
+      "metalness": 0,
+      "opacity": 1
+    }
+  },
+  "lighting": {
+    "style": "soft",
+    "intensity": 1,
+    "shadows": false
+  },
+  "shape": {
+    "style": "simple",
+    "edges": "rounded",
+    "realism": "schematic"
+  },
+  "motion": {
+    "duration": 0.5,
+    "easing": "sine.inOut",
+    "ambient": false,
+    "scrollUnits": 1
+  },
+  "camera": {
+    "default": "best",
+    "expressiveness": "restrained"
+  },
+  "highlighting": {
+    "color": "#1144aa",
+    "surroundingOpacity": 0.2,
+    "useLabels": true
+  },
+  "labels": {
+    "size": 16,
+    "style": "plain"
+  },
+  "mobile": {
+    "priority": "readable text",
+    "maxPixelRatio": 1.5,
+    "simplifyEffects": true
+  },
+  "accessibility": {
+    "reducedMotion": "static-steps",
+    "fallback": "text-and-diagram",
+    "minimumContrast": 4.5
+  }
+}

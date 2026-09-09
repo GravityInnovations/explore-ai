@@ -17,7 +17,7 @@ Approved 2026-09-09. Target: **20 meaningful local commits total**, including th
 - [x] 13. Define specialist handoffs and independent critique criteria.
 - [x] 14. Provide deterministic runtime integration templates and guidance.
 - [x] 15. Test runtime transitions, cleanup and type compatibility.
-- [ ] 16. Ship minimal examples and verify repeated-level identity.
+- [x] 16. Ship minimal examples and verify repeated-level identity.
 - [ ] 17. Exercise negative validation and standalone installed tooling.
 - [ ] 18. Verify real Codex discovery and independent designer/topic exercises.
 - [ ] 19. Address demonstrated acceptance findings and verify affected behavior.
