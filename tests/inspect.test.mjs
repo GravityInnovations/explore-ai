@@ -5,7 +5,7 @@ import path from "node:path";
 import os from "node:os";
 import { inspectProject } from "../skills/explain-ai/scripts/inspect.mjs";
 import { fixture } from "./fixtures.mjs";
-test("inspection detects missing, unconfigured and ready profiles without rewriting", async () => {
+test("inspection distinguishes valid profiles from customer acceptance without rewriting", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-inspect-"));
   try {
     assert.equal((await inspectProject(root)).design.status, "missing");
@@ -20,7 +20,9 @@ test("inspection detects missing, unconfigured and ready profiles without rewrit
       JSON.stringify(f.config),
     );
     const result = await inspectProject(root);
-    assert.equal(result.design.status, "ready");
+    assert.equal(result.design.status, "valid");
+    assert.equal(result.workflow.topicReady, false);
+    assert.equal(result.workflow.stage, "unstarted");
     assert.equal(result.design.sha256.length, 64);
     assert.equal(await readFile(profile, "utf8"), bytes);
   } finally {

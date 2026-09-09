@@ -6,6 +6,7 @@ import os from "node:os";
 import { spawnSync } from "node:child_process";
 import { validateProject } from "../skills/explain-ai/scripts/validate.mjs";
 import { install } from "../scripts/install.mjs";
+import { acceptedFixture } from "./workflow-fixtures.mjs";
 const example = new URL(
   "../skills/explain-ai/examples/project/",
   import.meta.url,
@@ -14,6 +15,7 @@ async function trial(run) {
   const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-project-"));
   try {
     await cp(example, root, { recursive: true });
+    await acceptedFixture(root);
     await run(root);
   } finally {
     await rm(root, { recursive: true, force: true });
@@ -26,6 +28,20 @@ async function edit(root, file, change) {
   await writeFile(location, JSON.stringify(value, null, 2));
 }
 const first = "content/k1/maths/equal-parts/lesson.json";
+test("topic and integrated validation reject missing or stale acceptance while draft checks remain usable", async () => {
+  await trial(async root => {
+    await rm(path.join(root, ".explain-ai/workflow.json"));
+    for (const options of [{ integrated: true }, { lesson: first }]) {
+      const result = await validateProject(root, options);
+      assert.equal(result.valid, false);
+      assert.equal(result.errors[0].code, "DESIGN_NOT_ACCEPTED");
+    }
+    assert.equal((await validateProject(root)).valid, true);
+    await acceptedFixture(root);
+    await writeFile(path.join(root, "preview.html"), "changed after acceptance");
+    assert.equal((await validateProject(root, { integrated: true })).errors[0].code, "DESIGN_NOT_ACCEPTED");
+  });
+});
 test("both example levels pass full filesystem and browser copy validation", async () => {
   await trial(async (root) => {
     const result = await validateProject(root, { integrated: true });

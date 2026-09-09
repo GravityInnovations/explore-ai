@@ -5,6 +5,7 @@ import { pathToFileURL } from "node:url";
 import { readContract, readJson } from "./contracts.mjs";
 import { resolveLocal } from "./paths.mjs";
 import { validateDesign } from "./validate.mjs";
+import { workflowStatus } from "./workflow-actions.mjs";
 
 export async function inspectProject(project) {
   const root = await realpath(project);
@@ -53,7 +54,7 @@ export async function inspectProject(project) {
     const errors = validateDesign(value);
     design = {
       ...design,
-      status: errors.length ? "invalid" : config ? "ready" : "unconfigured",
+      status: errors.length ? "invalid" : config ? "valid" : "unconfigured",
       id: value.id,
       sha256: createHash("sha256").update(raw).digest("hex"),
       errors,
@@ -61,6 +62,7 @@ export async function inspectProject(project) {
   } catch (error) {
     if (error.code !== "ENOENT") throw error;
   }
+  const progress = await workflowStatus(root);
   return {
     root,
     configured: !!config,
@@ -73,12 +75,14 @@ export async function inspectProject(project) {
     },
     candidates,
     design,
+    workflow: { stage: progress.stage, revision: progress.revision, topicReady: progress.topicReady,
+      next: progress.next, blockers: progress.blockers, question: progress.question },
     next:
-      design.status === "ready"
+      design.status === "valid" && progress.topicReady
         ? "Reuse design for topic generation"
         : design.status === "unconfigured"
-          ? "Adopt the existing profile in project configuration without redesigning"
-          : "Run designer to establish or repair a project-specific profile",
+          ? "Preserve the existing profile; adopt its configuration through the guided designer review"
+          : `Continue the guided designer workflow: ${progress.next}. A valid profile is not customer acceptance`,
   };
 }
 if (

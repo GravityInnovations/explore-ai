@@ -3,6 +3,7 @@ import { readdir, readFile, realpath } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { readContract, validateData } from "./contracts.mjs";
 import { resolveLocal, lessonIdentity } from "./paths.mjs";
+import { workflowStatus } from "./workflow-actions.mjs";
 
 const emphasis = new Set([
   "focus",
@@ -253,6 +254,11 @@ export async function validateProject(
   project,
   { lesson: requested, integrated = false } = {},
 ) {
+  if (integrated || requested) {
+    const progress = await workflowStatus(project);
+    if (!progress.topicReady) return { valid: false, lessons: 0, integrated,
+      errors: [{ path: "/.explain-ai/workflow.json", code: "DESIGN_NOT_ACCEPTED", message: progress.blockers.join("; ") }] };
+  }
   const { root, config, design, index, runtime } = await loadProject(project);
   const errors = [];
   const add = (p, message) => errors.push({ path: p, message });
