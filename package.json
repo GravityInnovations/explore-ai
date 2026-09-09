@@ -15,7 +15,12 @@
     "install:skill": "node scripts/install.mjs"
   },
   "devDependencies": {
+    "@types/react": "19.1.10",
+    "@types/three": "0.180.0",
+    "gsap": "3.13.0",
     "json-schema-to-typescript": "15.0.4",
+    "react": "19.1.1",
+    "three": "0.180.0",
     "typescript": "5.9.3"
   }
 }

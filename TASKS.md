@@ -15,7 +15,7 @@ Approved 2026-09-09. Target: **20 meaningful local commits total**, including th
 - [x] 11. Implement local asset search and reuse guidance.
 - [x] 12. Implement educational topic-generation workflow.
 - [x] 13. Define specialist handoffs and independent critique criteria.
-- [ ] 14. Provide deterministic runtime integration templates and guidance.
+- [x] 14. Provide deterministic runtime integration templates and guidance.
 - [ ] 15. Test runtime transitions, cleanup and type compatibility.
 - [ ] 16. Ship minimal examples and verify repeated-level identity.
 - [ ] 17. Exercise negative validation and standalone installed tooling.
