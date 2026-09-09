@@ -9,7 +9,7 @@ Approved 2026-09-09. Target: **20 meaningful local commits total**, including th
 - [x] 5. Define project, design and local asset schemas.
 - [x] 6. Define declarative lesson schema and typed action vocabulary.
 - [x] 7. Generate TypeScript contracts; check drift and schema compilation.
-- [ ] 8. Implement structural validation and safe filesystem resolution.
+- [x] 8. Implement structural validation and safe filesystem resolution.
 - [ ] 9. Implement semantic package validation and capability checks.
 - [ ] 10. Implement designer workflow and project inspection.
 - [ ] 11. Implement local asset search and reuse guidance.
