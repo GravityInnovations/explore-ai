@@ -13,6 +13,8 @@ export function requireThat(condition, code, message) {
 export const digest = value => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 export const briefDigest = state => digest({ decisions: state.decisions, summary: state.brief.summary });
 export const STATE_PATH = ".explain-ai/workflow.json";
+export const QA_CHECKS = ["contracts", "desktop", "mobile", "labels", "keyboard", "motion", "fallback", "app-check"];
+export const qaComplete = state => QA_CHECKS.every(check => state.qa.some(q => q.check === check && q.result !== "fail"));
 
 export function newState() {
   return { schemaVersion: "1.0.0", session: randomUUID(), revision: 0,
@@ -32,6 +34,8 @@ export function assertState(state) {
   requireThat(stage < 3 || state.preview, "INVALID_STATE", "This stage requires a preview");
   requireThat(new Set(state.qa.map(q => q.check)).size === state.qa.length, "INVALID_STATE", "Duplicate QA checks");
   requireThat(state.qa.every(q => q.fingerprint === state.preview?.fingerprint), "INVALID_STATE", "QA belongs to a different preview");
+  requireThat(state.qa.every(q => q.result !== "not-applicable" || ["fallback", "app-check"].includes(q.check)), "INVALID_STATE", "Required visual and interaction checks cannot be waived");
+  requireThat(stage < 4 || qaComplete(state), "INVALID_STATE", "Review requires complete QA without blocking failures");
   requireThat(stage === 5 ? state.acceptance?.fingerprint === state.preview?.fingerprint : state.acceptance === null,
     "INVALID_STATE", "Acceptance must match the accepted preview stage");
 }
