@@ -19,7 +19,7 @@ Approved 2026-09-09. Target: **20 meaningful local commits total**, including th
 - [x] 15. Test runtime transitions, cleanup and type compatibility.
 - [x] 16. Ship minimal examples and verify repeated-level identity.
 - [x] 17. Exercise negative validation and standalone installed tooling.
-- [ ] 18. Verify real Codex discovery and independent designer/topic exercises.
+- [x] 18. Verify real Codex discovery and independent designer/topic exercises.
 - [ ] 19. Address demonstrated acceptance findings and verify affected behavior.
 - [ ] 20. Finish installation/docs/evidence, clean temporary output and verify delivery.
 
