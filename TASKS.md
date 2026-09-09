@@ -13,7 +13,7 @@ Approved 2026-09-09. Target: **20 meaningful local commits total**, including th
 - [x] 9. Implement semantic package validation and capability checks.
 - [x] 10. Implement designer workflow and project inspection.
 - [x] 11. Implement local asset search and reuse guidance.
-- [ ] 12. Implement educational topic-generation workflow.
+- [x] 12. Implement educational topic-generation workflow.
 - [ ] 13. Define specialist handoffs and independent critique criteria.
 - [ ] 14. Provide deterministic runtime integration templates and guidance.
 - [ ] 15. Test runtime transitions, cleanup and type compatibility.
