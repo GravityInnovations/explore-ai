@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravityinnovations.github.io/explore-ai/schemas/common.schema.json",
+  "title": "Common",
+  "$defs": {
+    "version": {
+      "const": "1.0.0",
+      "type": "string"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 80
+    },
+    "target": {
+      "type": "string",
+      "pattern": "^[a-z][a-zA-Z0-9]*(?:\\.[a-z][a-zA-Z0-9]*)*$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))[a-zA-Z0-9_. -]+(?:/[a-zA-Z0-9_. -]+)*$"
+    },
+    "vector": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "z"
+      ],
+      "additionalProperties": false
+    },
+    "actionName": {
+      "type": "string",
+      "enum": [
+        "focus",
+        "highlight",
+        "isolate",
+        "extract",
+        "explode",
+        "dissect",
+        "assemble",
+        "orbit",
+        "inspect",
+        "reveal",
+        "hide",
+        "fade",
+        "xray",
+        "cutaway",
+        "magnify",
+        "follow",
+        "compare",
+        "flow",
+        "transform"
+      ]
+    },
+    "cameraMode": {
+      "type": "string",
+      "enum": [
+        "wide",
+        "medium",
+        "close",
+        "macro",
+        "inside",
+        "orbit",
+        "top",
+        "side",
+        "best"
+      ]
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "title",
+        "reference"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

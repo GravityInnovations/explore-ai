@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravityinnovations.github.io/explore-ai/schemas/project.schema.json",
+  "title": "Project",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "paths": {
+      "type": "object",
+      "properties": {
+        "design": {
+          "$ref": "common.schema.json#/$defs/relativePath"
+        },
+        "content": {
+          "$ref": "common.schema.json#/$defs/relativePath"
+        },
+        "assetLibrary": {
+          "$ref": "common.schema.json#/$defs/relativePath"
+        },
+        "publicAssets": {
+          "$ref": "common.schema.json#/$defs/relativePath"
+        },
+        "runtime": {
+          "$ref": "common.schema.json#/$defs/relativePath"
+        }
+      },
+      "required": [
+        "design",
+        "content",
+        "assetLibrary",
+        "publicAssets",
+        "runtime"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "paths"
+  ],
+  "additionalProperties": false
+}

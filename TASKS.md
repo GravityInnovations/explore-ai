@@ -6,7 +6,7 @@ Approved 2026-09-09. Target: **20 meaningful local commits total**, including th
 - [x] 2. Record approval, concrete task list and maintenance rules.
 - [x] 3. Package skill entrypoint, metadata and standalone tooling dependencies.
 - [x] 4. Build local installer; verify copying, containment and overwrite refusal.
-- [ ] 5. Define project, design and local asset schemas.
+- [x] 5. Define project, design and local asset schemas.
 - [ ] 6. Define declarative lesson schema and typed action vocabulary.
 - [ ] 7. Generate TypeScript contracts; check drift and schema compilation.
 - [ ] 8. Implement structural validation and safe filesystem resolution.

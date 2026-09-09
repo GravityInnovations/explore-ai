@@ -1,0 +1,372 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravityinnovations.github.io/explore-ai/schemas/design.schema.json",
+  "title": "Design",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/slug"
+    },
+    "audience": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "observed",
+              "inferred",
+              "user-choice"
+            ]
+          }
+        },
+        "required": [
+          "source",
+          "observation",
+          "kind"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "typography": {
+      "type": "object",
+      "properties": {
+        "headingFamily": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bodyFamily": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseSize": {
+          "type": "number",
+          "minimum": 12,
+          "maximum": 32
+        },
+        "lineHeight": {
+          "type": "number",
+          "minimum": 1.2,
+          "maximum": 2.5
+        }
+      },
+      "required": [
+        "headingFamily",
+        "bodyFamily",
+        "baseSize",
+        "lineHeight"
+      ],
+      "additionalProperties": false
+    },
+    "spacing": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "contentWidth": {
+          "type": "number",
+          "minimum": 240
+        }
+      },
+      "required": [
+        "unit",
+        "contentWidth"
+      ],
+      "additionalProperties": false
+    },
+    "colors": {
+      "type": "object",
+      "properties": {
+        "background": {
+          "$ref": "common.schema.json#/$defs/color"
+        },
+        "text": {
+          "$ref": "common.schema.json#/$defs/color"
+        },
+        "accent": {
+          "$ref": "common.schema.json#/$defs/color"
+        },
+        "muted": {
+          "$ref": "common.schema.json#/$defs/color"
+        }
+      },
+      "required": [
+        "background",
+        "text",
+        "accent",
+        "muted"
+      ],
+      "additionalProperties": false
+    },
+    "materials": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-zA-Z][a-zA-Z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "color": {
+            "$ref": "common.schema.json#/$defs/color"
+          },
+          "roughness": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "metalness": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "opacity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "color",
+          "roughness",
+          "metalness",
+          "opacity"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "lighting": {
+      "type": "object",
+      "properties": {
+        "style": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intensity": {
+          "type": "number",
+          "minimum": 0
+        },
+        "shadows": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "style",
+        "intensity",
+        "shadows"
+      ],
+      "additionalProperties": false
+    },
+    "shape": {
+      "type": "object",
+      "properties": {
+        "style": {
+          "type": "string",
+          "minLength": 1
+        },
+        "edges": {
+          "type": "string",
+          "minLength": 1
+        },
+        "realism": {
+          "type": "string",
+          "enum": [
+            "schematic",
+            "illustrated",
+            "realistic"
+          ]
+        }
+      },
+      "required": [
+        "style",
+        "edges",
+        "realism"
+      ],
+      "additionalProperties": false
+    },
+    "motion": {
+      "type": "object",
+      "properties": {
+        "duration": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "easing": {
+          "type": "string",
+          "enum": [
+            "none",
+            "power1.inOut",
+            "power2.inOut",
+            "sine.inOut"
+          ]
+        },
+        "ambient": {
+          "type": "boolean"
+        },
+        "scrollUnits": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        }
+      },
+      "required": [
+        "duration",
+        "easing",
+        "ambient",
+        "scrollUnits"
+      ],
+      "additionalProperties": false
+    },
+    "camera": {
+      "type": "object",
+      "properties": {
+        "default": {
+          "$ref": "common.schema.json#/$defs/cameraMode"
+        },
+        "expressiveness": {
+          "type": "string",
+          "enum": [
+            "restrained",
+            "moderate",
+            "expressive"
+          ]
+        }
+      },
+      "required": [
+        "default",
+        "expressiveness"
+      ],
+      "additionalProperties": false
+    },
+    "highlighting": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "$ref": "common.schema.json#/$defs/color"
+        },
+        "surroundingOpacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "useLabels": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "color",
+        "surroundingOpacity",
+        "useLabels"
+      ],
+      "additionalProperties": false
+    },
+    "labels": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "number",
+          "minimum": 12
+        },
+        "style": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "size",
+        "style"
+      ],
+      "additionalProperties": false
+    },
+    "mobile": {
+      "type": "object",
+      "properties": {
+        "priority": {
+          "type": "string",
+          "minLength": 1
+        },
+        "maxPixelRatio": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "simplifyEffects": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "priority",
+        "maxPixelRatio",
+        "simplifyEffects"
+      ],
+      "additionalProperties": false
+    },
+    "accessibility": {
+      "type": "object",
+      "properties": {
+        "reducedMotion": {
+          "type": "string",
+          "enum": [
+            "static-steps"
+          ]
+        },
+        "fallback": {
+          "type": "string",
+          "enum": [
+            "text-and-diagram"
+          ]
+        },
+        "minimumContrast": {
+          "type": "number",
+          "minimum": 4.5,
+          "maximum": 21
+        }
+      },
+      "required": [
+        "reducedMotion",
+        "fallback",
+        "minimumContrast"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "audience",
+    "evidence",
+    "typography",
+    "spacing",
+    "colors",
+    "materials",
+    "lighting",
+    "shape",
+    "motion",
+    "camera",
+    "highlighting",
+    "labels",
+    "mobile",
+    "accessibility"
+  ],
+  "additionalProperties": false
+}
