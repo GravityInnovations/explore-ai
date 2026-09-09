@@ -3,7 +3,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 const base = new URL("../skills/explain-ai/", import.meta.url);
 await mkdir(new URL("types/", base), { recursive: true });
-for (const name of ["project", "design", "asset-index", "runtime", "lesson"]) {
+for (const name of ["project", "design", "asset-index", "runtime", "lesson", "workflow"]) {
   const source = fileURLToPath(new URL(`schemas/${name}.schema.json`, base));
   const output = new URL(`types/${name}.d.ts`, base);
   const content = await compileFromFile(source, {
@@ -22,5 +22,5 @@ for (const name of ["project", "design", "asset-index", "runtime", "lesson"]) {
 console.log(
   process.argv.includes("--check")
     ? "Type contracts match schemas"
-    : "Generated five TypeScript contracts",
+    : "Generated six TypeScript contracts",
 );
