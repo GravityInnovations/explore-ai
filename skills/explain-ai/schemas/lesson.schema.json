@@ -1,0 +1,701 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravityinnovations.github.io/explore-ai/schemas/lesson.schema.json",
+  "title": "Lesson",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "$ref": "common.schema.json#/$defs/version"
+    },
+    "lessonId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*/[a-z0-9]+(?:-[a-z0-9]+)*/[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "level": {
+      "$ref": "common.schema.json#/$defs/slug"
+    },
+    "subject": {
+      "$ref": "common.schema.json#/$defs/slug"
+    },
+    "topicKey": {
+      "$ref": "common.schema.json#/$defs/slug"
+    },
+    "slug": {
+      "$ref": "common.schema.json#/$defs/slug"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "designId": {
+      "$ref": "common.schema.json#/$defs/slug"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "objectives": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/source"
+          },
+          "minItems": 0
+        },
+        "scopeNote": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "summary",
+        "objectives",
+        "sources"
+      ],
+      "additionalProperties": false
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "asset-index.schema.json#/$defs/asset"
+      },
+      "minItems": 0
+    },
+    "objects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sceneObject"
+      },
+      "minItems": 1
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/step"
+      },
+      "minItems": 1
+    },
+    "accessibility": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "staticDiagramAssetId": {
+          "$ref": "common.schema.json#/$defs/slug"
+        }
+      },
+      "required": [
+        "summary"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "lessonId",
+    "level",
+    "subject",
+    "topicKey",
+    "slug",
+    "title",
+    "designId",
+    "metadata",
+    "objects",
+    "steps",
+    "accessibility"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "focus": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "focus",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        }
+      },
+      "required": [
+        "action",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "highlight": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "highlight",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        }
+      },
+      "required": [
+        "action",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "isolate": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "isolate",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        }
+      },
+      "required": [
+        "action",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "assemble": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "assemble",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        }
+      },
+      "required": [
+        "action",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "inspect": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "inspect",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        }
+      },
+      "required": [
+        "action",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "reveal": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "reveal",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        }
+      },
+      "required": [
+        "action",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "hide": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "hide",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        }
+      },
+      "required": [
+        "action",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "extract": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "extract",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "offset": {
+          "$ref": "common.schema.json#/$defs/vector"
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "offset"
+      ],
+      "additionalProperties": false
+    },
+    "explode": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "explode",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "distance": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "distance"
+      ],
+      "additionalProperties": false
+    },
+    "dissect": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "dissect",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/target"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "parts"
+      ],
+      "additionalProperties": false
+    },
+    "orbit": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "orbit",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "degrees": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "degrees"
+      ],
+      "additionalProperties": false
+    },
+    "fade": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "fade",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "opacity"
+      ],
+      "additionalProperties": false
+    },
+    "xray": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "xray",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "opacity"
+      ],
+      "additionalProperties": false
+    },
+    "cutaway": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "cutaway",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "normal": {
+          "$ref": "common.schema.json#/$defs/vector"
+        },
+        "constant": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "normal",
+        "constant"
+      ],
+      "additionalProperties": false
+    },
+    "magnify": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "magnify",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "factor": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "factor"
+      ],
+      "additionalProperties": false
+    },
+    "follow": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "follow",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/target"
+          },
+          "minItems": 2
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "compare": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "compare",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "with": {
+          "$ref": "common.schema.json#/$defs/target"
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "with"
+      ],
+      "additionalProperties": false
+    },
+    "flow": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "flow",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "to": {
+          "$ref": "common.schema.json#/$defs/target"
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "to"
+      ],
+      "additionalProperties": false
+    },
+    "transform": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "transform",
+          "type": "string"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "position": {
+          "$ref": "common.schema.json#/$defs/vector"
+        },
+        "rotation": {
+          "$ref": "common.schema.json#/$defs/vector"
+        },
+        "scale": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "action",
+        "target"
+      ],
+      "additionalProperties": false,
+      "minProperties": 3
+    },
+    "action": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/focus"
+        },
+        {
+          "$ref": "#/$defs/highlight"
+        },
+        {
+          "$ref": "#/$defs/isolate"
+        },
+        {
+          "$ref": "#/$defs/assemble"
+        },
+        {
+          "$ref": "#/$defs/inspect"
+        },
+        {
+          "$ref": "#/$defs/reveal"
+        },
+        {
+          "$ref": "#/$defs/hide"
+        },
+        {
+          "$ref": "#/$defs/extract"
+        },
+        {
+          "$ref": "#/$defs/explode"
+        },
+        {
+          "$ref": "#/$defs/dissect"
+        },
+        {
+          "$ref": "#/$defs/orbit"
+        },
+        {
+          "$ref": "#/$defs/fade"
+        },
+        {
+          "$ref": "#/$defs/xray"
+        },
+        {
+          "$ref": "#/$defs/cutaway"
+        },
+        {
+          "$ref": "#/$defs/magnify"
+        },
+        {
+          "$ref": "#/$defs/follow"
+        },
+        {
+          "$ref": "#/$defs/compare"
+        },
+        {
+          "$ref": "#/$defs/flow"
+        },
+        {
+          "$ref": "#/$defs/transform"
+        }
+      ]
+    },
+    "camera": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "$ref": "common.schema.json#/$defs/cameraMode"
+        },
+        "target": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "position": {
+          "$ref": "common.schema.json#/$defs/vector"
+        },
+        "lookAt": {
+          "$ref": "common.schema.json#/$defs/vector"
+        }
+      },
+      "required": [
+        "mode",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "sceneObject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "parent": {
+          "$ref": "common.schema.json#/$defs/target"
+        },
+        "component": {
+          "$ref": "common.schema.json#/$defs/slug"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assetId": {
+          "$ref": "common.schema.json#/$defs/slug"
+        },
+        "material": {
+          "type": "string",
+          "minLength": 1
+        },
+        "position": {
+          "$ref": "common.schema.json#/$defs/vector"
+        },
+        "scale": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "id",
+        "component",
+        "label",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "step": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/slug"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "explains": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/target"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/action"
+          },
+          "minItems": 1
+        },
+        "camera": {
+          "$ref": "#/$defs/camera"
+        },
+        "alt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "narrationAssetId": {
+          "$ref": "common.schema.json#/$defs/slug"
+        },
+        "scrollUnits": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "text",
+        "explains",
+        "actions",
+        "camera",
+        "alt"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
