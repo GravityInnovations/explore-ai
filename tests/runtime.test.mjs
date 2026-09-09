@@ -1,8 +1,9 @@
 import {test,before,after} from 'node:test';import assert from 'node:assert/strict';
-import {mkdtemp,readFile,writeFile,rm} from 'node:fs/promises';import path from 'node:path';import {pathToFileURL} from 'node:url';
+import {mkdtemp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';import path from 'node:path';import {pathToFileURL} from 'node:url';
 import ts from 'typescript';import {Box3,Vector3,PerspectiveCamera} from 'three';import {fixture} from './fixtures.mjs';
 let directory,createLessonController,frameBounds;
 before(async()=>{
+ await mkdir(path.resolve('.tmp'),{recursive:true});
  directory=await mkdtemp(path.resolve('.tmp/runtime-'));
  for(const name of ['controller','camera']){
   const source=await readFile(new URL(`../skills/explain-ai/assets/templates/${name}.ts`,import.meta.url),'utf8');

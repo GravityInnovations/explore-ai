@@ -12,6 +12,8 @@ The package includes adaptable TypeScript building blocks, not a production app 
 6. Connect matching text sections using `scroll.ts` after assets are ready. Size sections using each step's `scrollUnits` or the design default and a readable minimum. Place the scene beside the text using the project's layout; do not bake a permanent theme into the skill. Refresh ScrollTrigger after async layout changes. Explicit navigation must update scroll position and focus the matching text section.
 7. Map local assets using ASSETS.md. Build static reviewed imports for source components; do not import arbitrary paths from lesson JSON. Validate full catalog, capability declarations and browser asset copies.
 
+Run the CLI validator during authoring and as a build/preflight check, not by spawning a process on every page request. For production, prefer a generated validated catalog with explicit local JSON imports, or narrowly scoped/cached server loading. Resolve configured paths once; avoid unconstrained dynamic joins from `process.cwd()` that cause Next.js output tracing to include the entire project. Check build tracing warnings and ensure only the intended content/design files are included. The deployed runtime should not depend on an installed agent skill directory.
+
 ## Template usage
 
 Copy only needed files from `assets/templates/` into an appropriate target-project runtime folder. Copy generated declarations from `types/` or adapt imports to the existing contract module. The shipped relative type imports work inside this package and **must be adjusted after copying**. These are templates for the user's agent to integrate, not a drop-in Next.js route.

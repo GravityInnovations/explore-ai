@@ -25,7 +25,7 @@ A separate independent agent used the installed skill to author k1 and k2 maths 
 The agent reached a host usage limit before completing verification. The coordinator completed the TypeScript check, production build and browser checks locally; this was not a fully independent end-to-end verdict.
 
 - Existing design SHA-256 stayed `dc9a29f62c57daf2bdadd0da62a13a440c2684554523ab0b559930e9281d227a`.
-- The generated Next.js 16.3.4 project passed TypeScript and production compilation. Initial dynamic filesystem loading caused build tracing warnings; the integration guidance and final outcome are addressed below.
+- The generated Next.js 16.3.4 project passed TypeScript and production compilation. Dynamic filesystem loading caused four build tracing warnings. RUNTIME.md now directs agents to validate at authoring/build time and use explicit catalog imports or narrowly scoped/cached server loading. The scratch app was not hardened for production deployment; no warning-free production build is claimed.
 - Desktop browser: the whole rectangle and the explained half rendered; the other half dimmed while context remained visible. Keyboard activation of the "One half" anchor focused its section and selected the expected semantic targets.
 - Reverse scrolling changed the active scene step. At 390 × 844, the equal-parts scene, labels and explanation remained readable.
 - The scratch app's explicit no-WebGL test path rendered the local diagram and all lesson text without a canvas. No browser console errors were captured in the inspected tab.

@@ -29,7 +29,7 @@ Every action requires `action` and `target`. Fields below are additional require
 | assemble | none | Return target and its subtree to baseline assembly |
 | orbit | degrees | Inspect the target by orbiting the camera around its bounds |
 | inspect | none | Present an unobstructed useful view of the target |
-| reveal | none | Show the target/subtree, respecting remaining ancestor visibility |
+| reveal | none | Set target/subtree visibility on, respecting ancestor visibility; opacity is unchanged |
 | hide | none | Hide target and descendants |
 | fade | opacity | Set target/subtree opacity without losing material ownership |
 | xray | opacity | Make target's outer surfaces transparent to expose interior anatomy |
@@ -47,6 +47,8 @@ No action is silently mapped to a vaguely similar effect. Capability manifests l
 Camera requires a semantic `target` and `mode`: wide, medium, close, macro, inside, orbit, top, side or best. Optional `position` and `lookAt` override derived placement. Calculate framing from bounds, aspect ratio, field of view, surrounding occlusion and the current project scene scale. Exact coordinates are escape hatches, not default authoring practice.
 
 Each step starts from the immutable canonical baseline. Actions are evaluated in order and sampled by absolute progress; repeated calls cannot accumulate transforms. Scrubbing backward or jumping to a step must produce the same state as arriving there normally. `assemble` restores baseline geometry, not a snapshot from the previous step. Camera/action conflicts must be resolved in the adapter and reviewed visually.
+
+Visibility and material opacity are independent. A later positive `fade` restores opacity; `reveal` does not. `fade` sets opacity throughout the semantic subtree. `xray` sets only the target's outer-surface opacity so internal descendants can remain visible. `assemble` restores owned baseline geometry, visibility and opacity for its subtree; hidden ancestors still apply. Validators check these declared endpoint states, while intermediate occlusion and legibility need rendered review.
 
 Default appearance, duration, easing and scroll pacing come from the design. Objects select material names, not duplicated colour/material settings. The runtime owns rendering and animation; JSON never contains script strings, callback names, imports or general conditional logic.
 

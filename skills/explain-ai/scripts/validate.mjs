@@ -33,6 +33,7 @@ export function validateSemantics(lesson, design, index, runtime) {
   if(lesson.accessibility.staticDiagramAssetId)asset(lesson.accessibility.staticDiagramAssetId,'/accessibility/staticDiagramAssetId','image');
   lesson.steps.forEach((step,i)=>{
     const p=`/steps/${i}`; const focused=new Set(); const hidden=new Set();
+    const opacity=new Map([...objects.values()].map(o=>[o.id,o.material?design.materials[o.material]?.opacity??1:1]));
     target(step.camera.target,`${p}/camera/target`);
     if(!runtime.cameraModes.includes(step.camera.mode))add(`${p}/camera/mode`,`Unsupported camera: ${step.camera.mode}`);
     if(step.camera.mode!=='wide')focused.add(step.camera.target);
@@ -49,13 +50,20 @@ export function validateSemantics(lesson, design, index, runtime) {
       if(a.action==='follow')a.path.forEach((id,k)=>target(id,`${q}/path/${k}`));
       if(a.action==='cutaway'&&Object.values(a.normal).every(n=>n===0))add(`${q}/normal`,'Cutting-plane normal cannot be zero');
       if(a.action==='isolate')for(const id of objects.keys())if(!under(id,a.target)&&!under(a.target,id))hidden.add(id);
-      if(a.action==='hide'||(['fade','xray'].includes(a.action)&&a.opacity===0))hidden.add(a.target);
+      if(a.action==='hide')hidden.add(a.target);
+      if(a.action==='fade')for(const id of objects.keys())if(under(id,a.target))opacity.set(id,a.opacity);
+      // Xray affects outer surfaces, not the visibility of interior descendants.
+      if(a.action==='xray')opacity.set(a.target,a.opacity);
+      if(a.action==='assemble')for(const id of objects.keys())if(under(id,a.target)){
+        const object=objects.get(id);opacity.set(id,object.material?design.materials[object.material]?.opacity??1:1);
+        hidden.delete(id);
+      }
       if(a.action==='reveal')for(const id of [...hidden])if(under(id,a.target))hidden.delete(id);
     });
     step.explains.forEach((id,j)=>{
       target(id,`${p}/explains/${j}`);
       if(!focused.has(id))add(`${p}/explains/${j}`,`Explained target needs explicit emphasis or a close camera: ${id}`);
-      if([...hidden].some(parent=>under(id,parent)))add(`${p}/explains/${j}`,`Explained target is hidden: ${id}`);
+      if([...hidden].some(parent=>under(id,parent))||opacity.get(id)===0)add(`${p}/explains/${j}`,`Explained target is hidden: ${id}`);
     });
   });
   return errors;

@@ -20,7 +20,7 @@ Approved 2026-09-09. Target: **20 meaningful local commits total**, including th
 - [x] 16. Ship minimal examples and verify repeated-level identity.
 - [x] 17. Exercise negative validation and standalone installed tooling.
 - [x] 18. Verify real Codex discovery and independent designer/topic exercises.
-- [ ] 19. Address demonstrated acceptance findings and verify affected behavior.
+- [x] 19. Address demonstrated acceptance findings and verify affected behavior.
 - [ ] 20. Finish installation/docs/evidence, clean temporary output and verify delivery.
 
 For each milestone: stage exact owned paths, review staged diff/check/stat, commit locally, and update this tracker. Preserve the build prompt and original MIT license. Tests must check observable invariants; never report a rendered lesson or agent workflow as passed from schema validation alone. If acceptance reveals no defects, milestone 19 records reproducible acceptance coverage instead of manufacturing a fix.
