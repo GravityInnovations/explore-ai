@@ -1,6 +1,6 @@
 # ExplainAI v1 implementation plan
 
-Status: proposed, awaiting Faik's verification before implementation.
+Status: approved by Faik on 2026-09-09. Implementation authorised; commits remain local.
 
 ## Outcome and scope
 
@@ -177,4 +177,4 @@ Split additional independently useful fixes into further commits when justified.
 
 ## Approval boundary
 
-The original build prompt explicitly says: "Then present the plan to me for verification" and "Wait for my verification." Implementation begins after Faik verifies or corrects this proposal. The next action is to turn the approved architecture into a concrete tracked task list, then complete implementation, testing, cleanup and final review.
+The original build prompt explicitly required plan verification. Faik approved this proposal on 2026-09-09: "its a go." The approval is satisfied. Execute the tracked task list through implementation, testing, cleanup and final review without requesting this approval again.
