@@ -1,24 +1,96 @@
-import path from 'node:path';
-import { readFile, readdir, realpath } from 'node:fs/promises';
-import { createHash } from 'node:crypto';
-import { pathToFileURL } from 'node:url';
-import { readContract, readJson } from './contracts.mjs';
-import { resolveLocal } from './paths.mjs';
-import { validateDesign } from './validate.mjs';
+import path from "node:path";
+import { readFile, readdir, realpath } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { pathToFileURL } from "node:url";
+import { readContract, readJson } from "./contracts.mjs";
+import { resolveLocal } from "./paths.mjs";
+import { validateDesign } from "./validate.mjs";
 
-export async function inspectProject(project){
-  const root=await realpath(project); let config; let pkg={};
-  try {config=await readContract('project',await resolveLocal(root,'explain-ai.config.json',{file:true}));}catch(error){if(error.code!=='ENOENT')throw error;}
-  try {pkg=await readJson(await resolveLocal(root,'package.json',{file:true}));}catch(error){if(error.code!=='ENOENT')throw error;}
-  const dependencies={...pkg.devDependencies,...pkg.dependencies};const candidates=[];
-  for(const folder of ['app','src/app','styles','src/styles','design']){
-    try {const location=await resolveLocal(root,folder);const entries=await readdir(location,{withFileTypes:true});candidates.push({folder,entries:entries.filter(e=>!e.isSymbolicLink()).map(e=>e.name).slice(0,30)});}catch(error){if(error.code!=='ENOENT')throw error;}
-  }
-  let design={status:'missing',path:config?.paths.design??'design/profile.json'};
+export async function inspectProject(project) {
+  const root = await realpath(project);
+  let config;
+  let pkg = {};
   try {
-    const file=await resolveLocal(root,design.path,{file:true});const raw=await readFile(file);const value=JSON.parse(raw.toString('utf8').replace(/^\uFEFF/,''));const errors=validateDesign(value);
-    design={...design,status:errors.length?'invalid':config?'ready':'unconfigured',id:value.id,sha256:createHash('sha256').update(raw).digest('hex'),errors};
-  }catch(error){if(error.code!=='ENOENT')throw error;}
-  return {root,configured:!!config,config,framework:{next:dependencies.next??null,typescript:dependencies.typescript??null,three:dependencies.three??null,gsap:dependencies.gsap??null},candidates,design,next:design.status==='ready'?'Reuse design for topic generation':design.status==='unconfigured'?'Adopt the existing profile in project configuration without redesigning':'Run designer to establish or repair a project-specific profile'};
+    config = await readContract(
+      "project",
+      await resolveLocal(root, "explain-ai.config.json", { file: true }),
+    );
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  try {
+    pkg = await readJson(
+      await resolveLocal(root, "package.json", { file: true }),
+    );
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  const dependencies = { ...pkg.devDependencies, ...pkg.dependencies };
+  const candidates = [];
+  for (const folder of ["app", "src/app", "styles", "src/styles", "design"]) {
+    try {
+      const location = await resolveLocal(root, folder);
+      const entries = await readdir(location, { withFileTypes: true });
+      candidates.push({
+        folder,
+        entries: entries
+          .filter((e) => !e.isSymbolicLink())
+          .map((e) => e.name)
+          .slice(0, 30),
+      });
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
+  }
+  let design = {
+    status: "missing",
+    path: config?.paths.design ?? "design/profile.json",
+  };
+  try {
+    const file = await resolveLocal(root, design.path, { file: true });
+    const raw = await readFile(file);
+    const value = JSON.parse(raw.toString("utf8").replace(/^\uFEFF/, ""));
+    const errors = validateDesign(value);
+    design = {
+      ...design,
+      status: errors.length ? "invalid" : config ? "ready" : "unconfigured",
+      id: value.id,
+      sha256: createHash("sha256").update(raw).digest("hex"),
+      errors,
+    };
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  return {
+    root,
+    configured: !!config,
+    config,
+    framework: {
+      next: dependencies.next ?? null,
+      typescript: dependencies.typescript ?? null,
+      three: dependencies.three ?? null,
+      gsap: dependencies.gsap ?? null,
+    },
+    candidates,
+    design,
+    next:
+      design.status === "ready"
+        ? "Reuse design for topic generation"
+        : design.status === "unconfigured"
+          ? "Adopt the existing profile in project configuration without redesigning"
+          : "Run designer to establish or repair a project-specific profile",
+  };
 }
-if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){try{if(process.argv.length!==3)throw new Error('Usage: inspect.mjs <project-root>');console.log(JSON.stringify(await inspectProject(process.argv[2]),null,2));}catch(error){console.error(error.message);process.exitCode=1;}}
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
+) {
+  try {
+    if (process.argv.length !== 3)
+      throw new Error("Usage: inspect.mjs <project-root>");
+    console.log(JSON.stringify(await inspectProject(process.argv[2]), null, 2));
+  } catch (error) {
+    console.error(error.message);
+    process.exitCode = 1;
+  }
+}

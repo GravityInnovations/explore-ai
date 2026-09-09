@@ -42,4 +42,6 @@ Regression coverage now distinguishes visibility and opacity, positive fade rest
 
 Run the documented development setup and `npm run check`. It verifies generated type parity, strict template compilation, structural/semantic/filesystem behavior, installed CLI independence, package links, action-vocabulary documentation and matching MIT licenses. Test cases use disposable directories and do not modify the original license or remote repository.
 
-Final test totals, integration-warning resolution and cleanup status are recorded at delivery after the final verification run.
+Final `npm run check`: **43 tests passed, zero failures**, generated types matched schemas, all runtime templates typechecked, and package checks passed for 47 installed files and 19 documented actions. The final documentation pass exposed a schema loader assuming every directory entry was JSON; the loader and compilation test now explicitly select `*.schema.json`, and the complete check passed afterwards.
+
+The disposable acceptance projects, dependency experiments, protocol output and local browser/server were removed or stopped. The repository retains only minimal intentional fixtures and normal ignored development dependencies. The original build prompt and MIT license are unchanged. GitHub issues track the work through ISSUES.md; implementation commits remain local and no deployment or push was performed.
