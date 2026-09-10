@@ -9,9 +9,9 @@ node scripts/install.mjs ./examples/playground
 npm.cmd ci --prefix ./examples/playground/.agents/skills/explain-ai --ignore-scripts --no-audit --no-fund
 ```
 
-Then open `examples/playground/` as the project in Codex (or launch `codex` from that directory). Invoke `$explain-ai designer`, then `$explain-ai explore-a-topic` with your level, subject and topic. Ask it to initialise a Next.js App Router TypeScript application in this target directory if you want to preview the result. See the [playground instructions](examples/playground/README.md) for ready-to-use prompts.
+Then open `examples/playground/` as the project in Codex (or launch `codex` from that directory). Invoke `$explain-ai designer` for the interview, brief agreement, preview and QA. After you accept the design, use `$explain-ai explore-a-topic` with your level, subject and topic. The designer can initialise a minimal preview app after brief agreement. See the [playground instructions](examples/playground/README.md).
 
-The skill has not been pre-installed and no app has been generated there: this is your installation trial. Generated files, including the copied skill, app, content and dependencies, are ignored by Git. The existing `skills/explain-ai/examples/project/` is a shipped JSON/asset fixture with no renderer; do not use it as your mutable app folder.
+A fresh clone has no pre-installed skill or generated app. Your existing local playground may already contain them; inspect it before installing again. Generated files, including the copied skill, app, workflow state, content and dependencies, are ignored by Git. The existing `skills/explain-ai/examples/project/` is a shipped JSON/asset fixture with no renderer; do not use it as your mutable app folder.
 
 This is a copy-based installation. Later source-skill edits do not automatically update the playground copy; follow the update instructions below when you want to retest a newer version.
 
@@ -52,12 +52,14 @@ This starts a short-lived local Codex app-server, performs a read-only `skills/l
 Within the installed skill folder, confirm its toolchain works:
 
 ```sh
-node scripts/validate.mjs --project examples/project --integrated
+node scripts/validate.mjs --project examples/project
 ```
 
 Then invoke `$explain-ai designer` in the target project, followed by `$explain-ai explore-a-topic` with level, subject and topic. Tools run against the explicit target root. Generated design/content belongs to that project, outside the installed skill directory.
 
 ## Updates and removal
+
+Version 0.2 adds enforced review state. Existing profiles and lessons remain intact, but selected-lesson/integrated validation now requires a guided review and current customer acceptance. Standalone schema and draft catalog checks remain usable. Inspector profile status is `valid`, with acceptance reported separately under `workflow.topicReady`. Never create a fake accepted record to migrate a fixture or legacy project.
 
 The installer refuses an existing destination so it cannot silently destroy local skill edits. Compare the installed folder with a newer checkout, preserve any changes, then explicitly move the old installation aside and install the replacement. Reinstall its pinned dependencies and rerun validation. Updating the skill does not migrate or overwrite project design/lessons automatically; schema changes need an explicit migration.
 

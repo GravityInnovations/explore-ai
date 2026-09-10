@@ -35,6 +35,8 @@ Select `explain-ai` in the skill picker; restart Codex if it has not appeared.
 
 ## Establish your design
 
+Designer now conducts a guided interview before implementation, asks you to agree the brief, builds a preview, records QA and requests your acceptance. Topics stay blocked until that acceptance is current. To disregard an earlier trial's proposed choices, explicitly ask for a fresh designer interview; the CLI archives its workflow state without deleting the app or design files.
+
 ```text
 $explain-ai designer
 Use this folder as the target project. Help me establish a design for interactive
@@ -44,6 +46,8 @@ educational lessons. Ask me the important design questions one at a time.
 You can provide a screenshot, CSS or reference site instead of answering from scratch.
 
 ## Generate and preview a lesson
+
+Use this after accepting the design preview. A valid profile or working demo alone does not complete the designer stage.
 
 ```text
 $explain-ai explore-a-topic

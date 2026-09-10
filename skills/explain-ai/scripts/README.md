@@ -5,11 +5,14 @@ Run these with Node.js 22+ after `npm ci --ignore-scripts --no-audit --no-fund` 
 | Entry point | Usage |
 | --- | --- |
 | `inspect.mjs` | `<project-root>`: read-only framework/path/profile inspection and fingerprint |
+| `workflow.mjs` | `<command> --project <root> [--input <relative.json>] [--expect <revision>] [--json]`: guided designer state, review and topic preflight |
 | `find-assets.mjs` | `<project-root> [terms]`: search the local index and verify matching files |
 | `validate.mjs` | `--project <root> [--lesson <relative-path>] [--integrated]`: validate a catalog/package |
 | `validate.mjs` | `--kind <contract> --file <json>`: standalone structural check; design also checks body contrast |
 
-Internal modules: `contracts.mjs` loads bundled Ajv schemas; `paths.mjs` handles portable relative paths, junction containment and collision-free identity. `validate.mjs` adds semantic and filesystem rules. These scripts are read-only and do not call a model, download assets or upload content.
+Internal modules: `contracts.mjs` loads bundled Ajv schemas; `paths.mjs` handles portable relative paths and containment. `validate.mjs` adds semantic/filesystem rules. `workflow-actions.mjs` owns transitions and guidance; `workflow-store.mjs` owns strict reads, atomic locked writes, archive/reset and scoped fingerprints. Only workflow mutations write project state; inspection, validation and search remain read-only. No helper calls a model, downloads assets or uploads content.
+
+See [WORKFLOW.md](../references/WORKFLOW.md) for payloads and evidence. Preserve the distinction between structural validity, QA observations and customer acceptance. Preview source changes invalidate downstream reviews. Draft catalog validation does not grant permission to author topics; `preflight`, selected-lesson and integrated checks enforce current acceptance.
 
 Hotspots when extending validation:
 

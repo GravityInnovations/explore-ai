@@ -8,7 +8,7 @@ After installing this skill's dependencies:
 
 ```sh
 node scripts/validate.mjs --project examples/project
-node scripts/validate.mjs --project examples/project --integrated
+node scripts/validate.mjs --project examples/project
 node scripts/find-assets.mjs examples/project equal parts
 ```
 
