@@ -12,6 +12,9 @@ Run `npm test` after installing both root and skill dependencies. Run `npm run c
 | `assets.test.mjs` | Indexed reuse search and missing sources |
 | `runtime.test.mjs` | Deterministic sampling, reverse/jump behavior, disposal and camera bounds |
 | `project.test.mjs` | Full catalog/file validation, public copies and installed CLI independence |
+| `workflow-*.test.mjs` | Strict state, atomic/stale writes, transitions, QA, customer acceptance, invalidation, contained restart and one installed-CLI journey |
+
+Workflow test fixtures explicitly simulate customer statements and observations in isolated temporary projects. They are never copied into a customer's project as real acceptance. The installed CLI journey establishes deterministic behaviour, not a real customer's satisfaction or visual QA.
 
 `fixtures.mjs` supplies a deliberately small test-only profile and scene. The installable examples are separate explanatory fixtures. Temporary directories are created and removed by tests; they do not touch a user's existing target project. Runtime compilation uses an ignored `.tmp` directory so imports can resolve development libraries.
 

@@ -9,11 +9,13 @@ Work inside the user's target project. This package supplies authoring workflows
 
 ## Select the workflow
 
-- `designer`: read [DESIGNER.md](references/DESIGNER.md). Inspect the project and reference evidence, then establish or explicitly update its design profile.
-- `explore-a-topic`: read [EXPLORE-A-TOPIC.md](references/EXPLORE-A-TOPIC.md). Required inputs are level, subject and topic. Reuse the existing design; route through designer if it is missing or invalid.
+- `designer`: read [DESIGNER.md](references/DESIGNER.md). Guide questions, brief agreement, a preview, QA/revisions and design acceptance using the local workflow CLI.
+- `explore-a-topic`: read [EXPLORE-A-TOPIC.md](references/EXPLORE-A-TOPIC.md). Required inputs are level, subject and topic. The CLI must confirm current customer acceptance before topic authoring.
 - For existing lesson repair, inspect the lesson and validation failures, then use the relevant topic stages without rewriting unrelated content.
 
 These names select workflows, not shell commands. `$explain-ai designer` and `$explain-ai explore-a-topic` explicitly select this skill. Natural-language requests may also select it.
+
+A demo request, valid profile or passing tests does not establish design agreement. Obtain agreement to the concrete brief before implementing its design, then acceptance of the reviewed preview before topics. Reuse explicit agreement already given to that exact revision; do not ask twice. See [WORKFLOW.md](references/WORKFLOW.md) for CLI inputs and recovery. Never fabricate answers, observations or acceptance records to advance a stage.
 
 ## Shared working contract
 

@@ -1,0 +1,471 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravityinnovations.github.io/explore-ai/schemas/workflow.schema.json",
+  "title": "DesignerWorkflow",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "session": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "stage": {
+      "enum": [
+        "interview",
+        "brief-review",
+        "design",
+        "qa",
+        "design-review",
+        "accepted"
+      ]
+    },
+    "decisions": {
+      "type": "object",
+      "properties": {
+        "audience": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "delegated",
+                "proposed"
+              ]
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "brand": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "delegated",
+                "proposed"
+              ]
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "typography": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "delegated",
+                "proposed"
+              ]
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "palette": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "delegated",
+                "proposed"
+              ]
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "layout": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "delegated",
+                "proposed"
+              ]
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "visuals": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "delegated",
+                "proposed"
+              ]
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "motion": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "delegated",
+                "proposed"
+              ]
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "accessibility": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "delegated",
+                "proposed"
+              ]
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "evidence"
+          ],
+          "additionalProperties": false
+        },
+        "constraints": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "enum": [
+                "user",
+                "delegated",
+                "proposed"
+              ]
+            },
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value",
+            "source",
+            "evidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "brief": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "minLength": 1
+            },
+            "fingerprint": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "agreement": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "fingerprint": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    },
+                    "statement": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "at": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "fingerprint",
+                    "statement",
+                    "at"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "summary",
+            "fingerprint",
+            "agreement"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "preview": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "minLength": 1
+            },
+            "paths": {
+              "type": "array",
+              "items": {
+                "$ref": "common.schema.json#/$defs/relativePath"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "fingerprint": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "url",
+            "paths",
+            "fingerprint"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "qa": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "check": {
+            "enum": [
+              "contracts",
+              "desktop",
+              "mobile",
+              "labels",
+              "keyboard",
+              "motion",
+              "fallback",
+              "app-check"
+            ]
+          },
+          "result": {
+            "enum": [
+              "pass",
+              "fail",
+              "not-applicable"
+            ]
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fingerprint": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "check",
+          "result",
+          "evidence",
+          "fingerprint"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "feedback": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stage": {
+            "type": "string",
+            "minLength": 1
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1
+          },
+          "at": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "stage",
+          "note",
+          "at"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "acceptance": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "fingerprint": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "statement": {
+              "type": "string",
+              "minLength": 1
+            },
+            "at": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "fingerprint",
+            "statement",
+            "at"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "session",
+    "revision",
+    "stage",
+    "decisions",
+    "brief",
+    "preview",
+    "qa",
+    "feedback",
+    "acceptance"
+  ],
+  "additionalProperties": false
+}

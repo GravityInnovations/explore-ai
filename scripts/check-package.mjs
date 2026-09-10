@@ -12,6 +12,12 @@ const required = [
   "scripts/validate.mjs",
   "scripts/inspect.mjs",
   "scripts/find-assets.mjs",
+  "scripts/workflow.mjs",
+  "scripts/workflow-actions.mjs",
+  "scripts/workflow-store.mjs",
+  "schemas/workflow.schema.json",
+  "types/workflow.d.ts",
+  "references/WORKFLOW.md",
 ];
 for (const name of required)
   if (!(await lstat(path.join(skill, name))).isFile())

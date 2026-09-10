@@ -1,6 +1,6 @@
 # Lesson format v1
 
-The six JSON schemas in `schemas/` are authoritative. They use Draft 2020-12, require exact `schemaVersion: "1.0.0"`, and reject unknown fields. Generated TypeScript in `types/` mirrors structure; semantic checks remain necessary. Schema IDs are identifiers, not required network downloads: the validator loads bundled schemas locally.
+The JSON schemas in `schemas/` are authoritative. They use Draft 2020-12, require exact `schemaVersion: "1.0.0"`, and reject unknown fields. Generated TypeScript in `types/` mirrors structure; semantic checks remain necessary. The separate workflow contract tracks designer review and acceptance. Schema IDs are identifiers, not required network downloads: the validator loads bundled schemas locally.
 
 ## Identity, content and scene
 

@@ -22,4 +22,10 @@ This is the v1 copy convention. If the project uses an existing asset server, im
 
 Automated checks cover contracts, identity, target existence, hierarchy, declared focus, basic visibility contradictions, materials, capability declarations, references, type compatibility for narration/diagrams, file existence, root containment and public copies. Text/background contrast does not establish contrast on every 3D surface.
 
+## Designer acceptance boundary
+
+Run `node scripts/workflow.mjs preflight --project <root>` before topic authoring. It fails for missing, incomplete or stale customer acceptance. Both `--lesson` and `--integrated` enforce this gate before validating a topic or delivery. Unflagged `--project` remains a draft catalog diagnostic, and `--kind` remains a standalone contract check; neither grants acceptance or authorises topic generation.
+
+The bundled examples intentionally contain no customer approvals or working preview. Validate them with unflagged `--project`. The designer CLI can validate a design-only preview before any lesson/runtime exists. See [WORKFLOW.md](WORKFLOW.md) for required QA and explicit brief/design agreement. Records cannot authenticate a human or establish that an agent's claimed observation occurred; the skill must capture actual user agreement and evidence.
+
 The critic must separately review factual sources, level appropriateness, actual copy-to-target alignment, occlusion, labels, unsupported geometry, mobile composition, keyboard access, backward scroll, reduced motion and no-WebGL output. A manifest is a declaration, not evidence of a working renderer. Report structural checks, agent exercises and browser observations separately.

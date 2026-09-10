@@ -2,7 +2,7 @@
 
 An MIT-licensed agent skill for creating project-specific design profiles and declarative, scroll-driven 3D educational lessons in Next.js projects.
 
-Install it into your project, then ask your own coding agent to establish the design and explore a topic. Lessons inherit that design, reuse local assets, address semantic objects such as `cell.nucleus`, and describe visual intent through validated JSON.
+Install it into your project, then work through a guided designer interview, agreed brief, preview, QA and explicit design acceptance before exploring topics. Lessons inherit that design, reuse local assets, address semantic objects such as `cell.nucleus`, and describe visual intent through validated JSON.
 
 ## Install from this checkout
 
@@ -36,12 +36,15 @@ Subject: science
 Topic: plant cell
 ```
 
-`designer` and `explore-a-topic` are workflows within one skill, not shell commands. The first inspects the project/reference and asks only useful unresolved questions. The second plans the educational story, composes semantic targets, reuses assets, generates JSON, validates it and integrates the lesson into the target project's runtime.
+`designer` and `explore-a-topic` are workflows within one skill, not shell commands. Designer asks one meaningful question at a time, reuses supplied answers and records decisions through a local CLI. You agree the brief before design implementation and accept the reviewed preview before topics. Existing profiles start unreviewed; passing schema checks never counts as acceptance. The topic workflow then plans the story, reuses assets, generates JSON and integrates the lesson.
+
+To inspect or resume progress, run `node <installed-skill>/scripts/workflow.mjs status --project <your-project>`. See the [guided workflow and CLI](skills/explain-ai/references/WORKFLOW.md) for commands, review evidence and recovery. No model API or cloud service is added by this CLI.
 
 Default project outputs:
 
 ```text
 explain-ai.config.json
+.explain-ai/workflow.json
 design/profile.json
 asset-library/index.json
 content/<level>/<subject>/<topicKey>/lesson.json
@@ -67,7 +70,7 @@ node scripts/validate.mjs --project /absolute/path/to/your-project
 node scripts/validate.mjs --project /absolute/path/to/your-project --integrated
 ```
 
-The second additionally verifies local browser asset copies. Neither proves factual correctness or visual quality; see [validation boundaries](skills/explain-ai/references/VALIDATION.md).
+The first is draft catalog validation. Selected-lesson and integrated checks require current design acceptance; integrated checks additionally verify browser asset copies. Design changes invalidate acceptance. Neither proves factual correctness or visual quality; see [validation boundaries](skills/explain-ai/references/VALIDATION.md).
 
 To develop this repository:
 

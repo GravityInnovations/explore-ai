@@ -1,54 +1,61 @@
-# Designer workflow
+# Guided designer experience
 
-Create a reusable visual language inside the target project, using its existing implementation and supplied references as evidence. This workflow writes design/configuration, not production lessons. The user can explicitly request design revisions later.
+The journey is **questions → agreed brief → design preview → QA/revisions → accepted design → topics**. The agent guides the conversation; the local CLI persists decisions and enforces transitions. Read [WORKFLOW.md](WORKFLOW.md) for command inputs and recovery.
 
-## Inspect before interviewing
+## Inspect, start or resume
 
-Run `node <installed-skill>/scripts/inspect.mjs <project-root>` and inspect relevant project instructions, `package.json`, App Router layouts, global CSS/tokens, fonts, reusable 3D components and user references. The inspector is read-only; it returns profile status and a SHA-256 fingerprint. Do not scan vendor or build directories.
+Run the installed inspector and workflow `status --project <root> --json`. Inspect project instructions, relevant layouts/styles/assets and supplied references; exclude vendor and build output.
 
-- `ready`: reuse the profile. Report its path and ID. Do not write it again unless the user requested an update.
-- `unconfigured`: a valid default-location profile exists. Adopt its path in the configuration and preserve its bytes.
-- `invalid`: show the specific failure and repair within the user's design intent; do not replace it wholesale with an example.
-- `missing`: search the project's established design locations and supplied references before starting an interview.
+- A `valid` profile is structurally valid, not customer agreement. Check `workflow.topicReady` separately.
+- Reuse an accepted, unchanged design. A revision returns through the appropriate reviews.
+- Existing unreviewed profiles are candidates to discuss. Preserve their bytes; imported decisions remain proposals unless explicitly supplied or selected by the customer. Never adopt the previous agent's theme silently.
+- With no workflow, use `start`. Resume existing sessions without repeating answered questions.
+- For an explicit fresh-start request, use `restart` with the current revision and customer reason. It archives workflow state and clears the interview, preserving the app, profile and skill. Existing files are reference material, not agreed choices.
 
-If the user already provided sufficient preferences, proceed. Otherwise ask the single highest-impact unresolved question, such as intended audience or an unresolved reference conflict. Do not mechanically ask about every schema field. Derive subordinate details consistently and identify assumptions in evidence.
+## Ask and record meaningful questions
 
-## Reference interpretation
+Begin with who the experience serves and what it should accomplish. Ask one high-impact question at a time and adapt to the answer. The CLI question is a prompt, not a mandatory script. Reuse information already supplied.
 
-Inspect screenshots/images visually; inspect supplied CSS/tokens and actual webpage references using available tools. Record which choices are directly observed, inferred or explicitly chosen. Do not claim exact font families from an image alone. If an input cannot be read, state that limitation and ask only for information needed to proceed.
+Resolve these areas before submitting the brief:
 
-Preserve established typography, palette, spacing and accessible controls unless a redesign is requested. Translate reference characteristics into materials, lighting, shape treatment, camera expressiveness and motion. A flat image does not establish 3D lighting settings: treat those as inferences. Resolve conflicts using explicit user choices first, existing project constraints next, then reference evidence. Label significant approximations.
+| Area | Decisions |
+| --- | --- |
+| Audience | Learners, context and desired experience |
+| Brand | References, existing identity, logo status and exclusions |
+| Typography | Heading/body character, families or proposed direction, readability |
+| Palette | Background, text, accent/muted roles and contrast |
+| Layout | Text/visual balance, hierarchy, spacing, labels, desktop/mobile composition |
+| Visuals | Shape, realism, materials, lighting, shadows, camera and highlights |
+| Motion | Navigation, pacing, ambient effects and reduced-motion alternative |
+| Accessibility | Keyboard/focus, readable labels, device performance and fallback |
+| Constraints | Existing stack, assets/licensing, scope, budget and must/avoid requirements |
 
-## Author the profile
+Customers may delegate choices. Record their delegation and a concrete recommendation; do not pretend they picked the recommendation. Proposed subordinate defaults are allowed but must appear in the brief for agreement. Do not invent the audience, theme or topic from examples, or interrogate every schema field.
 
-Read `schemas/design.schema.json` for the exact shape. Author one `design/profile.json` (or configured equivalent):
+Inspect references before claiming their properties. Separate observations, inferences and customer choices. A screenshot cannot establish an exact typeface or 3D lighting rig. Clarify conflicts that materially affect the design.
 
-- `schemaVersion: "1.0.0"`, a stable project design `id`, audience and concise `evidence` records.
-- Typography families/base size/line height, spacing and four semantic colours.
-- Named material presets with colour, roughness, metalness and opacity.
-- Lighting, shadows, shape/edge treatment and realism.
-- Motion duration/easing/ambient preference/scroll units; camera intent and expressiveness.
-- Highlight treatment, label style, mobile priority/pixel-ratio budget and accessibility alternatives.
+## Agree the brief before implementing
 
-Use hex RGB colours for v1; resolve project CSS colour variables to values while keeping the original token mapping in evidence. Do not inject an example theme. If existing colours fail the profile's minimum text contrast, make the smallest evidence-consistent accessibility adjustment and explain it. Visual checks are still required for labels over geometry.
+Use `answer` to record each decision and provenance, then `brief` to submit the concise design specification. Present concrete choices, delegated recommendations, scope, exclusions and what the preview will demonstrate. Associate the version shown with the CLI fingerprint.
 
-Create `explain-ai.config.json` from `schemas/project.schema.json`, adapting the default paths below to the project:
+Ask for agreement to that brief and wait. Do not implement the design while this decision is pending. The customer may answer naturally; no magic phrase is required. An earlier instruction to build a demo or proceed with repository work is not agreement to an unseen brief. Record the actual explicit agreement with `agree`. Feedback goes through `revise` and back to unresolved decisions. Reuse explicit agreement already given to that exact revision rather than asking twice.
 
-```json
-{
-  "schemaVersion": "1.0.0",
-  "paths": {
-    "design": "design/profile.json",
-    "content": "content",
-    "assetLibrary": "asset-library",
-    "publicAssets": "public/explain-ai",
-    "runtime": "explain-ai.runtime.json"
-  }
-}
-```
+## Build the agreed design and preview
 
-Create an empty versioned asset index only when none exists. Runtime capabilities must reflect implemented handlers/components; if no runtime exists, leave integration for the topic workflow rather than inventing capabilities. Designer does not need a completed runtime to validate its output.
+Read `schemas/design.schema.json`. Write the configured profile (default `design/profile.json`), project configuration and an empty asset index only if absent. Preserve established paths. Cover the agreed typography, spacing, colours, materials, lighting, shape, motion, camera, highlights, labels, mobile and accessibility choices. Evidence records the agreed brief and references; inferred values remain labelled.
 
-## Validate and finish
+Create or adapt a runnable design-only preview. Demonstrate typography/palette, representative forms/materials, text and labels, navigation/focus and agreed motion/fallback behaviour. Use text for a deferred logo. Do not choose a production lesson or fabricate runtime capabilities. SVG or procedural studies may establish visual language without claiming a completed Three.js lesson runtime.
 
-Run `validate.mjs --kind project --file <config>` and `validate.mjs --kind design --file <profile>`. Re-run inspection. Review the profile against its source evidence, especially audience, typography, material language and motion preferences. If reusing a profile, verify its fingerprint did not change. Report the profile/config paths, major inferred choices and validation outcome. Future lessons inherit this profile; they may select existing material presets but do not redefine global design.
+Use the existing app and dependencies. For an empty project, initialise only the minimal requested preview. Respect target instructions and keep content local. Present the preview, then register its URL and relevant files through `preview`.
+
+## QA, revise and request acceptance
+
+The CLI runs project/design and body-contrast checks. Record observed desktop/mobile, labels, keyboard, reduced-motion and fallback behaviour, plus applicable app checks. Describe the actual check and outcome; tests and screenshots are different evidence. Neither establishes customer acceptance.
+
+Resolve blocking findings. Use `revise` before changing submitted preview files, then resubmit and record fresh QA. External file changes make old acceptance stale. If a required check is unavailable, report the limitation and leave it pending; never mark it passed.
+
+When QA is complete, run `review`, show the concrete preview and concise QA summary, and ask whether the customer accepts this design. Wait for their answer. Feedback returns through `revise`; explicit acceptance is recorded with `accept` against the reviewed fingerprint. Silence and validator success are not acceptance.
+
+## Finish designer
+
+Confirm `preflight` succeeds and report the accepted profile/preview. Future lessons inherit it. Completing designer does not choose a topic. Continue an already requested topic only after acceptance; otherwise collect level, subject and topic when the customer wants to proceed.

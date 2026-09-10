@@ -5,7 +5,7 @@
 From the installed skill folder, run:
 
 ```sh
-node scripts/validate.mjs --project examples/project --integrated
+node scripts/validate.mjs --project examples/project
 ```
 
-The runtime manifest states the capabilities an example renderer would need; this fixture does not include a renderer. Use it to learn the data format and asset reuse, then follow the user's project design. See [EXAMPLES.md](../references/EXAMPLES.md) for interpretation. Acceptance evidence is tracked in the development repository's GitHub issues; it is not required by this self-contained installation.
+The runtime manifest states the capabilities an example renderer would need; this fixture does not include a renderer or customer acceptance. Use it to learn the data format and asset reuse, then follow the user's guided design process. Integrated validation deliberately rejects this unaccepted fixture; do not fabricate acceptance to make it pass. See [EXAMPLES.md](../references/EXAMPLES.md) for interpretation.

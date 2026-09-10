@@ -2,6 +2,19 @@
 
 Use this folder to install and test the skill without creating a separate repository. It starts with setup instructions only. Your generated application, design, lessons, assets and copied skill remain ignored by the parent repository.
 
+## Run an existing local demo
+
+If this folder already contains the generated `package.json`, run these commands from this folder:
+
+```powershell
+npm.cmd ci --no-audit --no-fund
+npm.cmd run dev
+```
+
+The design demo opens at http://127.0.0.1:3100. If dependencies are already installed, only `npm.cmd run dev` is needed. Stop it with Ctrl+C. The demo has observation, focus and connection steps plus an optional motion toggle; it uses a text wordmark while the logo is deferred. Its generated `DEMO.md` describes the implementation and reusable design profile.
+
+The generated app is local and ignored, so it will not appear in a fresh clone. If there is no `package.json`, follow the installation and generation steps below. Do not rerun the skill installer when `.agents/skills/explain-ai` already exists; it intentionally refuses to overwrite an installed copy.
+
 ## Install it yourself
 
 From `W:\GravityInnovations\explore-ai` in PowerShell:
@@ -22,6 +35,8 @@ Select `explain-ai` in the skill picker; restart Codex if it has not appeared.
 
 ## Establish your design
 
+Designer now conducts a guided interview before implementation, asks you to agree the brief, builds a preview, records QA and requests your acceptance. Topics stay blocked until that acceptance is current. To disregard an earlier trial's proposed choices, explicitly ask for a fresh designer interview; the CLI archives its workflow state without deleting the app or design files.
+
 ```text
 $explain-ai designer
 Use this folder as the target project. Help me establish a design for interactive
@@ -31,6 +46,8 @@ educational lessons. Ask me the important design questions one at a time.
 You can provide a screenshot, CSS or reference site instead of answering from scratch.
 
 ## Generate and preview a lesson
+
+Use this after accepting the design preview. A valid profile or working demo alone does not complete the designer stage.
 
 ```text
 $explain-ai explore-a-topic
