@@ -1,4 +1,4 @@
-import { loadState, newState, updateState, requireThat, snapshot, briefDigest, QA_CHECKS, qaComplete } from "./workflow-store.mjs";
+import { loadState, newState, updateState, requireThat, snapshot, briefDigest, QA_CHECKS, qaComplete, archiveState } from "./workflow-store.mjs";
 import { readContract } from "./contracts.mjs";
 import { resolveLocal } from "./paths.mjs";
 
@@ -89,6 +89,15 @@ export async function runWorkflow(root, command, input = {}, expected) {
     return workflowStatus(root);
   }
   const handlers = {
+    async restart(state) {
+      requireThat(state, "NOT_STARTED", "Use start for a project without a workflow");
+      inputFields(input, ["reason"]);
+      const reason = textValue(input.reason, "Customer's fresh-start request");
+      const archived = await archiveState(root, state);
+      const fresh = newState();
+      fresh.feedback.push({ stage: "restart", note: `${reason}\nPrevious session: ${archived}`, at: new Date().toISOString() });
+      return fresh;
+    },
     answer(state) {
       atStage(state, ["interview"]);
       inputFields(input, ["key", "value", "source", "evidence"]);

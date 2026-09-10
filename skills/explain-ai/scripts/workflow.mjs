@@ -22,6 +22,7 @@ export async function cli(args) {
   if (options['--expect'] !== undefined && !/^(0|[1-9]\d*)$/.test(options['--expect']))
     throw new WorkflowError("INVALID_ARGUMENT", "--expect must be a nonnegative revision integer");
   const expected = options['--expect'] === undefined ? undefined : Number(options['--expect']);
+  if (expected !== undefined && !Number.isSafeInteger(expected)) throw new WorkflowError("INVALID_ARGUMENT", "--expect exceeds the safe integer range");
   let input = {};
   if (options['--input']) input = JSON.parse(await readFile(await resolveLocal(options['--project'], options['--input'], { file: true }), "utf8"));
   const result = await runWorkflow(options['--project'], command, input, expected);
@@ -30,12 +31,16 @@ export async function cli(args) {
     console.log(`Designer: ${result.stage} | revision ${result.revision ?? "none"} | topic ${result.topicReady ? "ready" : "blocked"}`);
     for (const blocker of result.blockers) console.log(`- ${blocker}`);
     console.log(`Next: ${result.next}`);
+    if (result.stage === "qa") console.log(`Pending QA: ${result.pendingChecks.join(", ") || "none; use review"}`);
     if (result.question) console.log(`${result.question.key}: ${result.question.text}`);
     if (result.stage === "brief-review") {
       console.log(`Brief to review: ${result.brief.summary}\nFingerprint: ${result.brief.fingerprint}`);
       for (const [key, decision] of Object.entries(result.decisions)) console.log(`${key} [${decision.source}]: ${decision.value}`);
     }
-    if (result.stage === "design-review") console.log(`Preview to review: ${result.preview.url}\nFingerprint: ${result.preview.fingerprint}`);
+    if (result.stage === "design-review") {
+      console.log(`Preview to review: ${result.preview.url}\nFingerprint: ${result.preview.fingerprint}`);
+      for (const entry of result.qa) console.log(`${entry.check} [${entry.result}]: ${entry.evidence}`);
+    }
   }
   return result;
 }

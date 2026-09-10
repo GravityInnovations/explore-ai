@@ -1,6 +1,5 @@
 import { mkdir, open, readFile, rename, unlink, readdir, lstat } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
-import path from "node:path";
 import { resolveLocal } from "./paths.mjs";
 import { validateData } from "./contracts.mjs";
 
@@ -85,6 +84,17 @@ export async function updateState(root, expected, change) {
     await lock.close();
     await unlink(lockPath);
   }
+}
+
+// Called under the workflow writer lock; never archive outside the target project.
+export async function archiveState(root, state) {
+  const folder = await resolveLocal(root, ".explain-ai/history", { mustExist: false });
+  await mkdir(folder, { recursive: true });
+  const relative = `.explain-ai/history/workflow-${randomUUID()}.json`;
+  const handle = await open(await localFile(root, relative, false), "wx");
+  try { await handle.writeFile(JSON.stringify(state, null, 2) + "\n"); await handle.sync(); }
+  finally { await handle.close(); }
+  return relative;
 }
 
 const excluded = new Set(["node_modules", ".git", ".agents", ".next", ".explain-ai", ".tmp"]);
