@@ -4,7 +4,9 @@ Input: level, subject and topic. Optional: topic key, references, curriculum not
 
 ## 1. Establish project context
 
-Run the read-only inspector from DESIGNER.md. If design is missing or invalid, complete designer first; if it is unconfigured, adopt it. Record the existing design SHA-256 and ID. Read configuration, design, local asset index and implemented runtime/component registry. A topic request is not permission to redesign the project.
+Run the inspector and `node <installed-skill>/scripts/workflow.mjs preflight --project <project-root> --json`. If preflight fails, return to [DESIGNER.md](DESIGNER.md) at the reported stage; stop topic authoring until the customer accepts the reviewed design. Missing legacy workflow state is unreviewed; never silently adopt it or fabricate acceptance. Valid JSON alone is insufficient. Preserve any already supplied level, subject and topic through the conversation.
+
+After preflight succeeds, record the accepted design SHA-256 and ID. Read configuration, design, local asset index and implemented runtime/component registry. A topic request is not permission to redesign the project.
 
 Use the project's level taxonomy and curriculum notes. `k5` is a catalog key, not a universal age standard. If scope can be inferred reasonably, record it; otherwise clarify the level once. Inspect the user's references, verify factual claims against suitable sources and label intentional simplifications. Avoid unsupported educational assertions, invented curriculum alignment or made-up citations.
 
