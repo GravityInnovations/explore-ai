@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { readContract, validateData } from "./contracts.mjs";
 import { resolveLocal, lessonIdentity, lessonRoute, assertLessonRoute } from "./paths.mjs";
 import { workflowStatus } from "./workflow-actions.mjs";
+import { critiquePedagogy } from "./pedagogy.mjs";
 
 const emphasis = new Set([
   "focus",
@@ -399,6 +400,12 @@ export async function validateProject(
       );
       warnings.push(
         ...critiqueCopy(lesson).map((warning) => ({
+          ...warning,
+          path: `${relative}${warning.path}`,
+        })),
+      );
+      warnings.push(
+        ...critiquePedagogy(lesson).map((warning) => ({
           ...warning,
           path: `${relative}${warning.path}`,
         })),

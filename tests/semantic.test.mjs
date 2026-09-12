@@ -8,6 +8,7 @@ import {
   critiqueCopy,
   resolveColorStrategy,
 } from "../skills/explain-ai/scripts/validate.mjs";
+import { critiquePedagogy } from "../skills/explain-ai/scripts/pedagogy.mjs";
 const check = (f) => validateSemantics(f.lesson, f.design, f.index, f.runtime);
 test("coherent semantic package passes", () =>
   assert.deepEqual(check(fixture()), []));
@@ -34,6 +35,23 @@ test("factual steps require existing source references and preserve clean copy",
     reference: "local/duplicate.md",
   });
   assert.match(JSON.stringify(check(f)), /Duplicate source ID/);
+});
+
+test("paired grade fixtures allow richer Grade 7 detail while flagging Grade 2 overload", () => {
+  const grade2 = fixture();
+  grade2.lesson.level = "grade-2";
+  grade2.lesson.steps[0].explains = ["shape", "shape.part", "shape.extra"];
+  grade2.lesson.objects.push({ id: "shape.extra", parent: "shape", component: "box", label: "Extra", description: "Extra" });
+  const grade2Warnings = critiquePedagogy(grade2.lesson);
+  assert.ok(grade2Warnings.some((warning) => warning.code === "COGNITIVE_LOAD_TARGETS"));
+
+  const grade7 = fixture();
+  grade7.lesson.level = "grade-7";
+  grade7.lesson.steps[0].introduces = ["ratio", "comparison"];
+  grade7.lesson.steps[0].uses = ["ratio", "comparison"];
+  grade7.lesson.steps[0].title = "Recap the comparison";
+  grade7.lesson.steps[0].text = "Identify the marked part and recap the comparison.";
+  assert.deepEqual(critiquePedagogy(grade7.lesson), []);
 });
 
 test("emphasis critic warns on repetitive highlight-only teaching without failing validation", () => {

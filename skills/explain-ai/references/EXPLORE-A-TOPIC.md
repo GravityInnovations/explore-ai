@@ -14,7 +14,7 @@ Reuse the accepted design's lesson colour strategy by default. Ask for a lesson 
 
 ## 2. Plan the educational and visual story
 
-Create a compact working table with: learning objective, explanation, exact semantic target, visual teaching technique, asset/component choice and fallback. Keep planning notes small and task-local; do not introduce required duplicate lesson manifests.
+Create a compact working table with: learning objective, explanation, exact semantic target, visual teaching technique, asset/component choice and fallback. Apply the grade-band guardrails in [PEDAGOGY.md](PEDAGOGY.md), including one learning point per step, ordered vocabulary and a final recap. Keep planning notes small and task-local; do not introduce required duplicate lesson manifests.
 
 Choose an order that builds understanding: orient the learner, introduce the relevant whole, examine its parts or process, compare where helpful, then reconnect the detail to the whole and conclude. Sequence depends on the subject; this is not a fixed slide formula. Dissection, extraction, magnification, flow and scale are teaching tools, not decoration. Do not use the same effect for every concept merely because its handler already exists.
 
