@@ -14,4 +14,15 @@ All contracts use JSON Schema Draft 2020-12. The package validator resolves refe
 
 Change JSON here first, then run `npm run types:generate` from the development repository and validate affected examples/tests. Keep action variants, the common vocabulary and [LESSON-SPEC.md](../references/LESSON-SPEC.md) aligned. Unknown fields/versions fail; introduce an explicit migration when semantics change.
 
+## Compatibility
+
+Data contracts are the project, design, asset-index, runtime and lesson documents. Workflow state is an operational record with its own version and lifecycle.
+
+| Skill package | Data contracts | Workflow state |
+| --- | --- | --- |
+| `0.2.0` | `1.0.0` | `1.0.0` |
+| Next release tracked by issue #39 | `2.0.0` | `1.0.0` |
+
+The package version and contract versions are independent. The v2 transition changes only the explicit version boundary; later evolution issues own any new fields or semantics. Migrate v1 project data with `node scripts/migrate.mjs --project <root>` to inspect the plan, then repeat with `--write`. The workflow file is not rewritten. Its stored design fingerprint becomes stale after the design profile changes, so the customer must review and accept the migrated preview again.
+
 Schema validity cannot establish referential integrity, path containment or rendered behavior. Those checks belong to the semantic/filesystem validator and actual runtime review. Do not loosen schemas to silence an unsupported runtime action.

@@ -20,6 +20,8 @@ Then, inside `<your-project>/.agents/skills/explain-ai`:
 npm ci --ignore-scripts --no-audit --no-fund
 ```
 
+Projects using v1 data contracts can preview the v2 migration with `node scripts/migrate.mjs --project <your-project>` from the installed skill. Add `--write` only after reviewing its file plan; the command creates deterministic local backups before changing owned ExplainAI JSON.
+
 On Windows use `npm.cmd` in PowerShell and quote paths containing spaces. Open the target project in Codex and select `explain-ai`. See [installation and verification](INSTALL.md) for manual copying, discovery, updates and eventual GitHub installation. A GitHub install cannot retrieve commits that exist only locally.
 
 ## Use

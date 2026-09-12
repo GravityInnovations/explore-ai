@@ -1,6 +1,6 @@
-# Lesson format v1
+# Lesson format v2
 
-The JSON schemas in `schemas/` are authoritative. They use Draft 2020-12, require exact `schemaVersion: "1.0.0"`, and reject unknown fields. Generated TypeScript in `types/` mirrors structure; semantic checks remain necessary. The separate workflow contract tracks designer review and acceptance. Schema IDs are identifiers, not required network downloads: the validator loads bundled schemas locally.
+The JSON schemas in `schemas/` are authoritative. They use Draft 2020-12, require exact data-contract `schemaVersion: "2.0.0"`, and reject unknown fields. Generated TypeScript in `types/` mirrors structure; semantic checks remain necessary. The separate workflow contract remains at v1 and tracks designer review and acceptance. Schema IDs are identifiers, not required network downloads: the validator loads bundled schemas locally.
 
 ## Identity, content and scene
 
@@ -54,4 +54,4 @@ Default appearance, duration, easing and scroll pacing come from the design. Obj
 
 ## Extension and compatibility
 
-To add an action: specify semantics and parameters, update common vocabulary and lesson action variant, regenerate TypeScript, implement and test the runtime handler/component support, then extend validation and examples. Add an explicit migration when changing existing meaning. Unsupported versions/actions fail clearly; no silent downgrade. A future storage adapter may change persistence while preserving these contracts.
+To add an action: specify semantics and parameters, update common vocabulary and lesson action variant, regenerate TypeScript, implement and test the runtime handler/component support, then extend validation and examples. Add an explicit migration when changing existing meaning. Unsupported versions/actions fail clearly; no silent downgrade. See the schema [compatibility table](../schemas/README.md) and use the bundled migration for v1 data. A future storage adapter may change persistence while preserving these contracts.

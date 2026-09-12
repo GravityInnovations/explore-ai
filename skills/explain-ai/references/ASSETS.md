@@ -20,7 +20,7 @@ Read `schemas/asset-index.schema.json`. A local library index is:
 
 ```json
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "assets": [{
     "id": "plant-cell-diagram",
     "type": "image",
