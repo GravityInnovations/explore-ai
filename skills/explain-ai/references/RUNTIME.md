@@ -55,6 +55,8 @@ In React effects, return cleanup that reverts the GSAP context, stops render loo
 
 Use a ResizeObserver or the project's resize infrastructure; update renderer size, camera aspect/projection and responsive bounds. Cap pixel ratio according to the design. On WebGL creation/context failure, keep the server-rendered explanation and expose a clear runtime error; render a diagram only when the lesson explicitly configures one. Do not leave a blank lesson or generate a duplicate 2D model.
 
+During development, run the scene auditor from `assets/runtime/performance-audit.ts` against the lesson scene. The defaults are DPR ≤2, 120 draw calls, 250,000 visible triangles, 2048px textures, 64 MiB estimated texture memory, two shadow lights and 5,000 particles. A project-specific `budgetOverrideReason` is required and reported for an intentional exception; the auditor never silently lowers quality or transmits telemetry. Register every lesson-owned resource with its ledger and require zero owned resources after disposal.
+
 Before reporting integration complete, inspect representative beginning/middle/end steps, reverse scroll and direct anchors, desktop/mobile widths, reduced motion and no-WebGL fallback. Validate asset loading in the actual browser. Report separately what was typechecked, unit tested and visually observed.
 
 API references checked while building v1: [Next.js server/client boundaries](https://nextjs.org/docs/app/getting-started/server-and-client-components), [GSAP ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/), [Three.js documentation](https://threejs.org/docs/).
