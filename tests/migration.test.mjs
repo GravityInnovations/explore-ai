@@ -63,6 +63,10 @@ test("migration plans first, writes atomically, preserves other files, and is id
       JSON.parse(await readFile(path.join(root, "design/profile.json"), "utf8")).accessibility.fallback,
       "text-and-diagram",
     );
+    assert.equal(
+      JSON.parse(await readFile(path.join(root, "design/profile.json"), "utf8")).lessonColorStrategyDefault,
+      "theme",
+    );
     assert.deepEqual(
       await readFile(path.join(root, ".explain-ai/migrations/1.0.0-to-2.0.0/backup", owned[0])),
       before,

@@ -25,4 +25,6 @@ Data contracts are the project, design, asset-index, runtime and lesson document
 
 The package version and contract versions are independent. The v2 transition changes only the explicit version boundary; later evolution issues own any new fields or semantics. Migrate v1 project data with `node scripts/migrate.mjs --project <root>` to inspect the plan, then repeat with `--write`. The workflow file is not rewritten. Its stored design fingerprint becomes stale after the design profile changes, so the customer must review and accept the migrated preview again.
 
+The v1-to-v2 migration assigns a missing design colour-strategy default to `theme`; it never infers colors from CSS or rewrites object materials. A lesson may explicitly override that accepted default with `imitated` or `theme`.
+
 Schema validity cannot establish referential integrity, path containment or rendered behavior. Those checks belong to the semantic/filesystem validator and actual runtime review. Do not loosen schemas to silence an unsupported runtime action.

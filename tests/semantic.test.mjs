@@ -6,6 +6,7 @@ import {
   validateDesign,
   critiqueEmphasis,
   critiqueCopy,
+  resolveColorStrategy,
 } from "../skills/explain-ai/scripts/validate.mjs";
 const check = (f) => validateSemantics(f.lesson, f.design, f.index, f.runtime);
 test("coherent semantic package passes", () =>
@@ -31,6 +32,15 @@ test("copy critic warns on paragraph-heavy steps without truncating text", () =>
   assert.equal(f.lesson.steps[0].text, original);
   f.lesson.steps[0].text = "First point. Second point. Third point.";
   assert.deepEqual(critiqueCopy(f.lesson), []);
+});
+
+test("lesson color strategy resolves override before accepted project default", () => {
+  const f = fixture();
+  assert.equal(resolveColorStrategy(f.lesson, f.design), "imitated");
+  delete f.lesson.metadata.colorStrategy;
+  assert.equal(resolveColorStrategy(f.lesson, f.design), "theme");
+  f.lesson.metadata.colorStrategy = "unknown";
+  assert.notDeepEqual(validateSemantics(f.lesson, f.design, f.index, f.runtime), []);
 });
 for (const [name, mutate, match] of [
   [

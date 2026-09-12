@@ -10,6 +10,8 @@ After preflight succeeds, record the accepted design SHA-256 and ID. Read config
 
 Use the project's level taxonomy and curriculum notes. `k5` is a catalog key, not a universal age standard. If scope can be inferred reasonably, record it; otherwise clarify the level once. Inspect the user's references, verify factual claims against suitable sources and label intentional simplifications. Avoid unsupported educational assertions, invented curriculum alignment or made-up citations.
 
+Reuse the accepted design's lesson colour strategy by default. Ask for a lesson override only when the topic has a clear educational reason; record `imitated` or `theme` declaratively and keep the interface palette inherited from the design.
+
 ## 2. Plan the educational and visual story
 
 Create a compact working table with: learning objective, explanation, exact semantic target, visual teaching technique, asset/component choice and fallback. Keep planning notes small and task-local; do not introduce required duplicate lesson manifests.

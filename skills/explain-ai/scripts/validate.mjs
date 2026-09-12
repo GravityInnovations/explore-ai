@@ -223,6 +223,10 @@ export function critiqueCopy(lesson) {
   });
 }
 
+export function resolveColorStrategy(lesson, design) {
+  return lesson.metadata.colorStrategy ?? design.lessonColorStrategyDefault;
+}
+
 function luminance(hex) {
   const channels = hex
     .slice(1)

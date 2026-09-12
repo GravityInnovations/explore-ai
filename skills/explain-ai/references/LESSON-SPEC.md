@@ -14,6 +14,8 @@ The JSON schemas in `schemas/` are authoritative. They use Draft 2020-12, requir
 
 Lesson `assets` contains only lesson-specific metadata. Shared assets resolve from the library index. `accessibility.summary` provides the required textual fallback; `staticDiagramAssetId` optionally references an explicitly requested image. Every step's `alt` describes the teaching content, not merely "3D image".
 
+Educational object colour strategy resolves as lesson `metadata.colorStrategy` first, then the accepted design `lessonColorStrategyDefault`. `imitated` permits recognizable subject colours; `theme` uses the accepted project materials. The strategy does not change UI chrome, typography or navigation, and object JSON cannot add arbitrary colour overrides.
+
 ## Action semantics
 
 Every action requires `action` and `target`. Fields below are additional required parameters unless marked optional. All numeric distances use the scene's documented world units, angles use degrees (convert once for Three.js), and opacity ranges from 0 to 1. A transform without any transform field is invalid.
