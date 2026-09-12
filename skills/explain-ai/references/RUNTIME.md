@@ -20,6 +20,8 @@ Copy only needed files from `assets/templates/` into an appropriate target-proje
 
 `runtime.ts` is the primary integration boundary: it creates a real Three.js scene, camera and renderer, registers GSAP ScrollTrigger and owns the trigger/renderer cleanup. Use the target project's canvas and section elements; do not replace this boundary with CSS/SVG animation. A browser observation is still required to prove that the target application mounts it successfully.
 
+Use `DesktopLessonGate.tsx` around the lesson route. It treats widths below 768 CSS pixels as unsupported, renders a lightweight server-safe desktop/laptop message, and invokes the heavy renderer only at 768 pixels or wider. Recalculate on resize; do not use user-agent detection or initialize a canvas and hide it on phones.
+
 `controller.ts` requires explicit action handlers and owns sequencing, pacing, reduced-motion sampling and disposal. `scroll.ts` uses real GSAP/ScrollTrigger APIs with media-query context cleanup. `camera.ts` provides bounds fitting for wide/medium/close/macro/top/side/best; inside/orbit require deliberate geometry-aware camera handlers. `LessonText.tsx` is unstyled semantic content with anchors and an optional locally resolved diagram.
 
 Example adapter pattern (inside the target project):

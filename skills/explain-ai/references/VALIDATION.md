@@ -24,6 +24,8 @@ The project needs its configuration, design, asset index (even when empty), runt
 
 Primary runtime evidence must show an actual Three.js scene/renderer and live GSAP ScrollTrigger wiring in the target application. Package dependencies, imports, manifest names or source text alone are structural evidence only. Keep readable text and a clear WebGL failure message as the required fallback; render a static diagram only when explicitly configured, then separately record the browser observation for renderer creation, scroll synchronization, resize, reverse navigation and cleanup.
 
+For lesson routes, validate the fixed desktop gate at 767px and 768px, including a resize across the boundary. The blocked branch must render the readable desktop/laptop message without initializing the lesson renderer; tablet support is not inferred beyond the width predicate.
+
 `--integrated` additionally verifies every non-component asset has a byte-identical browser copy under the configured public-assets root:
 
 - Library: `<publicAssets>/library/<asset.path>`.

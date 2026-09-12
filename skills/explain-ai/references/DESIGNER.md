@@ -46,6 +46,8 @@ Read `schemas/design.schema.json`. Write the configured profile (default `design
 
 Create or adapt a runnable design-only preview. Demonstrate typography/palette, representative forms/materials, text and labels, navigation/focus and agreed motion/fallback behaviour. The primary preview scene uses Three.js with GSAP ScrollTrigger; clients choose visual and interaction direction, never the rendering or animation libraries. Use text for a deferred logo. Do not choose a production lesson or fabricate runtime capabilities. SVG or procedural studies may support fallback content or visual reference, but cannot claim a completed primary lesson runtime.
 
+The designer preview may remain responsive as a review surface. Lesson routes use the desktop lesson gate at 768 CSS pixels; do not create a separate phone composition.
+
 Use the existing app and dependencies. For an empty project, initialise only the minimal requested preview. Respect target instructions and keep content local. Present the preview, then register its URL and relevant files through `preview`.
 
 ## QA, revise and request acceptance
