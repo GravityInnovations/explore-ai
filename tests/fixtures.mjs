@@ -7,6 +7,7 @@ export function fixture() {
       assetLibrary: "asset-library",
       publicAssets: "public/explain-ai",
       runtime: "explain-ai.runtime.json",
+      catalog: "catalog/index.json",
     },
   };
   const design = {

@@ -14,6 +14,9 @@ export function migrateContract(kind, value) {
   return {
     ...value,
     schemaVersion: toVersion,
+    ...(kind === "project" && !value.paths.catalog
+      ? { paths: { ...value.paths, catalog: "catalog/index.json" } }
+      : {}),
     ...(kind === "design" && !value.lessonColorStrategyDefault
       ? { lessonColorStrategyDefault: "theme" }
       : {}),

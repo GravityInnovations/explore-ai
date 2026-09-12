@@ -20,6 +20,7 @@ const config = {
     assetLibrary: "asset-library",
     publicAssets: "public/explain-ai",
     runtime: "explain-ai.runtime.json",
+    catalog: "catalog/index.json",
   },
 };
 test("versioned project contract rejects unknown properties and requires migration", () => {

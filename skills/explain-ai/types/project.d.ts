@@ -8,5 +8,6 @@ export interface Project {
     assetLibrary: string;
     publicAssets: string;
     runtime: string;
+    catalog: string;
   };
 }

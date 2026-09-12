@@ -24,6 +24,9 @@
         },
         "runtime": {
           "$ref": "common.schema.json#/$defs/relativePath"
+        },
+        "catalog": {
+          "$ref": "common.schema.json#/$defs/relativePath"
         }
       },
       "required": [
@@ -31,7 +34,8 @@
         "content",
         "assetLibrary",
         "publicAssets",
-        "runtime"
+        "runtime",
+        "catalog"
       ],
       "additionalProperties": false
     }
