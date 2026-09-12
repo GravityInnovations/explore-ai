@@ -7,7 +7,7 @@ Share a compact project context: target root/config paths, level/subject/topic, 
 | Role | Inputs | Output and acceptance |
 | --- | --- | --- |
 | Education Planner | Topic, level interpretation, curriculum/reference evidence | A short objective/sequence outline, intentional simplifications and source-backed claims; flag unresolved factual questions |
-| Visual Director | Objectives and design profile | Concept-to-target teaching choices, useful spatial composition, variety justified by understanding, and fallback strategy |
+| Visual Director | Objectives and design profile | Concept-to-target teaching choices from the intent table, useful spatial composition, variety justified by understanding, and fallback strategy |
 | Asset Planner | Visual requirements, local library and component registry | Reuse matches, procedural/new-asset decisions, provenance, anatomy requirements and missing runtime capabilities |
 | Scene Composer | Agreed visuals/assets | A semantic object hierarchy, reusable component bindings and stable names; no missing parents or opaque mesh references |
 | Choreography Agent | Scene and sequence | Complete independent story steps, explicit action parameters, semantic camera intent, clear emphasis and reversible progress |
@@ -26,10 +26,11 @@ One coordinator owns final writes to shared lesson/design/index files. Separate 
 1. Can the chosen learner understand the sequence and its conclusion? Are sources and simplifications honest?
 2. Does every named part in the text have a real semantic target, visible in that exact step? Inspect actual render/occlusion; a valid ID is insufficient.
 3. Does each advanced action have an implemented handler and appropriate anatomy? Are comparisons simultaneously legible?
-4. Are assets local, appropriately attributed and reused? Are browser URLs valid?
-5. Is the design fingerprint unchanged unless a design revision was explicitly requested?
-6. Do reverse scroll, resize, keyboard navigation, reduced motion and no-WebGL content work? Do labels rely on more than colour?
-7. Did optimisation remove duplication without deleting necessary explanation or focus?
+4. Do consecutive steps vary emphasis when another registered technique fits, while retaining justified highlights?
+5. Are assets local, appropriately attributed and reused? Are browser URLs valid?
+6. Is the design fingerprint unchanged unless a design revision was explicitly requested?
+7. Do reverse scroll, resize, keyboard navigation, reduced motion and no-WebGL content work? Do labels rely on more than colour?
+8. Did optimisation remove duplication without deleting necessary explanation or focus?
 
 ## Independent skill forward-test
 

@@ -16,6 +16,18 @@ Create a compact working table with: learning objective, explanation, exact sema
 
 Choose an order that builds understanding: orient the learner, introduce the relevant whole, examine its parts or process, compare where helpful, then reconnect the detail to the whole and conclude. Sequence depends on the subject; this is not a fixed slide formula. Dissection, extraction, magnification, flow and scale are teaching tools, not decoration. Do not use the same effect for every concept merely because its handler already exists.
 
+Choose emphasis by teaching intent and available anatomy:
+
+| Intent | Preferred registered technique |
+| --- | --- |
+| Identify a target | `focus` or `highlight` |
+| Inspect an interior | `xray` or an explicit geometry adapter for `cutaway` |
+| Separate related parts | `extract` or `explode` |
+| Inspect detail | `magnify` |
+| Show a relationship or direction | `compare` or `flow` |
+
+Keep `highlight` when it is the clearest choice. Avoid three or more consecutive highlight-only teaching steps when another registered technique fits; the critic reports a warning, not an automatic failure.
+
 Use the roles in AGENT-ROLES.md when useful. Asset planning precedes final scene/choreography: search local components and metadata, assess semantic anatomy, then decide reuse/procedural/new/reference. Creating new reusable geometry is allowed when required; keep its behavior in target-project components rather than executable lesson JSON.
 
 ## 3. Compose the package

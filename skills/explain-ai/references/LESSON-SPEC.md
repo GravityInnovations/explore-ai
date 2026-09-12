@@ -42,6 +42,8 @@ Every action requires `action` and `target`. Fields below are additional require
 
 No action is silently mapped to a vaguely similar effect. Capability manifests list implemented action names and camera modes plus per-component supported actions. Handler code and geometry must substantiate those declarations. Advanced imported anatomy may need an adapter; opaque model nodes alone are insufficient.
 
+For teaching emphasis, choose the implemented action that makes the intended relationship clearest: focus/highlight for identification, xray or an adapter-backed cutaway for interiors, extract/explode for separation, magnify for detail, and compare/flow for relationships. A highlight remains valid when it is clearest; repeated highlight-only steps are a critic warning when another registered capability fits.
+
 ## Camera, state and defaults
 
 Camera requires a semantic `target` and `mode`: wide, medium, close, macro, inside, orbit, top, side or best. Optional `position` and `lookAt` override derived placement. Calculate framing from bounds, aspect ratio, field of view, surrounding occlusion and the current project scene scale. Exact coordinates are escape hatches, not default authoring practice.
