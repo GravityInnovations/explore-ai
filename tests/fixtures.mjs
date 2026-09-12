@@ -58,7 +58,7 @@ export function fixture() {
     },
     accessibility: {
       reducedMotion: "static-steps",
-      fallback: "text-and-diagram",
+      fallback: "text",
       minimumContrast: 4.5,
     },
   };

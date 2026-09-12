@@ -79,7 +79,7 @@ export interface Design {
   };
   accessibility: {
     reducedMotion: "static-steps";
-    fallback: "text-and-diagram";
+    fallback: "text-and-diagram" | "text";
     minimumContrast: number;
   };
 }
