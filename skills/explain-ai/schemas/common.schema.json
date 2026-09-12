@@ -83,6 +83,13 @@
       "type": "string",
       "pattern": "^#[0-9a-fA-F]{6}$"
     },
+    "colorStrategy": {
+      "type": "string",
+      "enum": [
+        "imitated",
+        "theme"
+      ]
+    },
     "source": {
       "type": "object",
       "properties": {

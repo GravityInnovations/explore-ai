@@ -41,6 +41,7 @@ export interface Lesson {
      */
     sources: Source[];
     scopeNote?: string;
+    colorStrategy?: "imitated" | "theme";
   };
   /**
    * @minItems 0

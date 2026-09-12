@@ -2,6 +2,7 @@
   "schemaVersion": "2.0.0",
   "id": "example-only",
   "audience": "Illustrative fixture only; do not copy as a project theme",
+  "lessonColorStrategyDefault": "theme",
   "evidence": [
     {
       "source": "Original test fixture",

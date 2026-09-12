@@ -55,6 +55,9 @@
         "scopeNote": {
           "type": "string",
           "minLength": 1
+        },
+        "colorStrategy": {
+          "$ref": "common.schema.json#/$defs/colorStrategy"
         }
       },
       "required": [

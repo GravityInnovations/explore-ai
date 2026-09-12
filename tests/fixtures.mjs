@@ -13,6 +13,7 @@ export function fixture() {
     schemaVersion: "2.0.0",
     id: "test-profile",
     audience: "Technical test fixture",
+    lessonColorStrategyDefault: "theme",
     evidence: [
       {
         source: "test input",
@@ -87,6 +88,7 @@ export function fixture() {
       summary: "A fixture showing a part",
       objectives: ["Identify the marked part"],
       sources: [],
+      colorStrategy: "imitated",
     },
     objects: [
       {

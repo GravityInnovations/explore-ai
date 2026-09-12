@@ -14,6 +14,9 @@
       "type": "string",
       "minLength": 1
     },
+    "lessonColorStrategyDefault": {
+      "$ref": "common.schema.json#/$defs/colorStrategy"
+    },
     "evidence": {
       "type": "array",
       "items": {
@@ -355,6 +358,7 @@
     "schemaVersion",
     "id",
     "audience",
+    "lessonColorStrategyDefault",
     "evidence",
     "typography",
     "spacing",

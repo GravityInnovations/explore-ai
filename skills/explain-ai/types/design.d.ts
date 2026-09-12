@@ -4,6 +4,7 @@ export interface Design {
   schemaVersion: "2.0.0";
   id: string;
   audience: string;
+  lessonColorStrategyDefault: "imitated" | "theme";
   /**
    * @minItems 1
    */

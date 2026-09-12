@@ -11,5 +11,11 @@ export function migrateContract(kind, value) {
     throw new Error(
       `Cannot migrate ${kind}: expected schemaVersion ${JSON.stringify(fromVersion)}, received ${JSON.stringify(value.schemaVersion)}`,
     );
-  return { ...value, schemaVersion: toVersion };
+  return {
+    ...value,
+    schemaVersion: toVersion,
+    ...(kind === "design" && !value.lessonColorStrategyDefault
+      ? { lessonColorStrategyDefault: "theme" }
+      : {}),
+  };
 }
