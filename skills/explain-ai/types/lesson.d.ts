@@ -29,6 +29,7 @@ export type Lesson = {
    * @minItems 0
    */
   assets?: Asset[];
+  quiz: Quiz;
   /**
    * @minItems 1
    */
@@ -64,6 +65,24 @@ export type Asset = {
    */
   semanticTargets?: string[];
 };
+export type Answer = {
+  [k: string]: unknown;
+} & {
+  id: string;
+  text: string;
+  correct: boolean;
+  explanation?: string;
+} & {
+  id: string;
+  text: string;
+  correct: boolean;
+  explanation?: string;
+} & {
+  id: string;
+  text: string;
+  correct: boolean;
+  explanation?: string;
+};
 export type Action =
   | Focus
   | Highlight
@@ -90,6 +109,26 @@ export interface Source {
   title: string;
   reference: string;
   note?: string;
+}
+export interface Quiz {
+  enabled: boolean;
+  drawCount: number;
+  /**
+   * @minItems 0
+   */
+  questions: Question[];
+}
+export interface Question {
+  id: string;
+  /**
+   * @minItems 1
+   */
+  objectiveIds: [string, ...string[]];
+  prompt: string;
+  /**
+   * @minItems 2
+   */
+  answers: [Answer, Answer, ...Answer[]];
 }
 export interface SceneObject {
   id: string;

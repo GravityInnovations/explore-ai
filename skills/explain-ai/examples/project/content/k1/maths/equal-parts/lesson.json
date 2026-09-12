@@ -22,6 +22,11 @@
       }
     ]
   },
+  "quiz": {
+    "enabled": false,
+    "drawCount": 3,
+    "questions": []
+  },
   "objects": [
     {
       "id": "shape",

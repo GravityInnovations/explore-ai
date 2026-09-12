@@ -79,6 +79,9 @@
       },
       "minItems": 0
     },
+    "quiz": {
+      "$ref": "#/$defs/quiz"
+    },
     "objects": {
       "type": "array",
       "items": {
@@ -120,6 +123,7 @@
     "title",
     "designId",
     "metadata",
+    "quiz",
     "objects",
     "steps",
     "accessibility"
@@ -764,6 +768,63 @@
         "actions",
         "camera",
         "alt"
+      ],
+      "additionalProperties": false
+    },
+    "quiz": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "drawCount": { "type": "integer", "minimum": 3, "maximum": 10 },
+        "questions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/question" },
+          "minItems": 0
+        }
+      },
+      "required": ["enabled", "drawCount", "questions"],
+      "additionalProperties": false
+    },
+    "question": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/slug" },
+        "objectiveIds": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/slug" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "prompt": { "type": "string", "minLength": 1 },
+        "answers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/answer" },
+          "minItems": 2
+        }
+      },
+      "required": ["id", "objectiveIds", "prompt", "answers"],
+      "additionalProperties": false
+    },
+    "answer": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/slug" },
+        "text": { "type": "string", "minLength": 1 },
+        "correct": { "type": "boolean" },
+        "explanation": { "type": "string", "minLength": 1 }
+      },
+      "required": ["id", "text", "correct"],
+      "allOf": [
+        {
+          "if": {
+            "properties": { "correct": { "const": true } },
+            "required": ["correct"]
+          },
+          "then": {
+            "properties": { "explanation": { "type": "string", "minLength": 1 } },
+            "required": ["explanation"]
+          }
+        }
       ],
       "additionalProperties": false
     }

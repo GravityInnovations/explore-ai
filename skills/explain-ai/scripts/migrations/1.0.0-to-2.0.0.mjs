@@ -48,6 +48,7 @@ export function migrateContract(kind, value) {
         id: source.id ?? `source-${index + 1}`,
       })),
     };
+    migrated.quiz = value.quiz ?? { enabled: false, drawCount: 3, questions: [] };
   }
   return migrated;
 }

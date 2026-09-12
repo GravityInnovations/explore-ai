@@ -99,6 +99,7 @@ export function fixture() {
       sources: [],
       colorStrategy: "imitated",
     },
+    quiz: { enabled: false, drawCount: 3, questions: [] },
     objects: [
       {
         id: "shape",
