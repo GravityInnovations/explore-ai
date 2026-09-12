@@ -63,4 +63,14 @@ export interface Runtime {
       | "transform"
     )[];
   }[];
+  performanceBudgets?: {
+    devicePixelRatio?: number;
+    drawCalls?: number;
+    visibleTriangles?: number;
+    maxTextureDimension?: number;
+    textureMemoryBytes?: number;
+    shadowLights?: number;
+    particles?: number;
+  };
+  budgetOverrideReason?: string;
 }

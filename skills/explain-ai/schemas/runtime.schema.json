@@ -47,6 +47,23 @@
         "additionalProperties": false
       },
       "minItems": 0
+    },
+    "performanceBudgets": {
+      "type": "object",
+      "properties": {
+        "devicePixelRatio": { "type": "number", "exclusiveMinimum": 0 },
+        "drawCalls": { "type": "integer", "minimum": 0 },
+        "visibleTriangles": { "type": "integer", "minimum": 0 },
+        "maxTextureDimension": { "type": "integer", "minimum": 1 },
+        "textureMemoryBytes": { "type": "integer", "minimum": 0 },
+        "shadowLights": { "type": "integer", "minimum": 0 },
+        "particles": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "budgetOverrideReason": {
+      "type": "string",
+      "minLength": 1
     }
   },
   "required": [
