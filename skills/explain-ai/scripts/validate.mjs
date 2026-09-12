@@ -181,6 +181,34 @@ export function validateSemantics(lesson, design, index, runtime) {
   return errors;
 }
 
+export function critiqueEmphasis(lesson, runtime) {
+  const warnings = [];
+  const alternatives = new Set([
+    "focus", "isolate", "extract", "explode", "xray", "magnify", "compare", "flow",
+  ]);
+  const hasAlternative = [...alternatives].some((action) => runtime.actions.includes(action));
+  let run = [];
+  const report = () => {
+    if (run.length >= 3)
+      warnings.push({
+        path: `/steps/${run[0]}/actions`,
+        code: "EMPHASIS_REPETITION",
+        message: `${run.length} consecutive teaching steps use highlight only; consider a compatible registered technique such as focus, isolate, extract, magnify, compare or flow`,
+      });
+  };
+  lesson.steps.forEach((step, index) => {
+    const teaching = step.explains.length > 0;
+    const highlightOnly = teaching && step.actions.length > 0 && step.actions.every((action) => action.action === "highlight");
+    if (hasAlternative && highlightOnly) run.push(index);
+    else {
+      report();
+      run = [];
+    }
+  });
+  report();
+  return warnings;
+}
+
 function luminance(hex) {
   const channels = hex
     .slice(1)
@@ -265,6 +293,7 @@ export async function validateProject(
   }
   const { root, config, design, index, runtime } = await loadProject(project);
   const errors = [];
+  const warnings = [];
   const add = (p, message) => errors.push({ path: p, message });
   const lessons = requested
     ? [requested]
@@ -320,6 +349,12 @@ export async function validateProject(
           path: `${relative}${e.path}`,
         })),
       );
+      warnings.push(
+        ...critiqueEmphasis(lesson, runtime).map((warning) => ({
+          ...warning,
+          path: `${relative}${warning.path}`,
+        })),
+      );
       const base = path.posix.dirname(relative);
       for (const a of lesson.assets ?? []) {
         if (!a.path.startsWith("assets/"))
@@ -342,6 +377,7 @@ export async function validateProject(
     valid: errors.length === 0,
     lessons: lessons.length,
     errors,
+    warnings,
     integrated,
   };
 }

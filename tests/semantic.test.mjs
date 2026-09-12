@@ -4,10 +4,22 @@ import { fixture } from "./fixtures.mjs";
 import {
   validateSemantics,
   validateDesign,
+  critiqueEmphasis,
 } from "../skills/explain-ai/scripts/validate.mjs";
 const check = (f) => validateSemantics(f.lesson, f.design, f.index, f.runtime);
 test("coherent semantic package passes", () =>
   assert.deepEqual(check(fixture()), []));
+
+test("emphasis critic warns on repetitive highlight-only teaching without failing validation", () => {
+  const f = fixture();
+  f.lesson.steps = [0, 1, 2].map((index) => ({ ...f.lesson.steps[0], id: `step-${index}` }));
+  assert.equal(critiqueEmphasis(f.lesson, f.runtime).length, 1);
+  f.lesson.steps[1].actions = [{ action: "magnify", target: "shape.part", factor: 1.2 }];
+  assert.deepEqual(critiqueEmphasis(f.lesson, f.runtime), []);
+  f.runtime.actions = ["highlight"];
+  f.lesson.steps[1].actions = [{ action: "highlight", target: "shape.part" }];
+  assert.deepEqual(critiqueEmphasis(f.lesson, f.runtime), []);
+});
 for (const [name, mutate, match] of [
   [
     "unknown target",
