@@ -1,6 +1,6 @@
 export function fixture() {
   const config = {
-    schemaVersion: "1.0.0",
+    schemaVersion: "2.0.0",
     paths: {
       design: "design/profile.json",
       content: "content",
@@ -10,7 +10,7 @@ export function fixture() {
     },
   };
   const design = {
-    schemaVersion: "1.0.0",
+    schemaVersion: "2.0.0",
     id: "test-profile",
     audience: "Technical test fixture",
     evidence: [
@@ -62,9 +62,9 @@ export function fixture() {
       minimumContrast: 4.5,
     },
   };
-  const index = { schemaVersion: "1.0.0", assets: [] };
+  const index = { schemaVersion: "2.0.0", assets: [] };
   const runtime = {
-    schemaVersion: "1.0.0",
+    schemaVersion: "2.0.0",
     actions: ["highlight", "focus", "compare", "hide", "reveal", "cutaway"],
     cameraModes: ["wide", "close", "best"],
     components: [
@@ -75,7 +75,7 @@ export function fixture() {
     ],
   };
   const lesson = {
-    schemaVersion: "1.0.0",
+    schemaVersion: "2.0.0",
     lessonId: "k1/maths/shape",
     level: "k1",
     subject: "maths",

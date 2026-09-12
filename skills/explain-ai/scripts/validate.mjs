@@ -209,12 +209,14 @@ export async function loadProject(root) {
   const config = await readContract(
     "project",
     await resolveLocal(root, "explain-ai.config.json", { file: true }),
+    { project: root },
   );
   for (const relative of Object.values(config.paths))
     await resolveLocal(root, relative, { mustExist: false });
   const design = await readContract(
     "design",
     await resolveLocal(root, config.paths.design, { file: true }),
+    { project: root },
   );
   const designErrors = validateDesign(design);
   if (designErrors.length)
@@ -226,10 +228,12 @@ export async function loadProject(root) {
     await resolveLocal(root, `${config.paths.assetLibrary}/index.json`, {
       file: true,
     }),
+    { project: root },
   );
   const runtime = await readContract(
     "runtime",
     await resolveLocal(root, config.paths.runtime, { file: true }),
+    { project: root },
   );
   return { root, config, design, index, runtime };
 }
@@ -299,6 +303,7 @@ export async function validateProject(
       const lesson = await readContract(
         "lesson",
         await resolveLocal(root, relative, { file: true }),
+        { project: root },
       );
       const expected = `${config.paths.content}/${lessonIdentity(lesson.level, lesson.subject, lesson.topicKey)}/lesson.json`;
       if (relative !== expected)

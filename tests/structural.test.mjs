@@ -11,7 +11,7 @@ import {
 } from "../skills/explain-ai/scripts/paths.mjs";
 
 const config = {
-  schemaVersion: "1.0.0",
+  schemaVersion: "2.0.0",
   paths: {
     design: "design/profile.json",
     content: "content",
@@ -20,12 +20,15 @@ const config = {
     runtime: "explain-ai.runtime.json",
   },
 };
-test("versioned project contract rejects unknown properties and malformed versions", () => {
+test("versioned project contract rejects unknown properties and requires migration", () => {
   assert.deepEqual(validateData("project", config), []);
   assert.ok(validateData("project", { ...config, cloud: true }).length);
-  assert.ok(
-    validateData("project", { ...config, schemaVersion: "2.0.0" }).length,
-  );
+  const [versionError] = validateData("project", {
+    ...config,
+    schemaVersion: "1.0.0",
+  });
+  assert.equal(versionError.code, "MIGRATION_REQUIRED");
+  assert.match(versionError.message, /migrate\.mjs.*--project/);
 });
 test("catalog identity cannot collide through hyphen concatenation", () => {
   assert.notEqual(
