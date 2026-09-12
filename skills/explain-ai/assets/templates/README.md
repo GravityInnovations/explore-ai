@@ -11,6 +11,8 @@
 | `LessonStage.tsx` | Persistent visual stage, ordered copy, one scroll progress model and Next/Previous controls | Connect the target runtime factory and keep step styling unboxed |
 | `CatalogRoutes.ts` | Pure level → subject → lesson route model from catalog entries | Render it through the target project's existing shell; never replace the root route |
 | `AppShell.tsx` | Shared shell boundary for catalog and lesson entrypoints | Apply the accepted profile tokens once; keep lesson-specific composition inside `children` |
+| `quiz-state.ts` | Session-only locked answers, first-submission score and retry state | Keep question selection/authoring in the lesson contract; do not persist learner data |
+| `Quiz.tsx` | Accessible correction, score and retry presentation | Apply project shell tokens; browser proof belongs to the E2E harness |
 
 After copying templates into a target project, adjust relative type imports. Keep filesystem modules on the server and scene/GSAP code behind a client boundary. Templates do not implement all nineteen action effects; do not advertise unsupported geometry in the runtime manifest.
 
