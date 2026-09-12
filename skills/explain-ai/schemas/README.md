@@ -6,6 +6,7 @@ All contracts use JSON Schema Draft 2020-12. The package validator resolves refe
 | --- | --- |
 | `common.schema.json` | Version, catalog keys, semantic paths, relative paths, vectors, colours, source records and action/camera vocabularies |
 | `project.schema.json` | Explicit project-local output and runtime paths |
+| `catalog.schema.json` | Deterministic additive level → subject → lesson entries and nested routes |
 | `design.schema.json` | Project-specific design values and their evidence |
 | `workflow.schema.json` | Guided designer decisions, stages, QA evidence and revision-bound acceptance |
 | `asset-index.schema.json` | Shared and lesson-local asset metadata shape |
