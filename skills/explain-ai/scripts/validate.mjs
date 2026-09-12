@@ -16,6 +16,37 @@ const emphasis = new Set([
   "compare",
 ]);
 const under = (id, parent) => id === parent || id.startsWith(`${parent}.`);
+export function validateQuiz(lesson) {
+  const quiz = lesson.quiz;
+  if (!quiz.enabled) return [];
+  const errors = [];
+  const add = (path, message) => errors.push({ path, message });
+  if (quiz.questions.length < quiz.drawCount)
+    add("/quiz/questions", "Question pool must contain at least drawCount questions");
+  const objectiveIds = lesson.metadata.objectives.map((_, index) => `objective-${index + 1}`);
+  const covered = new Set();
+  const questionIds = new Set();
+  quiz.questions.forEach((question, index) => {
+    if (questionIds.has(question.id)) add(`/quiz/questions/${index}/id`, `Duplicate question ID: ${question.id}`);
+    questionIds.add(question.id);
+    question.objectiveIds.forEach((objectiveId) => {
+      if (!objectiveIds.includes(objectiveId)) add(`/quiz/questions/${index}/objectiveIds`, `Unknown objective ID: ${objectiveId}`);
+      covered.add(objectiveId);
+    });
+    const answerIds = new Set();
+    let correct = 0;
+    question.answers.forEach((answer, answerIndex) => {
+      if (answerIds.has(answer.id)) add(`/quiz/questions/${index}/answers/${answerIndex}/id`, `Duplicate answer ID: ${answer.id}`);
+      answerIds.add(answer.id);
+      if (answer.correct) correct++;
+    });
+    if (correct !== 1) add(`/quiz/questions/${index}/answers`, "Each question must have exactly one correct answer");
+  });
+  objectiveIds.forEach((objectiveId) => {
+    if (!covered.has(objectiveId)) add("/quiz/questions", `Quiz does not cover ${objectiveId}`);
+  });
+  return errors;
+}
 export function validateSemantics(lesson, design, index, runtime, { integrated = false } = {}) {
   const errors = [];
   const add = (p, message) => errors.push({ path: p, message });
@@ -41,6 +72,7 @@ export function validateSemantics(lesson, design, index, runtime, { integrated =
   unique(lesson.steps, "/steps");
   const components = unique(runtime.components, "/runtime/components");
   const assets = unique([...index.assets, ...(lesson.assets ?? [])], "/assets");
+  errors.push(...validateQuiz(lesson));
   const sourceIds = new Set();
   lesson.metadata.sources.forEach((source, i) => {
     if (sourceIds.has(source.id)) add(`/metadata/sources/${i}/id`, `Duplicate source ID: ${source.id}`);

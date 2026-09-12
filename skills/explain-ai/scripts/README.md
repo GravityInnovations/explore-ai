@@ -10,6 +10,7 @@ Run these with Node.js 22+ after `npm ci --ignore-scripts --no-audit --no-fund` 
 | `build-catalog.mjs` | `--project <root> [--write]`: deterministically plan or write the configured level → subject → lesson catalog |
 | `find-assets.mjs` | `<project-root> [terms]`: search the local index and verify matching files |
 | `pedagogy.mjs` | Deterministic grade-band cognitive-load and sequence critic |
+| `quiz.mjs` | Seeded objective-covering question and answer selection |
 | `validate.mjs` | `--project <root> [--lesson <relative-path>] [--integrated]`: validate a catalog/package |
 | `validate.mjs` | `--kind <contract> --file <json>`: standalone structural check; design also checks body contrast |
 

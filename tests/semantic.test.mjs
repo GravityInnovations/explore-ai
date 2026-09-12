@@ -7,8 +7,10 @@ import {
   critiqueEmphasis,
   critiqueCopy,
   resolveColorStrategy,
+  validateQuiz,
 } from "../skills/explain-ai/scripts/validate.mjs";
 import { critiquePedagogy } from "../skills/explain-ai/scripts/pedagogy.mjs";
+import { selectQuizQuestions, shuffleQuizAnswers } from "../skills/explain-ai/scripts/quiz.mjs";
 const check = (f) => validateSemantics(f.lesson, f.design, f.index, f.runtime);
 test("coherent semantic package passes", () =>
   assert.deepEqual(check(fixture()), []));
@@ -52,6 +54,33 @@ test("paired grade fixtures allow richer Grade 7 detail while flagging Grade 2 o
   grade7.lesson.steps[0].title = "Recap the comparison";
   grade7.lesson.steps[0].text = "Identify the marked part and recap the comparison.";
   assert.deepEqual(critiquePedagogy(grade7.lesson), []);
+});
+
+test("quiz validation and seeded selection preserve objective coverage", () => {
+  const f = fixture();
+  f.lesson.quiz = {
+    enabled: true,
+    drawCount: 3,
+    questions: [1, 2, 3, 4].map((number) => ({
+      id: `question-${number}`,
+      objectiveIds: ["objective-1"],
+      prompt: `Which part is shown ${number}?`,
+      answers: [
+        { id: "yes", text: "The marked part", correct: true, explanation: "It is the marked part." },
+        { id: "no", text: "Another part", correct: false },
+      ],
+    })),
+  };
+  assert.deepEqual(validateQuiz(f.lesson), []);
+  const first = selectQuizQuestions(f.lesson.quiz, ["objective-1"], 1);
+  const second = selectQuizQuestions(f.lesson.quiz, ["objective-1"], 100);
+  assert.equal(first.length, 3);
+  assert.notDeepEqual(first.map((question) => question.id), second.map((question) => question.id));
+  assert.equal(shuffleQuizAnswers(first[0], 1).length, first[0].answers.length);
+  f.lesson.quiz.questions[0].answers[0].correct = false;
+  assert.match(JSON.stringify(validateQuiz(f.lesson)), /exactly one correct/);
+  f.lesson.quiz.questions[0].objectiveIds = ["objective-2"];
+  assert.match(JSON.stringify(validateQuiz(f.lesson)), /Unknown objective ID/);
 });
 
 test("emphasis critic warns on repetitive highlight-only teaching without failing validation", () => {
