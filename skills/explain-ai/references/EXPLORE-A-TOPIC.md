@@ -16,6 +16,8 @@ Create a compact working table with: learning objective, explanation, exact sema
 
 Choose an order that builds understanding: orient the learner, introduce the relevant whole, examine its parts or process, compare where helpful, then reconnect the detail to the whole and conclude. Sequence depends on the subject; this is not a fixed slide formula. Dissection, extraction, magnification, flow and scale are teaching tools, not decoration. Do not use the same effect for every concept merely because its handler already exists.
 
+Compose the lesson with one persistent visual stage and short copy sections around it. Use `LessonStage.tsx` and the shared controller for scroll, direct anchors and Next/Previous navigation. Do not turn teaching steps into bordered cards; reserve cards for genuine controls, catalog entries or quiz choices.
+
 Choose emphasis by teaching intent and available anatomy:
 
 | Intent | Preferred registered technique |

@@ -8,6 +8,7 @@
 | `LessonText.tsx` | Unstyled server-readable explanation, anchors, optional local diagram and WebGL error message | Apply project design and resolve the diagram URL |
 | `DesktopLessonGate.tsx` | Fixed 768px lesson support boundary and server-safe phone message | Keep heavy renderer invocation inside the supported children callback |
 | `runtime.ts` | Primary Three.js scene/camera/renderer and GSAP ScrollTrigger lifecycle boundary | Provide the target canvas/section and connect controller progress |
+| `LessonStage.tsx` | Persistent visual stage, ordered copy, one scroll progress model and Next/Previous controls | Connect the target runtime factory and keep step styling unboxed |
 
 After copying templates into a target project, adjust relative type imports. Keep filesystem modules on the server and scene/GSAP code behind a client boundary. Templates do not implement all nineteen action effects; do not advertise unsupported geometry in the runtime manifest.
 
