@@ -37,7 +37,7 @@ Each step describes its own state starting from the canonical scene baseline. Do
 
 Check needed actions against actual component anatomy/handlers. Extend a missing runtime using RUNTIME.md and the adaptable templates; do not mark an action implemented by merely putting it in the capability manifest. If an alternative is educationally equivalent, use it and state the tradeoff. JSON schema validity does not imply renderer compatibility.
 
-Adapt to the existing Next.js App Router. Prefer server-side filesystem loading and a client scene boundary. A project lacking catalog routes may get levels → subjects → topics → lesson routes. Do not rebuild an existing application or add storage services. Preserve nearby layouts and styling. Use configured paths and public asset mapping.
+Adapt to the existing Next.js App Router. Prefer server-side filesystem loading and a client scene boundary. The primary interactive lesson must create a real Three.js scene and use GSAP ScrollTrigger for scroll state; package declarations and manifest names are insufficient evidence. A project lacking catalog routes may get levels → subjects → topics → lesson routes. Do not rebuild an existing application or add storage services. Preserve nearby layouts and styling. Use configured paths and public asset mapping.
 
 Run structural and full project validation, then integrated copy checks where applicable. Fix failures. Preview explained targets, backward scrolling, resize/mobile, keyboard navigation, reduced motion and no-WebGL output. Confirm copy remains available without the canvas. Compare the design fingerprint with the initial value; if it changed unexpectedly, reconcile only your unintended changes before delivery.
 

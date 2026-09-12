@@ -44,7 +44,7 @@ Ask for agreement to that brief and wait. Do not implement the design while this
 
 Read `schemas/design.schema.json`. Write the configured profile (default `design/profile.json`), project configuration and an empty asset index only if absent. Preserve established paths. Cover the agreed typography, spacing, colours, materials, lighting, shape, motion, camera, highlights, labels, mobile and accessibility choices. Evidence records the agreed brief and references; inferred values remain labelled.
 
-Create or adapt a runnable design-only preview. Demonstrate typography/palette, representative forms/materials, text and labels, navigation/focus and agreed motion/fallback behaviour. Use text for a deferred logo. Do not choose a production lesson or fabricate runtime capabilities. SVG or procedural studies may establish visual language without claiming a completed Three.js lesson runtime.
+Create or adapt a runnable design-only preview. Demonstrate typography/palette, representative forms/materials, text and labels, navigation/focus and agreed motion/fallback behaviour. The primary preview scene uses Three.js with GSAP ScrollTrigger; clients choose visual and interaction direction, never the rendering or animation libraries. Use text for a deferred logo. Do not choose a production lesson or fabricate runtime capabilities. SVG or procedural studies may support fallback content or visual reference, but cannot claim a completed primary lesson runtime.
 
 Use the existing app and dependencies. For an empty project, initialise only the minimal requested preview. Respect target instructions and keep content local. Present the preview, then register its URL and relevant files through `preview`.
 

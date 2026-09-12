@@ -22,6 +22,8 @@ The first command is read-only. The second backs up exact v1 bytes, updates only
 
 The project needs its configuration, design, asset index (even when empty), runtime capability manifest and lesson files. See the schemas for exact shapes. Draft manifests may list no actions/components, but lesson validation will then correctly report unsupported work. Never claim integration from adding names to that manifest alone.
 
+Primary runtime evidence must show an actual Three.js scene/renderer and live GSAP ScrollTrigger wiring in the target application. Package dependencies, imports, manifest names or source text alone are structural evidence only. Keep static text/diagram and reduced-motion behavior as fallbacks, then separately record the browser observation for renderer creation, scroll synchronization, resize, reverse navigation and cleanup.
+
 `--integrated` additionally verifies every non-component asset has a byte-identical browser copy under the configured public-assets root:
 
 - Library: `<publicAssets>/library/<asset.path>`.

@@ -1,6 +1,6 @@
 # Target-project runtime integration
 
-The package includes adaptable TypeScript building blocks, not a production app or universal geometry engine. Inspect the user's existing Next.js/Three.js/GSAP versions and conventions; adapt imports and component layout. Do not install development dependencies from this repository into their project wholesale.
+The package includes adaptable TypeScript building blocks, not a production app or universal geometry engine. The primary lesson runtime is Three.js plus GSAP ScrollTrigger. Inspect the user's existing Next.js/Three.js/GSAP versions and conventions; adapt imports and component layout. Do not install development dependencies from this repository into their project wholesale.
 
 ## Integration sequence
 
@@ -17,6 +17,8 @@ Run the CLI validator during authoring and as a build/preflight check, not by sp
 ## Template usage
 
 Copy only needed files from `assets/templates/` into an appropriate target-project runtime folder. Copy generated declarations from `types/` or adapt imports to the existing contract module. The shipped relative type imports work inside this package and **must be adjusted after copying**. These are templates for the user's agent to integrate, not a drop-in Next.js route.
+
+`runtime.ts` is the primary integration boundary: it creates a real Three.js scene, camera and renderer, registers GSAP ScrollTrigger and owns the trigger/renderer cleanup. Use the target project's canvas and section elements; do not replace this boundary with CSS/SVG animation. A browser observation is still required to prove that the target application mounts it successfully.
 
 `controller.ts` requires explicit action handlers and owns sequencing, pacing, reduced-motion sampling and disposal. `scroll.ts` uses real GSAP/ScrollTrigger APIs with media-query context cleanup. `camera.ts` provides bounds fitting for wide/medium/close/macro/top/side/best; inside/orbit require deliberate geometry-aware camera handlers. `LessonText.tsx` is unstyled semantic content with anchors and an optional locally resolved diagram.
 
