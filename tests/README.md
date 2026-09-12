@@ -10,6 +10,7 @@ Run `npm test` after installing both root and skill dependencies. Run `npm run c
 | `semantic.test.mjs` | Targets, hierarchy, capabilities, emphasis, contrast and ordered visibility/opacity state |
 | `inspect.test.mjs` | Existing-profile discovery and byte preservation |
 | `assets.test.mjs` | Indexed reuse search and missing sources |
+| `e2e/fixture.spec.mjs` | Browser route, shell, lesson controls, quiz feedback and phone-gate checks |
 | `runtime.test.mjs` | Deterministic sampling, reverse/jump behavior, disposal and camera bounds |
 | `project.test.mjs` | Full catalog/file validation, public copies and installed CLI independence |
 | `workflow-*.test.mjs` | Strict state, atomic/stale writes, transitions, QA, customer acceptance, invalidation, contained restart and one installed-CLI journey |

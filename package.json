@@ -12,6 +12,7 @@
     "types:generate": "node scripts/generate-types.mjs",
     "types:check": "node scripts/generate-types.mjs --check",
     "test:runtime": "playwright test tests/e2e/runtime-probe.spec.mjs",
+    "test:e2e": "playwright test tests/e2e/fixture.spec.mjs tests/e2e/runtime-probe.spec.mjs",
     "check": "npm run types:check && npm run templates:check && npm test && node scripts/check-package.mjs",
     "install:skill": "node scripts/install.mjs",
     "templates:check": "tsc -p tsconfig.templates.json"
