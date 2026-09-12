@@ -59,6 +59,10 @@ test("migration plans first, writes atomically, preserves other files, and is id
     const result = await migrateProject(root, { write: true });
     assert.equal(result.status, "migrated");
     assert.equal(JSON.parse(await readFile(path.join(root, owned[0]), "utf8")).schemaVersion, "2.0.0");
+    assert.equal(
+      JSON.parse(await readFile(path.join(root, "design/profile.json"), "utf8")).accessibility.fallback,
+      "text-and-diagram",
+    );
     assert.deepEqual(
       await readFile(path.join(root, ".explain-ai/migrations/1.0.0-to-2.0.0/backup", owned[0])),
       before,

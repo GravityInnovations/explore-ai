@@ -12,7 +12,7 @@ The JSON schemas in `schemas/` are authoritative. They use Draft 2020-12, requir
 
 `steps` is ordered. Each has `id`, `title`, `text`, `explains`, `actions`, `camera` and `alt`. `explains` lists every specific visible object/part discussed in the prose. Each target must be emphasised directly or framed by a non-wide camera. The critic checks whether these declarations actually match the wording and rendered view. Optional `scrollUnits` overrides inherited pacing; optional `narrationAssetId` points to local audio.
 
-Lesson `assets` contains only lesson-specific metadata. Shared assets resolve from the library index. `accessibility.summary` provides a textual overall alternative; `staticDiagramAssetId` optionally references an image. Every step's `alt` describes the teaching content, not merely "3D image".
+Lesson `assets` contains only lesson-specific metadata. Shared assets resolve from the library index. `accessibility.summary` provides the required textual fallback; `staticDiagramAssetId` optionally references an explicitly requested image. Every step's `alt` describes the teaching content, not merely "3D image".
 
 ## Action semantics
 

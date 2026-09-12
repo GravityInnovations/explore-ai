@@ -2,6 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import Ajv from "../skills/explain-ai/node_modules/ajv/dist/2020.js";
+import { fixture } from "./fixtures.mjs";
+import { validateData } from "../skills/explain-ai/scripts/contracts.mjs";
 
 test("all contracts compile in strict Draft 2020-12 mode", async () => {
   const ajv = new Ajv({ strict: true });
@@ -17,4 +19,14 @@ test("all contracts compile in strict Draft 2020-12 mode", async () => {
   schemas.forEach((schema) =>
     assert.equal(typeof ajv.getSchema(schema.$id), "function"),
   );
+});
+
+test("text is a valid default fallback and diagrams remain explicit opt-ins", () => {
+  const value = fixture();
+  assert.deepEqual(validateData("design", value.design), []);
+  value.design.accessibility.fallback = "text-and-diagram";
+  assert.deepEqual(validateData("design", value.design), []);
+  assert.deepEqual(validateData("lesson", value.lesson), []);
+  value.lesson.accessibility.staticDiagramAssetId = "optional-diagram";
+  assert.deepEqual(validateData("lesson", value.lesson), []);
 });

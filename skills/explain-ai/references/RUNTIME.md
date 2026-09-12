@@ -47,11 +47,11 @@ Action values are relative to the canonical baseline described in LESSON-SPEC.md
 
 ## Accessibility, lifecycle and verification
 
-Respect `prefers-reduced-motion` at mount and when it changes: show stable endpoint states, no ambient motion, smooth scroll or forced pinning. Preserve all text and a useful static diagram, keyboard navigation, readable labels and non-colour emphasis. A reduced-motion controller alone cannot stop unrelated project animation; inspect the whole scene.
+Respect `prefers-reduced-motion` at mount and when it changes: show stable endpoint states, no ambient motion, smooth scroll or forced pinning. Preserve all text and an optional explicitly requested static diagram, keyboard navigation, readable labels and non-colour emphasis. On WebGL failure, keep the text and expose a clear runtime error; do not generate a parallel visual model. A reduced-motion controller alone cannot stop unrelated project animation; inspect the whole scene.
 
 In React effects, return cleanup that reverts the GSAP context, stops render loops, removes listeners/observers and disposes lesson-owned textures/materials/geometries and renderer. Do not dispose shared cached assets. Handle cancelled async loads before mounting and dispose late results. React Strict Mode can mount/clean up twice; create a fresh controller each mount. The provided controller disposal is idempotent.
 
-Use a ResizeObserver or the project's resize infrastructure; update renderer size, camera aspect/projection and responsive bounds. Cap pixel ratio according to the design. On WebGL creation/context failure, keep the server-rendered explanation and diagram visible; do not leave a blank lesson.
+Use a ResizeObserver or the project's resize infrastructure; update renderer size, camera aspect/projection and responsive bounds. Cap pixel ratio according to the design. On WebGL creation/context failure, keep the server-rendered explanation and expose a clear runtime error; render a diagram only when the lesson explicitly configures one. Do not leave a blank lesson or generate a duplicate 2D model.
 
 Before reporting integration complete, inspect representative beginning/middle/end steps, reverse scroll and direct anchors, desktop/mobile widths, reduced motion and no-WebGL fallback. Validate asset loading in the actual browser. Report separately what was typechecked, unit tested and visually observed.
 
