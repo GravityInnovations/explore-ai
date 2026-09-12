@@ -29,6 +29,8 @@ Read `schemas/asset-index.schema.json`. A local library index is:
     "description": "Labelled schematic for the static lesson alternative",
     "license": "MIT",
     "source": "Original project illustration",
+    "provenanceStatus": "original",
+    "redistribution": "allowed",
     "semanticTargets": ["cell.wall", "cell.nucleus"]
   }]
 }
@@ -36,7 +38,7 @@ Read `schemas/asset-index.schema.json`. A local library index is:
 
 Paths in the library are relative to `config.paths.assetLibrary`. Lesson `assets` use the same metadata shape, but paths must start with `assets/` and resolve relative to the lesson folder. IDs must be unique across the shared index and the lesson. Reuse shared IDs directly; do not copy the metadata into every lesson or action.
 
-Types are `model`, `image`, `texture`, `audio` and `component`. Retain source/license information. An unknown license can be recorded honestly but does not establish redistribution permission. Inspect reference restrictions before copying supplied work. Keep copyrighted reference material out of the distributable package unless its use is authorised. Do not invent attribution or URLs.
+Types are `model`, `image`, `texture`, `audio` and `component`. Retain source and provenance information. `provenanceStatus` is `original`, `permissive`, `customer-supplied`, `reference-only`, `restricted` or `unknown`; `redistribution` is `allowed`, `attribution-required` or `denied`. Permissive or attribution-required assets need a license and attribution. Customer-supplied assets need an authorization evidence note before redistribution. Unknown, reference-only, restricted and denied assets are evidence only and are blocked from integrated/public output. Do not infer a license from a filename or URL, and do not invent attribution.
 
 New reusable material goes in a descriptive local category; topic-only material stays with its lesson. Preserve existing files and IDs. Check for an existing semantically equivalent asset before allocating another ID. Keep model sizes, texture resolution and decoder requirements within the project's mobile budget. Do not add network-only dependencies.
 

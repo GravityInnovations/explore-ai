@@ -13,6 +13,8 @@
       "description": "Two equal halves of one rectangle",
       "license": "MIT",
       "source": "Original ExplainAI example illustration",
+      "provenanceStatus": "original",
+      "redistribution": "allowed",
       "semanticTargets": [
         "shape.left",
         "shape.right"

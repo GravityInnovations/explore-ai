@@ -67,6 +67,13 @@ test("migration plans first, writes atomically, preserves other files, and is id
       JSON.parse(await readFile(path.join(root, "design/profile.json"), "utf8")).lessonColorStrategyDefault,
       "theme",
     );
+    const migratedIndex = JSON.parse(
+      await readFile(path.join(root, owned[0]), "utf8"),
+    );
+    if (migratedIndex.assets.length) {
+      assert.equal(migratedIndex.assets[0].provenanceStatus, "original");
+      assert.equal(migratedIndex.assets[0].redistribution, "allowed");
+    }
     assert.deepEqual(
       await readFile(path.join(root, ".explain-ai/migrations/1.0.0-to-2.0.0/backup", owned[0])),
       before,
@@ -97,6 +104,20 @@ test("migration supplies the catalog path for legacy project configs", async () 
       JSON.parse(await readFile(file, "utf8")).paths.catalog,
       "catalog/index.json",
     );
+  });
+});
+
+test("migration marks legacy assets without provenance as unknown and denied", async () => {
+  await trial(async (root) => {
+    const file = path.join(root, "asset-library/index.json");
+    const value = JSON.parse(await readFile(file, "utf8"));
+    delete value.assets[0].provenanceStatus;
+    delete value.assets[0].redistribution;
+    await writeFile(file, `${JSON.stringify(value, null, 2)}\n`);
+    await migrateProject(root, { write: true });
+    const migrated = JSON.parse(await readFile(file, "utf8"));
+    assert.equal(migrated.assets[0].provenanceStatus, "unknown");
+    assert.equal(migrated.assets[0].redistribution, "denied");
   });
 });
 

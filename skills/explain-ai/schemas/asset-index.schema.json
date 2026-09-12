@@ -61,6 +61,33 @@
           "type": "string",
           "minLength": 1
         },
+        "provenanceStatus": {
+          "type": "string",
+          "enum": [
+            "original",
+            "permissive",
+            "customer-supplied",
+            "reference-only",
+            "restricted",
+            "unknown"
+          ]
+        },
+        "redistribution": {
+          "type": "string",
+          "enum": [
+            "allowed",
+            "attribution-required",
+            "denied"
+          ]
+        },
+        "attribution": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authorizationEvidence": {
+          "type": "string",
+          "minLength": 1
+        },
         "semanticTargets": {
           "type": "array",
           "items": {
@@ -76,8 +103,64 @@
         "path",
         "tags",
         "description",
-        "license",
-        "source"
+        "source",
+        "provenanceStatus",
+        "redistribution"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provenanceStatus": {
+                "enum": ["permissive"]
+              }
+            },
+            "required": ["provenanceStatus"]
+          },
+          "then": {
+            "properties": {
+              "license": { "type": "string", "minLength": 1 },
+              "attribution": { "type": "string", "minLength": 1 }
+            },
+            "required": ["license", "attribution"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "redistribution": {
+                "const": "attribution-required"
+              }
+            },
+            "required": ["redistribution"]
+          },
+          "then": {
+            "properties": {
+              "license": { "type": "string", "minLength": 1 },
+              "attribution": { "type": "string", "minLength": 1 }
+            },
+            "required": ["license", "attribution"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provenanceStatus": {
+                "const": "customer-supplied"
+              },
+              "redistribution": {
+                "enum": ["allowed", "attribution-required"]
+              }
+            },
+            "required": ["provenanceStatus", "redistribution"]
+          },
+          "then": {
+            "properties": {
+              "authorizationEvidence": { "type": "string", "minLength": 1 }
+            },
+            "required": ["authorizationEvidence"]
+          }
+        }
       ],
       "additionalProperties": false
     }

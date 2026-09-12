@@ -24,6 +24,8 @@ test("instruction-like source, metadata, filenames and node text remain inert da
       description: hostile,
       license: "MIT",
       source: "customer supplied fixture",
+      provenanceStatus: "original",
+      redistribution: "allowed",
     }];
     await mkdir(path.join(root, "asset-library"), { recursive: true });
     await writeFile(path.join(root, "explain-ai.config.json"), JSON.stringify(value.config));

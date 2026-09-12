@@ -15,7 +15,7 @@ const emphasis = new Set([
   "compare",
 ]);
 const under = (id, parent) => id === parent || id.startsWith(`${parent}.`);
-export function validateSemantics(lesson, design, index, runtime) {
+export function validateSemantics(lesson, design, index, runtime, { integrated = false } = {}) {
   const errors = [];
   const add = (p, message) => errors.push({ path: p, message });
   for (const [kind, data] of [
@@ -40,6 +40,17 @@ export function validateSemantics(lesson, design, index, runtime) {
   unique(lesson.steps, "/steps");
   const components = unique(runtime.components, "/runtime/components");
   const assets = unique([...index.assets, ...(lesson.assets ?? [])], "/assets");
+  const blockedForDistribution = new Set(["reference-only", "restricted", "unknown"]);
+  for (const [i, asset] of [...index.assets, ...(lesson.assets ?? [])].entries()) {
+    const p = `/assets/${i}`;
+    if (integrated && (blockedForDistribution.has(asset.provenanceStatus) || asset.redistribution === "denied"))
+      add(p, "Asset provenance or redistribution status blocks public/integrated output");
+  }
+  for (const shared of index.assets) {
+    const local = (lesson.assets ?? []).find((asset) => asset.id === shared.id);
+    if (local && (local.provenanceStatus !== shared.provenanceStatus || local.redistribution !== shared.redistribution || local.source !== shared.source))
+      add(`/assets/${shared.id}`, "Reused asset must retain shared provenance metadata");
+  }
   if (
     lesson.lessonId !==
     lessonIdentity(lesson.level, lesson.subject, lesson.topicKey)
@@ -362,7 +373,7 @@ export async function validateProject(
         add(relative, `Duplicate lesson ID: ${lesson.lessonId}`);
       ids.add(lesson.lessonId);
       errors.push(
-        ...validateSemantics(lesson, design, index, runtime).map((e) => ({
+        ...validateSemantics(lesson, design, index, runtime, { integrated }).map((e) => ({
           ...e,
           path: `${relative}${e.path}`,
         })),

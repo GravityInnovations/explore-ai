@@ -11,7 +11,7 @@ export function migrateContract(kind, value) {
     throw new Error(
       `Cannot migrate ${kind}: expected schemaVersion ${JSON.stringify(fromVersion)}, received ${JSON.stringify(value.schemaVersion)}`,
     );
-  return {
+  const migrated = {
     ...value,
     schemaVersion: toVersion,
     ...(kind === "project" && !value.paths.catalog
@@ -32,4 +32,12 @@ export function migrateContract(kind, value) {
         }
       : {}),
   };
+  if (kind === "asset-index") {
+    migrated.assets = value.assets.map((asset) => ({
+      ...asset,
+      provenanceStatus: asset.provenanceStatus ?? "unknown",
+      redistribution: asset.redistribution ?? "denied",
+    }));
+  }
+  return migrated;
 }
