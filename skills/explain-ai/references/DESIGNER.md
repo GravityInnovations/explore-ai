@@ -2,6 +2,12 @@
 
 The journey is **questions → agreed brief → design preview → QA/revisions → accepted design → topics**. The agent guides the conversation; the local CLI persists decisions and enforces transitions. Read [WORKFLOW.md](WORKFLOW.md) for command inputs and recovery.
 
+## Client-facing conversation rules
+
+Keep the client conversation in this order: audience, brand/logo, typography, colours, layout, visual style, motion, accessibility and constraints. Ask only the first unresolved decision in plain language, and reuse answers already recorded in the current session. When several choices arrive together, record them and continue with the next unresolved area. Keep workflow state, schema names, CLI commands, Three.js, GSAP and QA labels behind the conversation.
+
+For typography, show a small set of actual rendered font samples with friendly descriptions, or accept a brand font name, link or supplied file. For colours and layout, use swatches or compact visual examples when the host supports them; otherwise ask one concise question at a time and keep the same conversational fallback. A form interaction is a focused choice, never blanket approval of the brief or preview.
+
 ## Inspect, start or resume
 
 Run the installed inspector and workflow `status --project <root> --json`. Inspect project instructions, relevant layouts/styles/assets and supplied references; exclude vendor and build output.

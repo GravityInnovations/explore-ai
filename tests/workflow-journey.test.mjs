@@ -63,6 +63,20 @@ test("brand onboarding records supplied, deferred or reusable logo decisions wit
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
+test("client questions stay one-at-a-time and free of implementation jargon", async () => {
+  const forbidden = /\b(schema|cli|three\.js|gsap|qa|runtime)\b/i;
+  for (const text of Object.values(QUESTIONS)) assert.equal(forbidden.test(text), false, text);
+  const root = await mkdtemp(path.join(os.tmpdir(), "workflow-questions-"));
+  try {
+    let state = await runWorkflow(root, "start");
+    assert.equal(state.question.key, "audience");
+    state = await runWorkflow(root, "answer", {
+      key: "audience", value: "Primary school learners", source: "user", evidence: "Client supplied audience"
+    }, state.revision);
+    assert.equal((await runWorkflow(root, "status")).question.key, "brand");
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test("topic preflight requires explicit current acceptance and invalidates edited preview scopes", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "workflow-accept-"));
   try {
