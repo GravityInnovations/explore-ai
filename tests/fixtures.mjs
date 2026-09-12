@@ -94,6 +94,7 @@ export function fixture() {
     designId: design.id,
     metadata: {
       summary: "A fixture showing a part",
+      contentKind: "illustrative",
       objectives: ["Identify the marked part"],
       sources: [],
       colorStrategy: "imitated",

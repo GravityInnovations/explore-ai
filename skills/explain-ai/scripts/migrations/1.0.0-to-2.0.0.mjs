@@ -39,5 +39,15 @@ export function migrateContract(kind, value) {
       redistribution: asset.redistribution ?? "denied",
     }));
   }
+  if (kind === "lesson") {
+    migrated.metadata = {
+      ...value.metadata,
+      contentKind: value.metadata.contentKind ?? "illustrative",
+      sources: value.metadata.sources.map((source, index) => ({
+        ...source,
+        id: source.id ?? `source-${index + 1}`,
+      })),
+    };
+  }
   return migrated;
 }

@@ -37,6 +37,10 @@
           "type": "string",
           "minLength": 1
         },
+        "contentKind": {
+          "type": "string",
+          "enum": ["factual", "illustrative"]
+        },
         "objectives": {
           "type": "array",
           "items": {
@@ -63,7 +67,8 @@
       "required": [
         "summary",
         "objectives",
-        "sources"
+        "sources",
+        "contentKind"
       ],
       "additionalProperties": false
     },
@@ -118,6 +123,38 @@
     "objects",
     "steps",
     "accessibility"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "contentKind": { "const": "factual" }
+            },
+            "required": ["contentKind"]
+          }
+        },
+        "required": ["metadata"]
+      },
+      "then": {
+        "properties": {
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceRefs": {
+                  "type": "array"
+                }
+              },
+              "required": ["sourceRefs"]
+            }
+          }
+        }
+      }
+    }
   ],
   "additionalProperties": false,
   "$defs": {
@@ -677,6 +714,18 @@
           "$ref": "#/$defs/camera"
         },
         "alt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/slug"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "simplificationNote": {
           "type": "string",
           "minLength": 1
         },
