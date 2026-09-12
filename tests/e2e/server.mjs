@@ -13,7 +13,9 @@ const mime = new Map([
 const server = http.createServer(async (request, response) => {
   try {
     const requestPath = decodeURIComponent(new URL(request.url, "http://localhost").pathname);
-    const relative = requestPath === "/" ? "tests/e2e/runtime-probe.html" : requestPath.slice(1);
+    const relative = requestPath === "/" || requestPath === "/runtime-probe.html"
+      ? "tests/e2e/runtime-probe.html"
+      : requestPath.slice(1);
     const file = path.resolve(root, relative);
     if (!(file === root || file.startsWith(`${root}${path.sep}`))) throw new Error("Path escapes fixture root");
     const body = await readFile(file);
