@@ -7,6 +7,7 @@ Run these with Node.js 22+ after `npm ci --ignore-scripts --no-audit --no-fund` 
 | `inspect.mjs` | `<project-root>`: read-only framework/path/profile inspection and fingerprint |
 | `workflow.mjs` | `<command> --project <root> [--input <relative.json>] [--expect <revision>] [--json]`: guided designer state, review and topic preflight |
 | `migrate.mjs` | `--project <root> [--write]`: plan or apply the supported v1-to-v2 data-contract migration |
+| `build-catalog.mjs` | `--project <root> [--write]`: deterministically plan or write the configured level → subject → lesson catalog |
 | `find-assets.mjs` | `<project-root> [terms]`: search the local index and verify matching files |
 | `validate.mjs` | `--project <root> [--lesson <relative-path>] [--integrated]`: validate a catalog/package |
 | `validate.mjs` | `--kind <contract> --file <json>`: standalone structural check; design also checks body contrast |
