@@ -126,6 +126,14 @@ export interface Step {
    */
   sourceRefs?: [string, ...string[]];
   simplificationNote?: string;
+  /**
+   * @minItems 1
+   */
+  introduces?: [string, ...string[]];
+  /**
+   * @minItems 1
+   */
+  uses?: [string, ...string[]];
   narrationAssetId?: string;
   scrollUnits?: number;
 }

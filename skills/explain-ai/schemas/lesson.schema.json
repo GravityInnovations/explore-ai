@@ -729,6 +729,24 @@
           "type": "string",
           "minLength": 1
         },
+        "introduces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "uses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
         "narrationAssetId": {
           "$ref": "common.schema.json#/$defs/slug"
         },
