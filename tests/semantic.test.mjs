@@ -12,6 +12,30 @@ const check = (f) => validateSemantics(f.lesson, f.design, f.index, f.runtime);
 test("coherent semantic package passes", () =>
   assert.deepEqual(check(fixture()), []));
 
+test("factual steps require existing source references and preserve clean copy", () => {
+  const f = fixture();
+  f.lesson.metadata.contentKind = "factual";
+  f.lesson.metadata.sources = [{
+    id: "source-one",
+    title: "Reviewed source",
+    reference: "local/reviewed-source.md",
+  }];
+  f.lesson.steps[0].sourceRefs = ["source-one"];
+  f.lesson.steps[0].simplificationNote = "Uses simpler wording for the target level.";
+  assert.deepEqual(check(f), []);
+  f.lesson.steps[0].sourceRefs = ["missing-source"];
+  assert.match(JSON.stringify(check(f)), /Unknown source ID/);
+  delete f.lesson.steps[0].sourceRefs;
+  assert.match(JSON.stringify(check(f)), /sourceRefs/);
+  f.lesson.steps[0].sourceRefs = ["source-one"];
+  f.lesson.metadata.sources.push({
+    id: "source-one",
+    title: "Duplicate",
+    reference: "local/duplicate.md",
+  });
+  assert.match(JSON.stringify(check(f)), /Duplicate source ID/);
+});
+
 test("emphasis critic warns on repetitive highlight-only teaching without failing validation", () => {
   const f = fixture();
   f.lesson.steps = [0, 1, 2].map((index) => ({ ...f.lesson.steps[0], id: `step-${index}` }));

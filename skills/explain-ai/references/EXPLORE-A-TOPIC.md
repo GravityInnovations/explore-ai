@@ -8,7 +8,7 @@ Run the inspector and `node <installed-skill>/scripts/workflow.mjs preflight --p
 
 After preflight succeeds, record the accepted design SHA-256 and ID. Read configuration, design, local asset index and implemented runtime/component registry. A topic request is not permission to redesign the project.
 
-Use the project's level taxonomy and curriculum notes. `k5` is a catalog key, not a universal age standard. If scope can be inferred reasonably, record it; otherwise clarify the level once. Inspect the user's references, verify factual claims against suitable sources and label intentional simplifications. Avoid unsupported educational assertions, invented curriculum alignment or made-up citations.
+Use the project's level taxonomy and curriculum notes. `k5` is a catalog key, not a universal age standard. If scope can be inferred reasonably, record it; otherwise clarify the level once. For factual lessons, assign stable IDs to reviewed `metadata.sources` and put those IDs in each substantive step's `sourceRefs`; use `simplificationNote` for intentional level-appropriate wording. Avoid unsupported educational assertions, invented curriculum alignment or made-up citations. Keep source provenance in metadata rather than adding academic citations to child-facing copy.
 
 Reuse the accepted design's lesson colour strategy by default. Ask for a lesson override only when the topic has a clear educational reason; record `imitated` or `theme` declaratively and keep the interface palette inherited from the design.
 

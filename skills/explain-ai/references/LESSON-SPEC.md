@@ -6,7 +6,7 @@ The JSON schemas in `schemas/` are authoritative. They use Draft 2020-12, requir
 
 `lessonId` equals `level/subject/topicKey`. All three keys are lowercase hyphenated catalog segments. `slug` is a separate route key. The topic folder uses `topicKey`; the route uses `slug`. This avoids ambiguous hyphen concatenation and allows the same topic at multiple levels. Reject route collisions within one level/subject.
 
-`metadata` supplies summary, objectives and source records (`title`, `reference`, optional `note`); a source may be a local document or verified URL. `scopeNote` describes assumptions and intentional simplifications. An empty sources array is structurally permitted for basic illustrative fixtures; production factual lessons require reviewed evidence.
+`metadata` supplies summary, objectives, an explicit `contentKind` (`factual` or `illustrative`) and source records (`id`, `title`, `reference`, optional `note`); a source may be a local document or verified URL. Factual steps require `sourceRefs` that point to those stable source IDs. `simplificationNote` records intentional level-appropriate wording without copying source prose into learner-facing text. Illustrative fixtures must be marked `illustrative`; production factual lessons require reviewed evidence and traceable step references.
 
 `objects` is a flat array representing a semantic tree. Each object has `id`, `component`, `label` and `description`. An ID such as `cell.nucleus` requires `parent: "cell"` and a separately declared parent. Root objects omit parent. Optional `assetId`, `material`, `position` and uniform `scale` customise reusable components. Material names resolve to the design profile. Vectors use `{x,y,z}`; no raw mesh names or executable expressions.
 

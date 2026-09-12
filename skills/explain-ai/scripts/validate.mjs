@@ -40,6 +40,19 @@ export function validateSemantics(lesson, design, index, runtime, { integrated =
   unique(lesson.steps, "/steps");
   const components = unique(runtime.components, "/runtime/components");
   const assets = unique([...index.assets, ...(lesson.assets ?? [])], "/assets");
+  const sourceIds = new Set();
+  lesson.metadata.sources.forEach((source, i) => {
+    if (sourceIds.has(source.id)) add(`/metadata/sources/${i}/id`, `Duplicate source ID: ${source.id}`);
+    sourceIds.add(source.id);
+  });
+  lesson.steps.forEach((step, i) => {
+    const refs = step.sourceRefs ?? [];
+    refs.forEach((ref, j) => {
+      if (!sourceIds.has(ref)) add(`/steps/${i}/sourceRefs/${j}`, `Unknown source ID: ${ref}`);
+    });
+    if (lesson.metadata.contentKind === "factual" && refs.length === 0)
+      add(`/steps/${i}/sourceRefs`, "Factual teaching steps require source references");
+  });
   const blockedForDistribution = new Set(["reference-only", "restricted", "unknown"]);
   for (const [i, asset] of [...index.assets, ...(lesson.assets ?? [])].entries()) {
     const p = `/assets/${i}`;
