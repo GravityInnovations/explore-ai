@@ -84,6 +84,22 @@ test("migration plans first, writes atomically, preserves other files, and is id
   });
 });
 
+test("migration supplies the catalog path for legacy project configs", async () => {
+  await trial(async (root) => {
+    const file = path.join(root, "explain-ai.config.json");
+    const value = JSON.parse(await readFile(file, "utf8"));
+    delete value.paths.catalog;
+    await writeFile(file, `${JSON.stringify(value, null, 2)}\n`);
+
+    const result = await migrateProject(root, { write: true });
+    assert.equal(result.status, "migrated");
+    assert.equal(
+      JSON.parse(await readFile(file, "utf8")).paths.catalog,
+      "catalog/index.json",
+    );
+  });
+});
+
 test("migration refuses a backup collision before changing contracts", async () => {
   await trial(async (root) => {
     const collision = path.join(root, ".explain-ai/migrations/1.0.0-to-2.0.0/backup/explain-ai.config.json");
