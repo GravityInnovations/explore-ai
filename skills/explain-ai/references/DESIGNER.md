@@ -30,6 +30,8 @@ Resolve these areas before submitting the brief:
 | Accessibility | Keyboard/focus, readable labels, device performance and fallback |
 | Constraints | Existing stack, assets/licensing, scope, budget and must/avoid requirements |
 
+For brand/logo discovery, ask one of three plain-language paths: reuse a logo the client already supplied; ask them to provide an existing logo file or reference; or record that they explicitly want a temporary text wordmark/deferment. Reuse a recorded `brand` answer instead of asking again. Never inherit explore.ai's wordmark or logo deferral into another client, and never invent an asset or silently defer the decision.
+
 Customers may delegate choices. Record their delegation and a concrete recommendation; do not pretend they picked the recommendation. Proposed subordinate defaults are allowed but must appear in the brief for agreement. Do not invent the audience, theme or topic from examples, or interrogate every schema field.
 
 Inspect references before claiming their properties. Separate observations, inferences and customer choices. A screenshot cannot establish an exact typeface or 3D lighting rig. Clarify conflicts that materially affect the design.
