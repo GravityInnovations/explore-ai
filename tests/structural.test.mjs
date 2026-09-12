@@ -8,6 +8,8 @@ import {
   assertRelative,
   resolveLocal,
   lessonIdentity,
+  lessonRoute,
+  assertLessonRoute,
 } from "../skills/explain-ai/scripts/paths.mjs";
 
 const config = {
@@ -39,6 +41,12 @@ test("catalog identity cannot collide through hyphen concatenation", () => {
     lessonIdentity("k1", "science", "plants"),
     lessonIdentity("k2", "science", "plants"),
   );
+});
+
+test("lesson routes remain nested and never claim the project root", () => {
+  assert.equal(lessonRoute("k5", "science", "animal-cell"), "k5/science/animal-cell");
+  assert.throws(() => assertLessonRoute("/"), /root route/);
+  assert.throws(() => assertLessonRoute(""), /nested/);
 });
 test("portable paths reject traversal, drive paths and device names", () => {
   for (const value of [

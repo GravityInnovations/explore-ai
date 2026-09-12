@@ -2,7 +2,7 @@ import path from "node:path";
 import { readdir, readFile, realpath } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { readContract, validateData } from "./contracts.mjs";
-import { resolveLocal, lessonIdentity } from "./paths.mjs";
+import { resolveLocal, lessonIdentity, lessonRoute, assertLessonRoute } from "./paths.mjs";
 import { workflowStatus } from "./workflow-actions.mjs";
 
 const emphasis = new Set([
@@ -355,7 +355,7 @@ export async function validateProject(
       const expected = `${config.paths.content}/${lessonIdentity(lesson.level, lesson.subject, lesson.topicKey)}/lesson.json`;
       if (relative !== expected)
         add(relative, `Expected catalog path: ${expected}`);
-      const route = `${lesson.level}/${lesson.subject}/${lesson.slug}`;
+      const route = assertLessonRoute(lessonRoute(lesson.level, lesson.subject, lesson.slug));
       if (routes.has(route)) add(relative, `Duplicate route: ${route}`);
       routes.add(route);
       if (ids.has(lesson.lessonId))

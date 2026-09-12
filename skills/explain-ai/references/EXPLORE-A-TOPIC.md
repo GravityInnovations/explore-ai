@@ -47,6 +47,8 @@ content/<level>/<subject>/<topicKey>/assets/   only when needed
 
 `lessonId` is `level/subject/topicKey`. Preserve the user's explicit topic key; otherwise derive a readable lowercase hyphenated key. `slug` is the route-facing name and can differ. Repeated topics across levels must coexist. The route tuple is `level/subject/slug`; validate the full catalog for collisions.
 
+The project root remains the existing home/catalog route. A generated lesson must use its nested `level/subject/slug` route, and adding another lesson is additive. Preserve existing root and layout files; never mount a lesson at `/` or replace a compatible shell.
+
 Build semantic object paths and immediate parents before writing actions. Resolve each object to a reviewed component and optional asset/material preset. Write level-appropriate concise copy. For every exact object/part mentioned, include it in that step's `explains`, then make it visually unmistakable with emphasis, framing or a suitable technique. A parent highlight is not automatically enough for a tiny child.
 
 Each step describes its own state starting from the canonical scene baseline. Do not depend on a prior step having revealed/extracted an object. Supply camera intent and meaningful `alt` text. Optional precise vectors express geometry, never code. Use profile pacing/durations by default and per-step overrides only where pedagogically justified. Narration hooks reference local audio assets; audio must not be necessary to understand the content.
