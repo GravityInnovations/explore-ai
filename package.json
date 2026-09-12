@@ -11,11 +11,13 @@
     "test": "node --test tests/*.test.mjs",
     "types:generate": "node scripts/generate-types.mjs",
     "types:check": "node scripts/generate-types.mjs --check",
+    "test:runtime": "playwright test tests/e2e/runtime-probe.spec.mjs",
     "check": "npm run types:check && npm run templates:check && npm test && node scripts/check-package.mjs",
     "install:skill": "node scripts/install.mjs",
     "templates:check": "tsc -p tsconfig.templates.json"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@types/react": "19.1.10",
     "@types/three": "0.180.0",
     "gsap": "3.13.0",
