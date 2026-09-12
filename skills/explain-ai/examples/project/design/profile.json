@@ -3,6 +3,13 @@
   "id": "example-only",
   "audience": "Illustrative fixture only; do not copy as a project theme",
   "lessonColorStrategyDefault": "theme",
+  "shell": {
+    "catalogNavigation": "level-subject-lesson",
+    "lessonPresentation": "continuous-stage",
+    "inheritTypography": true,
+    "inheritSpacing": true,
+    "inheritControls": true
+  },
   "evidence": [
     {
       "source": "Original test fixture",

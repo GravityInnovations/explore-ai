@@ -15,6 +15,13 @@ export function fixture() {
     id: "test-profile",
     audience: "Technical test fixture",
     lessonColorStrategyDefault: "theme",
+    shell: {
+      catalogNavigation: "level-subject-lesson",
+      lessonPresentation: "continuous-stage",
+      inheritTypography: true,
+      inheritSpacing: true,
+      inheritControls: true,
+    },
     evidence: [
       {
         source: "test input",

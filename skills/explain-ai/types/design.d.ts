@@ -5,6 +5,13 @@ export interface Design {
   id: string;
   audience: string;
   lessonColorStrategyDefault: "imitated" | "theme";
+  shell: {
+    catalogNavigation: "level-subject-lesson";
+    lessonPresentation: "continuous-stage";
+    inheritTypography: true;
+    inheritSpacing: true;
+    inheritControls: true;
+  };
   /**
    * @minItems 1
    */

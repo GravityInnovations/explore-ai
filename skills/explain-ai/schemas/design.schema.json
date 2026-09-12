@@ -17,6 +17,36 @@
     "lessonColorStrategyDefault": {
       "$ref": "common.schema.json#/$defs/colorStrategy"
     },
+    "shell": {
+      "type": "object",
+      "properties": {
+        "catalogNavigation": {
+          "type": "string",
+          "const": "level-subject-lesson"
+        },
+        "lessonPresentation": {
+          "type": "string",
+          "const": "continuous-stage"
+        },
+        "inheritTypography": {
+          "const": true
+        },
+        "inheritSpacing": {
+          "const": true
+        },
+        "inheritControls": {
+          "const": true
+        }
+      },
+      "required": [
+        "catalogNavigation",
+        "lessonPresentation",
+        "inheritTypography",
+        "inheritSpacing",
+        "inheritControls"
+      ],
+      "additionalProperties": false
+    },
     "evidence": {
       "type": "array",
       "items": {
@@ -359,6 +389,7 @@
     "id",
     "audience",
     "lessonColorStrategyDefault",
+    "shell",
     "evidence",
     "typography",
     "spacing",

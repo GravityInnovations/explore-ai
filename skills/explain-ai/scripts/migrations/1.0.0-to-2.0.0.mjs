@@ -20,5 +20,16 @@ export function migrateContract(kind, value) {
     ...(kind === "design" && !value.lessonColorStrategyDefault
       ? { lessonColorStrategyDefault: "theme" }
       : {}),
+    ...(kind === "design" && !value.shell
+      ? {
+          shell: {
+            catalogNavigation: "level-subject-lesson",
+            lessonPresentation: "continuous-stage",
+            inheritTypography: true,
+            inheritSpacing: true,
+            inheritControls: true,
+          },
+        }
+      : {}),
   };
 }
