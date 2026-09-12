@@ -209,6 +209,20 @@ export function critiqueEmphasis(lesson, runtime) {
   return warnings;
 }
 
+export function critiqueCopy(lesson) {
+  return lesson.steps.flatMap((step, index) => {
+    const text = step.text.trim();
+    const words = text ? text.split(/\s+/).length : 0;
+    const sentences = text ? (text.match(/[.!?]+(?=\s|$)/g) ?? []).length : 0;
+    if (words <= 65 && sentences <= 3) return [];
+    return [{
+      path: `/steps/${index}/text`,
+      code: "COPY_DENSITY",
+      message: `Step copy is dense (${words} words, ${sentences} sentences); keep one teaching point with short progressive blocks`,
+    }];
+  });
+}
+
 function luminance(hex) {
   const channels = hex
     .slice(1)
@@ -351,6 +365,12 @@ export async function validateProject(
       );
       warnings.push(
         ...critiqueEmphasis(lesson, runtime).map((warning) => ({
+          ...warning,
+          path: `${relative}${warning.path}`,
+        })),
+      );
+      warnings.push(
+        ...critiqueCopy(lesson).map((warning) => ({
           ...warning,
           path: `${relative}${warning.path}`,
         })),

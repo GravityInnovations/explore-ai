@@ -5,6 +5,7 @@ import {
   validateSemantics,
   validateDesign,
   critiqueEmphasis,
+  critiqueCopy,
 } from "../skills/explain-ai/scripts/validate.mjs";
 const check = (f) => validateSemantics(f.lesson, f.design, f.index, f.runtime);
 test("coherent semantic package passes", () =>
@@ -19,6 +20,17 @@ test("emphasis critic warns on repetitive highlight-only teaching without failin
   f.runtime.actions = ["highlight"];
   f.lesson.steps[1].actions = [{ action: "highlight", target: "shape.part" }];
   assert.deepEqual(critiqueEmphasis(f.lesson, f.runtime), []);
+});
+
+test("copy critic warns on paragraph-heavy steps without truncating text", () => {
+  const f = fixture();
+  const original = Array.from({ length: 70 }, (_, i) => `concept${i}`).join(" ");
+  f.lesson.steps[0].text = original;
+  const [warning] = critiqueCopy(f.lesson);
+  assert.equal(warning.code, "COPY_DENSITY");
+  assert.equal(f.lesson.steps[0].text, original);
+  f.lesson.steps[0].text = "First point. Second point. Third point.";
+  assert.deepEqual(critiqueCopy(f.lesson), []);
 });
 for (const [name, mutate, match] of [
   [
