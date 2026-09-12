@@ -18,6 +18,8 @@ Choose an order that builds understanding: orient the learner, introduce the rel
 
 Compose the lesson with one persistent visual stage and short copy sections around it. Use `LessonStage.tsx` and the shared controller for scroll, direct anchors and Next/Previous navigation. Do not turn teaching steps into bordered cards; reserve cards for genuine controls, catalog entries or quiz choices.
 
+Keep each story step to one teaching point, one short heading and at most two short copy blocks. The general critic warns above 65 words or three prose sentences in a step; it preserves the source copy for revision and does not truncate it. Coordinate tighter grade-band thresholds with the pedagogy guidance.
+
 Choose emphasis by teaching intent and available anatomy:
 
 | Intent | Preferred registered technique |

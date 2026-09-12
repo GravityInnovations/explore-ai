@@ -44,6 +44,8 @@ No action is silently mapped to a vaguely similar effect. Capability manifests l
 
 For teaching emphasis, choose the implemented action that makes the intended relationship clearest: focus/highlight for identification, xray or an adapter-backed cutaway for interiors, extract/explode for separation, magnify for detail, and compare/flow for relationships. A highlight remains valid when it is clearest; repeated highlight-only steps are a critic warning when another registered capability fits.
 
+Keep story-step copy progressive: one teaching point, a short heading and no more than two short blocks. The general density critic warns above 65 words or three prose sentences without changing the authored text; grade bands may add stricter guidance.
+
 ## Camera, state and defaults
 
 Camera requires a semantic `target` and `mode`: wide, medium, close, macro, inside, orbit, top, side or best. Optional `position` and `lookAt` override derived placement. Calculate framing from bounds, aspect ratio, field of view, surrounding occlusion and the current project scene scale. Exact coordinates are escape hatches, not default authoring practice.

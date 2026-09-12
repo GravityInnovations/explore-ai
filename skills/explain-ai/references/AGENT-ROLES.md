@@ -11,7 +11,7 @@ Share a compact project context: target root/config paths, level/subject/topic, 
 | Asset Planner | Visual requirements, local library and component registry | Reuse matches, procedural/new-asset decisions, provenance, anatomy requirements and missing runtime capabilities |
 | Scene Composer | Agreed visuals/assets | A semantic object hierarchy, reusable component bindings and stable names; no missing parents or opaque mesh references |
 | Choreography Agent | Scene and sequence | Complete independent story steps, explicit action parameters, semantic camera intent, clear emphasis and reversible progress |
-| Content Writer | Objectives, sources and visible scene targets | Concise level-appropriate copy, exact `explains` references, meaningful alt text and conclusion; no unshown anatomical claims |
+| Content Writer | Objectives, sources and visible scene targets | One teaching point per step, concise level-appropriate copy, exact `explains` references, meaningful alt text and conclusion; no unshown anatomical claims |
 | Validator / Critic | Original brief, generated package and observed runtime | Structural results plus factual, instructional, visual, accessibility and inheritance findings with specific evidence |
 | Optimizer | Validated package and reusable defaults | Smaller authoring footprint through default/component/asset reuse; preserve meaning and emphasis and rerun validation |
 
@@ -27,10 +27,11 @@ One coordinator owns final writes to shared lesson/design/index files. Separate 
 2. Does every named part in the text have a real semantic target, visible in that exact step? Inspect actual render/occlusion; a valid ID is insufficient.
 3. Does each advanced action have an implemented handler and appropriate anatomy? Are comparisons simultaneously legible?
 4. Do consecutive steps vary emphasis when another registered technique fits, while retaining justified highlights?
-5. Are assets local, appropriately attributed and reused? Are browser URLs valid?
-6. Is the design fingerprint unchanged unless a design revision was explicitly requested?
-7. Do reverse scroll, resize, keyboard navigation, reduced motion and no-WebGL content work? Do labels rely on more than colour?
-8. Did optimisation remove duplication without deleting necessary explanation or focus?
+5. Is each step's copy concise enough for progressive reading, with one teaching point and no paragraph-density warning?
+6. Are assets local, appropriately attributed and reused? Are browser URLs valid?
+7. Is the design fingerprint unchanged unless a design revision was explicitly requested?
+8. Do reverse scroll, resize, keyboard navigation, reduced motion and no-WebGL content work? Do labels rely on more than colour?
+9. Did optimisation remove duplication without deleting necessary explanation or focus?
 
 ## Independent skill forward-test
 
