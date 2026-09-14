@@ -2,14 +2,14 @@ name: Publish production release
 
 on:
   push:
-    branches: [production]
+    branches: [main, production]
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: production-release
+  group: release-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -40,21 +40,30 @@ jobs:
         run: npm run check
 
       - name: Build the installable skill archive
-        run: npm pack --prefix skills/explain-ai --pack-destination "$RUNNER_TEMP"
+        run: npm pack ./skills/explain-ai --pack-destination "$RUNNER_TEMP"
 
-      - name: Publish the versioned GitHub release
+      - name: Publish the channel release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           version="$(node -p "require('./skills/explain-ai/package.json').version")"
-          tag="v${version}"
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            tag="v${version}-staging.${GITHUB_RUN_NUMBER}"
+            title="ExplainAI ${tag}"
+            prerelease="--prerelease"
+          else
+            tag="v${version}"
+            title="ExplainAI ${tag}"
+            prerelease=""
+          fi
           if gh release view "$tag" >/dev/null 2>&1; then
-            echo "Release $tag already exists; bump skills/explain-ai/package.json before publishing again."
+            echo "Release $tag already exists; refusing to overwrite it."
             exit 1
           fi
           archive="$RUNNER_TEMP/explain-ai-skill-${version}.tgz"
           gh release create "$tag" "$archive" \
             --target "$GITHUB_SHA" \
-            --title "ExplainAI $tag" \
-            --generate-notes
+            --title "$title" \
+            --generate-notes \
+            $prerelease
