@@ -70,6 +70,15 @@ test("all generic handlers sample from baseline and restore deterministically", 
   }
 });
 
+test("xray applies opacity to descendant meshes in grouped targets", () => {
+  const s = scene();
+  const context = { targets: s.targets, baseline: primitives.captureBaseline(s.targets) };
+  const handlers = primitives.createSemanticPrimitives(context);
+  handlers.get("xray")({ action: "xray", target: "part", opacity: 0.2 }, 1);
+  assert.ok(Math.abs(s.child.material.opacity - 0.2) < 1e-9);
+  assert.equal(s.child.material.transparent, true);
+});
+
 test("the same registry works with an unrelated scene", () => {
   const root = new THREE.Group();
   const target = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial());

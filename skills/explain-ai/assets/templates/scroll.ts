@@ -49,6 +49,5 @@ export function connectLessonScroll(
   );
   return () => {
     media.revert();
-    controller.dispose();
   };
 }

@@ -130,9 +130,13 @@ export function createSemanticPrimitives(context: PrimitiveContext): ReadonlyMap
       const object = target(context, action.target);
       const opacity = Number(action.opacity);
       if (!Number.isFinite(opacity) || opacity < 0 || opacity > 1) throw new Error("Xray opacity must be between 0 and 1");
-      const baseline = state(context, object);
-      for (const material of baseline.materials)
-        material.material.opacity = (material.opacity ?? 1) + (opacity - (material.opacity ?? 1)) * progress;
+      eachNode(object, (_node, baseline) => {
+        for (const material of baseline.materials) {
+          const initial = material.opacity ?? 1;
+          material.material.opacity = initial + (opacity - initial) * progress;
+          material.material.transparent = material.material.opacity < 1 || material.transparent === true;
+        }
+      }, context);
     }],
     ["magnify", (action, progress) => {
       const object = target(context, action.target);

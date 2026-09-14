@@ -83,6 +83,20 @@ test("quiz validation and seeded selection preserve objective coverage", () => {
   assert.match(JSON.stringify(validateQuiz(f.lesson)), /Unknown objective ID/);
 });
 
+test("quiz selection rejects a draw that drops an objective from the final slice", () => {
+  const quiz = {
+    enabled: true,
+    drawCount: 2,
+    questions: [
+      { id: "objective-1-a", objectiveIds: ["objective-1"], prompt: "One", answers: [] },
+      { id: "objective-1-b", objectiveIds: ["objective-1"], prompt: "Two", answers: [] },
+      { id: "objective-2", objectiveIds: ["objective-2"], prompt: "Three", answers: [] },
+      { id: "objective-3", objectiveIds: ["objective-3"], prompt: "Four", answers: [] },
+    ],
+  };
+  assert.deepEqual(selectQuizQuestions(quiz, ["objective-1", "objective-2", "objective-3"], 1), []);
+});
+
 test("emphasis critic warns on repetitive highlight-only teaching without failing validation", () => {
   const f = fixture();
   f.lesson.steps = [0, 1, 2].map((index) => ({ ...f.lesson.steps[0], id: `step-${index}` }));

@@ -34,8 +34,10 @@ export function selectQuizQuestions(quiz, objectiveIds, seed = 1) {
     if (selected.length >= quiz.drawCount) break;
     if (!selected.includes(question)) selected.push(question);
   }
-  if (covered.size < objectiveIds.length) return [];
-  return selected.slice(0, quiz.drawCount);
+  const result = selected.slice(0, quiz.drawCount);
+  const resultCoverage = new Set(result.flatMap((question) => question.objectiveIds));
+  if (objectiveIds.some((objectiveId) => !resultCoverage.has(objectiveId))) return [];
+  return result;
 }
 
 export function shuffleQuizAnswers(question, seed = 1) {
