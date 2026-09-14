@@ -1,6 +1,6 @@
 # Target-project runtime integration
 
-The package includes adaptable TypeScript building blocks, not a production app or universal geometry engine. Inspect the user's existing Next.js/Three.js/GSAP versions and conventions; adapt imports and component layout. Do not install development dependencies from this repository into their project wholesale.
+The package includes adaptable TypeScript building blocks, not a production app or universal geometry engine. The primary lesson runtime is Three.js plus GSAP ScrollTrigger. Inspect the user's existing Next.js/Three.js/GSAP versions and conventions; adapt imports and component layout. Do not install development dependencies from this repository into their project wholesale.
 
 ## Integration sequence
 
@@ -17,6 +17,12 @@ Run the CLI validator during authoring and as a build/preflight check, not by sp
 ## Template usage
 
 Copy only needed files from `assets/templates/` into an appropriate target-project runtime folder. Copy generated declarations from `types/` or adapt imports to the existing contract module. The shipped relative type imports work inside this package and **must be adjusted after copying**. These are templates for the user's agent to integrate, not a drop-in Next.js route.
+
+`runtime.ts` is the primary integration boundary: it creates a real Three.js scene, camera and renderer, registers GSAP ScrollTrigger and owns the trigger/renderer cleanup. Use the target project's canvas and section elements; do not replace this boundary with CSS/SVG animation. A browser observation is still required to prove that the target application mounts it successfully.
+
+Use `LessonStage.tsx` to keep one persistent canvas beside ordered server-readable copy. It connects the same controller progress model to ScrollTrigger, direct step anchors and Next/Previous controls; step sections are structural flow elements rather than bordered cards. Refresh measurements after fonts/layout/assets and destroy the runtime and scroll cleanup together.
+
+Use `DesktopLessonGate.tsx` around the lesson route. It treats widths below 768 CSS pixels as unsupported, renders a lightweight server-safe desktop/laptop message, and invokes the heavy renderer only at 768 pixels or wider. Recalculate on resize; do not use user-agent detection or initialize a canvas and hide it on phones.
 
 `controller.ts` requires explicit action handlers and owns sequencing, pacing, reduced-motion sampling and disposal. `scroll.ts` uses real GSAP/ScrollTrigger APIs with media-query context cleanup. `camera.ts` provides bounds fitting for wide/medium/close/macro/top/side/best; inside/orbit require deliberate geometry-aware camera handlers. `LessonText.tsx` is unstyled semantic content with anchors and an optional locally resolved diagram.
 
@@ -45,11 +51,13 @@ Action values are relative to the canonical baseline described in LESSON-SPEC.md
 
 ## Accessibility, lifecycle and verification
 
-Respect `prefers-reduced-motion` at mount and when it changes: show stable endpoint states, no ambient motion, smooth scroll or forced pinning. Preserve all text and a useful static diagram, keyboard navigation, readable labels and non-colour emphasis. A reduced-motion controller alone cannot stop unrelated project animation; inspect the whole scene.
+Respect `prefers-reduced-motion` at mount and when it changes: show stable endpoint states, no ambient motion, smooth scroll or forced pinning. Preserve all text and an optional explicitly requested static diagram, keyboard navigation, readable labels and non-colour emphasis. On WebGL failure, keep the text and expose a clear runtime error; do not generate a parallel visual model. A reduced-motion controller alone cannot stop unrelated project animation; inspect the whole scene.
 
 In React effects, return cleanup that reverts the GSAP context, stops render loops, removes listeners/observers and disposes lesson-owned textures/materials/geometries and renderer. Do not dispose shared cached assets. Handle cancelled async loads before mounting and dispose late results. React Strict Mode can mount/clean up twice; create a fresh controller each mount. The provided controller disposal is idempotent.
 
-Use a ResizeObserver or the project's resize infrastructure; update renderer size, camera aspect/projection and responsive bounds. Cap pixel ratio according to the design. On WebGL creation/context failure, keep the server-rendered explanation and diagram visible; do not leave a blank lesson.
+Use a ResizeObserver or the project's resize infrastructure; update renderer size, camera aspect/projection and responsive bounds. Cap pixel ratio according to the design. On WebGL creation/context failure, keep the server-rendered explanation and expose a clear runtime error; render a diagram only when the lesson explicitly configures one. Do not leave a blank lesson or generate a duplicate 2D model.
+
+During development, run the scene auditor from `assets/runtime/performance-audit.ts` against the lesson scene. The defaults are DPR ≤2, 120 draw calls, 250,000 visible triangles, 2048px textures, 64 MiB estimated texture memory, two shadow lights and 5,000 particles. A project-specific `budgetOverrideReason` is required and reported for an intentional exception; the auditor never silently lowers quality or transmits telemetry. Register every lesson-owned resource with its ledger and require zero owned resources after disposal.
 
 Before reporting integration complete, inspect representative beginning/middle/end steps, reverse scroll and direct anchors, desktop/mobile widths, reduced motion and no-WebGL fallback. Validate asset loading in the actual browser. Report separately what was typechecked, unit tested and visually observed.
 

@@ -1,7 +1,7 @@
 /* Generated from JSON Schema. Run npm run types:generate; do not edit. */
 
 export interface Runtime {
-  schemaVersion: "1.0.0";
+  schemaVersion: "2.0.0";
   /**
    * @minItems 0
    */
@@ -63,4 +63,14 @@ export interface Runtime {
       | "transform"
     )[];
   }[];
+  performanceBudgets?: {
+    devicePixelRatio?: number;
+    drawCalls?: number;
+    visibleTriangles?: number;
+    maxTextureDimension?: number;
+    textureMemoryBytes?: number;
+    shadowLights?: number;
+    particles?: number;
+  };
+  budgetOverrideReason?: string;
 }

@@ -4,10 +4,129 @@ import { fixture } from "./fixtures.mjs";
 import {
   validateSemantics,
   validateDesign,
+  critiqueEmphasis,
+  critiqueCopy,
+  resolveColorStrategy,
+  validateQuiz,
 } from "../skills/explain-ai/scripts/validate.mjs";
+import { critiquePedagogy } from "../skills/explain-ai/scripts/pedagogy.mjs";
+import { selectQuizQuestions, shuffleQuizAnswers } from "../skills/explain-ai/scripts/quiz.mjs";
 const check = (f) => validateSemantics(f.lesson, f.design, f.index, f.runtime);
 test("coherent semantic package passes", () =>
   assert.deepEqual(check(fixture()), []));
+
+test("factual steps require existing source references and preserve clean copy", () => {
+  const f = fixture();
+  f.lesson.metadata.contentKind = "factual";
+  f.lesson.metadata.sources = [{
+    id: "source-one",
+    title: "Reviewed source",
+    reference: "local/reviewed-source.md",
+  }];
+  f.lesson.steps[0].sourceRefs = ["source-one"];
+  f.lesson.steps[0].simplificationNote = "Uses simpler wording for the target level.";
+  assert.deepEqual(check(f), []);
+  f.lesson.steps[0].sourceRefs = ["missing-source"];
+  assert.match(JSON.stringify(check(f)), /Unknown source ID/);
+  delete f.lesson.steps[0].sourceRefs;
+  assert.match(JSON.stringify(check(f)), /sourceRefs/);
+  f.lesson.steps[0].sourceRefs = ["source-one"];
+  f.lesson.metadata.sources.push({
+    id: "source-one",
+    title: "Duplicate",
+    reference: "local/duplicate.md",
+  });
+  assert.match(JSON.stringify(check(f)), /Duplicate source ID/);
+});
+
+test("paired grade fixtures allow richer Grade 7 detail while flagging Grade 2 overload", () => {
+  const grade2 = fixture();
+  grade2.lesson.level = "grade-2";
+  grade2.lesson.steps[0].explains = ["shape", "shape.part", "shape.extra"];
+  grade2.lesson.objects.push({ id: "shape.extra", parent: "shape", component: "box", label: "Extra", description: "Extra" });
+  const grade2Warnings = critiquePedagogy(grade2.lesson);
+  assert.ok(grade2Warnings.some((warning) => warning.code === "COGNITIVE_LOAD_TARGETS"));
+
+  const grade7 = fixture();
+  grade7.lesson.level = "grade-7";
+  grade7.lesson.steps[0].introduces = ["ratio", "comparison"];
+  grade7.lesson.steps[0].uses = ["ratio", "comparison"];
+  grade7.lesson.steps[0].title = "Recap the comparison";
+  grade7.lesson.steps[0].text = "Identify the marked part and recap the comparison.";
+  assert.deepEqual(critiquePedagogy(grade7.lesson), []);
+});
+
+test("quiz validation and seeded selection preserve objective coverage", () => {
+  const f = fixture();
+  f.lesson.quiz = {
+    enabled: true,
+    drawCount: 3,
+    questions: [1, 2, 3, 4].map((number) => ({
+      id: `question-${number}`,
+      objectiveIds: ["objective-1"],
+      prompt: `Which part is shown ${number}?`,
+      answers: [
+        { id: "yes", text: "The marked part", correct: true, explanation: "It is the marked part." },
+        { id: "no", text: "Another part", correct: false },
+      ],
+    })),
+  };
+  assert.deepEqual(validateQuiz(f.lesson), []);
+  const first = selectQuizQuestions(f.lesson.quiz, ["objective-1"], 1);
+  const second = selectQuizQuestions(f.lesson.quiz, ["objective-1"], 100);
+  assert.equal(first.length, 3);
+  assert.notDeepEqual(first.map((question) => question.id), second.map((question) => question.id));
+  assert.equal(shuffleQuizAnswers(first[0], 1).length, first[0].answers.length);
+  f.lesson.quiz.questions[0].answers[0].correct = false;
+  assert.match(JSON.stringify(validateQuiz(f.lesson)), /exactly one correct/);
+  f.lesson.quiz.questions[0].objectiveIds = ["objective-2"];
+  assert.match(JSON.stringify(validateQuiz(f.lesson)), /Unknown objective ID/);
+});
+
+test("quiz selection rejects a draw that drops an objective from the final slice", () => {
+  const quiz = {
+    enabled: true,
+    drawCount: 2,
+    questions: [
+      { id: "objective-1-a", objectiveIds: ["objective-1"], prompt: "One", answers: [] },
+      { id: "objective-1-b", objectiveIds: ["objective-1"], prompt: "Two", answers: [] },
+      { id: "objective-2", objectiveIds: ["objective-2"], prompt: "Three", answers: [] },
+      { id: "objective-3", objectiveIds: ["objective-3"], prompt: "Four", answers: [] },
+    ],
+  };
+  assert.deepEqual(selectQuizQuestions(quiz, ["objective-1", "objective-2", "objective-3"], 1), []);
+});
+
+test("emphasis critic warns on repetitive highlight-only teaching without failing validation", () => {
+  const f = fixture();
+  f.lesson.steps = [0, 1, 2].map((index) => ({ ...f.lesson.steps[0], id: `step-${index}` }));
+  assert.equal(critiqueEmphasis(f.lesson, f.runtime).length, 1);
+  f.lesson.steps[1].actions = [{ action: "magnify", target: "shape.part", factor: 1.2 }];
+  assert.deepEqual(critiqueEmphasis(f.lesson, f.runtime), []);
+  f.runtime.actions = ["highlight"];
+  f.lesson.steps[1].actions = [{ action: "highlight", target: "shape.part" }];
+  assert.deepEqual(critiqueEmphasis(f.lesson, f.runtime), []);
+});
+
+test("copy critic warns on paragraph-heavy steps without truncating text", () => {
+  const f = fixture();
+  const original = Array.from({ length: 70 }, (_, i) => `concept${i}`).join(" ");
+  f.lesson.steps[0].text = original;
+  const [warning] = critiqueCopy(f.lesson);
+  assert.equal(warning.code, "COPY_DENSITY");
+  assert.equal(f.lesson.steps[0].text, original);
+  f.lesson.steps[0].text = "First point. Second point. Third point.";
+  assert.deepEqual(critiqueCopy(f.lesson), []);
+});
+
+test("lesson color strategy resolves override before accepted project default", () => {
+  const f = fixture();
+  assert.equal(resolveColorStrategy(f.lesson, f.design), "imitated");
+  delete f.lesson.metadata.colorStrategy;
+  assert.equal(resolveColorStrategy(f.lesson, f.design), "theme");
+  f.lesson.metadata.colorStrategy = "unknown";
+  assert.notDeepEqual(validateSemantics(f.lesson, f.design, f.index, f.runtime), []);
+});
 for (const [name, mutate, match] of [
   [
     "unknown target",

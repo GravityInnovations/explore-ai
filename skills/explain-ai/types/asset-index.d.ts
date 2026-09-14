@@ -1,13 +1,8 @@
 /* Generated from JSON Schema. Run npm run types:generate; do not edit. */
 
-export interface AssetIndex {
-  schemaVersion: "1.0.0";
-  /**
-   * @minItems 0
-   */
-  assets: Asset[];
-}
-export interface Asset {
+export type Asset = {
+  [k: string]: unknown;
+} & {
   id: string;
   type: "model" | "image" | "texture" | "audio" | "component";
   path: string;
@@ -16,10 +11,22 @@ export interface Asset {
    */
   tags: string[];
   description: string;
-  license: string;
+  license?: string;
   source: string;
+  provenanceStatus: "original" | "permissive" | "customer-supplied" | "reference-only" | "restricted" | "unknown";
+  redistribution: "allowed" | "attribution-required" | "denied";
+  attribution?: string;
+  authorizationEvidence?: string;
   /**
    * @minItems 0
    */
   semanticTargets?: string[];
+};
+
+export interface AssetIndex {
+  schemaVersion: "2.0.0";
+  /**
+   * @minItems 0
+   */
+  assets: Asset[];
 }

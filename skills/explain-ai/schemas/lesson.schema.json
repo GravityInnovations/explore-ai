@@ -37,6 +37,10 @@
           "type": "string",
           "minLength": 1
         },
+        "contentKind": {
+          "type": "string",
+          "enum": ["factual", "illustrative"]
+        },
         "objectives": {
           "type": "array",
           "items": {
@@ -55,12 +59,16 @@
         "scopeNote": {
           "type": "string",
           "minLength": 1
+        },
+        "colorStrategy": {
+          "$ref": "common.schema.json#/$defs/colorStrategy"
         }
       },
       "required": [
         "summary",
         "objectives",
-        "sources"
+        "sources",
+        "contentKind"
       ],
       "additionalProperties": false
     },
@@ -70,6 +78,9 @@
         "$ref": "asset-index.schema.json#/$defs/asset"
       },
       "minItems": 0
+    },
+    "quiz": {
+      "$ref": "#/$defs/quiz"
     },
     "objects": {
       "type": "array",
@@ -112,9 +123,42 @@
     "title",
     "designId",
     "metadata",
+    "quiz",
     "objects",
     "steps",
     "accessibility"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "contentKind": { "const": "factual" }
+            },
+            "required": ["contentKind"]
+          }
+        },
+        "required": ["metadata"]
+      },
+      "then": {
+        "properties": {
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceRefs": {
+                  "type": "array"
+                }
+              },
+              "required": ["sourceRefs"]
+            }
+          }
+        }
+      }
+    }
   ],
   "additionalProperties": false,
   "$defs": {
@@ -677,6 +721,36 @@
           "type": "string",
           "minLength": 1
         },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/slug"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "simplificationNote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "introduces": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "uses": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
         "narrationAssetId": {
           "$ref": "common.schema.json#/$defs/slug"
         },
@@ -694,6 +768,63 @@
         "actions",
         "camera",
         "alt"
+      ],
+      "additionalProperties": false
+    },
+    "quiz": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "drawCount": { "type": "integer", "minimum": 3, "maximum": 10 },
+        "questions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/question" },
+          "minItems": 0
+        }
+      },
+      "required": ["enabled", "drawCount", "questions"],
+      "additionalProperties": false
+    },
+    "question": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/slug" },
+        "objectiveIds": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/slug" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "prompt": { "type": "string", "minLength": 1 },
+        "answers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/answer" },
+          "minItems": 2
+        }
+      },
+      "required": ["id", "objectiveIds", "prompt", "answers"],
+      "additionalProperties": false
+    },
+    "answer": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "common.schema.json#/$defs/slug" },
+        "text": { "type": "string", "minLength": 1 },
+        "correct": { "type": "boolean" },
+        "explanation": { "type": "string", "minLength": 1 }
+      },
+      "required": ["id", "text", "correct"],
+      "allOf": [
+        {
+          "if": {
+            "properties": { "correct": { "const": true } },
+            "required": ["correct"]
+          },
+          "then": {
+            "properties": { "explanation": { "type": "string", "minLength": 1 } },
+            "required": ["explanation"]
+          }
+        }
       ],
       "additionalProperties": false
     }

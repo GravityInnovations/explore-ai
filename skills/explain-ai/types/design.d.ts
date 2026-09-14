@@ -1,9 +1,17 @@
 /* Generated from JSON Schema. Run npm run types:generate; do not edit. */
 
 export interface Design {
-  schemaVersion: "1.0.0";
+  schemaVersion: "2.0.0";
   id: string;
   audience: string;
+  lessonColorStrategyDefault: "imitated" | "theme";
+  shell: {
+    catalogNavigation: "level-subject-lesson";
+    lessonPresentation: "continuous-stage";
+    inheritTypography: true;
+    inheritSpacing: true;
+    inheritControls: true;
+  };
   /**
    * @minItems 1
    */
@@ -79,7 +87,7 @@ export interface Design {
   };
   accessibility: {
     reducedMotion: "static-steps";
-    fallback: "text-and-diagram";
+    fallback: "text-and-diagram" | "text";
     minimumContrast: number;
   };
 }

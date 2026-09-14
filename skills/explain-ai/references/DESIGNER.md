@@ -2,6 +2,12 @@
 
 The journey is **questions → agreed brief → design preview → QA/revisions → accepted design → topics**. The agent guides the conversation; the local CLI persists decisions and enforces transitions. Read [WORKFLOW.md](WORKFLOW.md) for command inputs and recovery.
 
+## Client-facing conversation rules
+
+Keep the client conversation in this order: audience, brand/logo, typography, colours, layout, visual style, motion, accessibility and constraints. Ask only the first unresolved decision in plain language, and reuse answers already recorded in the current session. When several choices arrive together, record them and continue with the next unresolved area. Keep workflow state, schema names, CLI commands, Three.js, GSAP and QA labels behind the conversation.
+
+For typography, show a small set of actual rendered font samples with friendly descriptions, or accept a brand font name, link or supplied file. For colours and layout, use swatches or compact visual examples when the host supports them; otherwise ask one concise question at a time and keep the same conversational fallback. A form interaction is a focused choice, never blanket approval of the brief or preview.
+
 ## Inspect, start or resume
 
 Run the installed inspector and workflow `status --project <root> --json`. Inspect project instructions, relevant layouts/styles/assets and supplied references; exclude vendor and build output.
@@ -30,6 +36,8 @@ Resolve these areas before submitting the brief:
 | Accessibility | Keyboard/focus, readable labels, device performance and fallback |
 | Constraints | Existing stack, assets/licensing, scope, budget and must/avoid requirements |
 
+For brand/logo discovery, ask one of three plain-language paths: reuse a logo the client already supplied; ask them to provide an existing logo file or reference; or record that they explicitly want a temporary text wordmark/deferment. Reuse a recorded `brand` answer instead of asking again. Never inherit explore.ai's wordmark or logo deferral into another client, and never invent an asset or silently defer the decision.
+
 Customers may delegate choices. Record their delegation and a concrete recommendation; do not pretend they picked the recommendation. Proposed subordinate defaults are allowed but must appear in the brief for agreement. Do not invent the audience, theme or topic from examples, or interrogate every schema field.
 
 Inspect references before claiming their properties. Separate observations, inferences and customer choices. A screenshot cannot establish an exact typeface or 3D lighting rig. Clarify conflicts that materially affect the design.
@@ -44,7 +52,9 @@ Ask for agreement to that brief and wait. Do not implement the design while this
 
 Read `schemas/design.schema.json`. Write the configured profile (default `design/profile.json`), project configuration and an empty asset index only if absent. Preserve established paths. Cover the agreed typography, spacing, colours, materials, lighting, shape, motion, camera, highlights, labels, mobile and accessibility choices. Evidence records the agreed brief and references; inferred values remain labelled.
 
-Create or adapt a runnable design-only preview. Demonstrate typography/palette, representative forms/materials, text and labels, navigation/focus and agreed motion/fallback behaviour. Use text for a deferred logo. Do not choose a production lesson or fabricate runtime capabilities. SVG or procedural studies may establish visual language without claiming a completed Three.js lesson runtime.
+Create or adapt a runnable design-only preview. Demonstrate typography/palette, representative forms/materials, text and labels, navigation/focus and agreed motion/fallback behaviour. Preview the shared shell once: level → subject → lesson navigation, typography, spacing and controls must be the same boundary later consumed by catalog and lesson routes. A lesson may vary its educational stage composition inside that shell only. The primary preview scene uses Three.js with GSAP ScrollTrigger; clients choose visual and interaction direction, never the rendering or animation libraries. Use text for a deferred logo. Do not choose a production lesson or fabricate runtime capabilities. SVG or procedural studies may support fallback content or visual reference, but cannot claim a completed primary lesson runtime.
+
+The designer preview may remain responsive as a review surface. Lesson routes use the desktop lesson gate at 768 CSS pixels; do not create a separate phone composition.
 
 Use the existing app and dependencies. For an empty project, initialise only the minimal requested preview. Respect target instructions and keep content local. Present the preview, then register its URL and relevant files through `preview`.
 

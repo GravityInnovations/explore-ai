@@ -4,15 +4,18 @@ import type { Lesson } from "../../types/lesson";
 export function LessonText({
   lesson,
   diagramUrl,
+  runtimeError,
 }: {
   lesson: Lesson;
   diagramUrl?: string;
+  runtimeError?: string;
 }) {
   const prefix = `lesson-${lesson.level}-${lesson.subject}-${lesson.slug}`;
   return (
-    <article aria-labelledby={`${prefix}-title`}>
+    <article className="explain-ai-lesson-copy" aria-labelledby={`${prefix}-title`}>
       <h1 id={`${prefix}-title`}>{lesson.title}</h1>
       <p>{lesson.accessibility.summary}</p>
+      {runtimeError && <p role="alert">{runtimeError}</p>}
       <nav aria-label="Lesson steps">
         <ol>
           {lesson.steps.map((step) => (
@@ -30,6 +33,7 @@ export function LessonText({
       )}
       {lesson.steps.map((step) => (
         <section
+          className="explain-ai-lesson-step"
           key={step.id}
           id={`${prefix}-${step.id}`}
           data-lesson-step={step.id}

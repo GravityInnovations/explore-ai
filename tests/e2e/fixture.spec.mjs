@@ -1,0 +1,33 @@
+import { test, expect } from "@playwright/test";
+
+test("catalog to lesson navigation, controls, deep links, quiz and phone gate remain usable", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/catalog");
+  await expect(page.getByRole("heading", { name: "Catalog" })).toBeVisible();
+  await page.getByRole("link", { name: "Grade 2" }).first().click();
+  await expect(page).toHaveURL(/grade-2$/);
+  await page.getByRole("link", { name: "Equal parts" }).click();
+  await expect(page).toHaveURL(/lesson\/grade-2\/maths\/equal-parts$/);
+  await expect(page.locator("#lesson-canvas")).toBeVisible();
+  await page.getByRole("button", { name: "Next" }).first().click();
+  await expect(page.getByRole("heading", { name: "Recap the idea" })).toBeVisible();
+  await page.getByRole("button", { name: "Back" }).click();
+  await expect(page.getByRole("heading", { name: "See the whole" })).toBeVisible();
+  await page.evaluate(() => window.scrollTo(0, 500));
+  await page.waitForTimeout(50);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.goto("/lesson/grade-2/maths/equal-parts#step-1");
+  await expect(page.getByRole("heading", { name: "Recap the idea" })).toBeVisible();
+  await page.locator('input[value="wrong"]').check();
+  await expect(page.getByRole("status")).toContainText("Correction");
+  await page.locator('input[value="correct"]').check();
+  await expect(page.locator("#score")).toHaveText("Score: 100%");
+  await page.goto("/lesson/grade-7/science/plant-parts");
+  await expect(page.getByRole("heading", { name: "Plant parts" })).toBeVisible();
+  await page.setViewportSize({ width: 600, height: 800 });
+  await expect(page.getByRole("alert")).toBeVisible();
+  expect(errors).toEqual([]);
+});

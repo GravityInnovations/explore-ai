@@ -4,7 +4,7 @@
   "title": "Common",
   "$defs": {
     "version": {
-      "const": "1.0.0",
+      "const": "2.0.0",
       "type": "string"
     },
     "slug": {
@@ -83,9 +83,19 @@
       "type": "string",
       "pattern": "^#[0-9a-fA-F]{6}$"
     },
+    "colorStrategy": {
+      "type": "string",
+      "enum": [
+        "imitated",
+        "theme"
+      ]
+    },
     "source": {
       "type": "object",
       "properties": {
+        "id": {
+          "$ref": "#/$defs/slug"
+        },
         "title": {
           "type": "string",
           "minLength": 1
@@ -100,6 +110,7 @@
         }
       },
       "required": [
+        "id",
         "title",
         "reference"
       ],

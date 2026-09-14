@@ -14,6 +14,39 @@
       "type": "string",
       "minLength": 1
     },
+    "lessonColorStrategyDefault": {
+      "$ref": "common.schema.json#/$defs/colorStrategy"
+    },
+    "shell": {
+      "type": "object",
+      "properties": {
+        "catalogNavigation": {
+          "type": "string",
+          "const": "level-subject-lesson"
+        },
+        "lessonPresentation": {
+          "type": "string",
+          "const": "continuous-stage"
+        },
+        "inheritTypography": {
+          "const": true
+        },
+        "inheritSpacing": {
+          "const": true
+        },
+        "inheritControls": {
+          "const": true
+        }
+      },
+      "required": [
+        "catalogNavigation",
+        "lessonPresentation",
+        "inheritTypography",
+        "inheritSpacing",
+        "inheritControls"
+      ],
+      "additionalProperties": false
+    },
     "evidence": {
       "type": "array",
       "items": {
@@ -333,7 +366,8 @@
         "fallback": {
           "type": "string",
           "enum": [
-            "text-and-diagram"
+            "text-and-diagram",
+            "text"
           ]
         },
         "minimumContrast": {
@@ -354,6 +388,8 @@
     "schemaVersion",
     "id",
     "audience",
+    "lessonColorStrategyDefault",
+    "shell",
     "evidence",
     "typography",
     "spacing",

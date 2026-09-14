@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ExplainAI browser fixture</title>
+  <style>
+    :root { font: 16px/1.5 sans-serif; color: #17202a; background: #f5f5f5; }
+    body { margin: 0; } header, main { max-width: 760px; margin: auto; padding: 1rem; }
+    nav { display: flex; gap: 1rem; } a, button { color: #075985; padding: .5rem; }
+    section { min-height: 70vh; padding: 2rem 0; } canvas { width: 100%; height: 180px; background: #dbeafe; }
+    #phone-block { display: none; } @media (max-width: 767px) { #app { display: none; } #phone-block { display: block; padding: 2rem; } }
+  </style>
+</head>
+<body data-runtime="ready">
+  <div id="phone-block" role="alert">This lesson is designed for a wider screen.</div>
+  <div id="app">
+    <header><nav aria-label="Primary"><a data-route="catalog" href="/catalog">ExploreAI</a><a data-route="grade" href="/grade-2">Grade 2</a></nav><h1 id="title">Catalog</h1></header>
+    <main id="content"></main>
+  </div>
+  <script>
+    const lessons = [{ slug: 'equal-parts', title: 'Equal parts', level: 'grade-2', subject: 'maths' }, { slug: 'plant-parts', title: 'Plant parts', level: 'grade-7', subject: 'science' }];
+    let step = 0;
+    const content = document.querySelector('#content');
+    function route(path = location.pathname) {
+      if (path === '/catalog' || path === '/') {
+        document.querySelector('#title').textContent = 'Catalog';
+        content.innerHTML = '<section><h2>Choose a level</h2><a data-route="grade" href="/grade-2">Grade 2</a><a data-route="grade" href="/grade-7">Grade 7</a></section>';
+      } else if (path.startsWith('/grade-')) {
+        const level = path.slice(1); document.querySelector('#title').textContent = level;
+        content.innerHTML = `<section><h2>Maths</h2><a data-route="lesson" href="/lesson/${level}/maths/equal-parts">Equal parts</a></section>`;
+      } else {
+        const lesson = lessons.find(item => path.includes(item.level)) ?? lessons[0];
+        document.querySelector('#title').textContent = lesson.title;
+        step = location.hash === '#step-1' ? 1 : 0;
+        content.innerHTML = `<canvas id="lesson-canvas" aria-label="Lesson visual"></canvas><div id="steps"><section id="step-0"><h2>See the whole</h2><p>Identify the marked part.</p><button data-next>Next</button></section><section id="step-1"><h2>Recap the idea</h2><p>Recap what you learned.</p><button data-back>Back</button><button data-next>Next</button></section></div><section id="quiz"><h2>Knowledge check</h2><fieldset><legend>Which part is marked?</legend><label><input type="radio" name="answer" value="correct"> The marked part</label><label><input type="radio" name="answer" value="wrong"> Another part</label><p role="status" id="feedback"></p></fieldset><p id="score"></p></section>`;
+        const update = () => document.querySelectorAll('#steps section').forEach((item, index) => item.hidden = index !== step);
+        content.querySelectorAll('[data-next]').forEach(button => button.onclick = () => { step = Math.min(1, step + 1); update(); });
+        content.querySelectorAll('[data-back]').forEach(button => button.onclick = () => { step = Math.max(0, step - 1); update(); });
+        content.querySelectorAll('input').forEach(input => input.onchange = () => { document.querySelector('#feedback').textContent = input.value === 'correct' ? 'Correct. The marked part is shown.' : 'Correction: look at the marked part.'; document.querySelector('#score').textContent = input.value === 'correct' ? 'Score: 100%' : 'Score: 0% — Try again'; });
+        update();
+      }
+      document.querySelectorAll('a[data-route]').forEach(link => link.onclick = event => { event.preventDefault(); history.pushState({}, '', link.href); route(); });
+    }
+    addEventListener('popstate', () => route()); addEventListener('hashchange', () => route()); route();
+  </script>
+</body>
+</html>

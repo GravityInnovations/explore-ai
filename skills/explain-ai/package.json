@@ -11,6 +11,8 @@
     "validate": "node scripts/validate.mjs",
     "inspect": "node scripts/inspect.mjs",
     "workflow": "node scripts/workflow.mjs",
+    "migrate": "node scripts/migrate.mjs",
+    "catalog": "node scripts/build-catalog.mjs",
     "assets": "node scripts/find-assets.mjs"
   },
   "dependencies": {

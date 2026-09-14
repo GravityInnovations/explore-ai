@@ -57,8 +57,8 @@ for (const [name, change, match] of [
   ],
   [
     "unsupported schema version",
-    (root) => edit(root, first, (v) => (v.schemaVersion = "2.0.0")),
-    /constant/,
+    (root) => edit(root, first, (v) => (v.schemaVersion = "1.0.0")),
+    /Migration required: .*migrate\.mjs.*--project/,
   ],
   [
     "unknown action",

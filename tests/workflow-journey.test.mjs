@@ -41,6 +41,42 @@ test("brief agreement cannot skip decisions or target an old revision", async ()
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
+test("brand onboarding records supplied, deferred or reusable logo decisions without a new workflow key", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "workflow-logo-"));
+  try {
+    let state = await runWorkflow(root, "start");
+    state = await runWorkflow(root, "answer", {
+      key: "brand",
+      value: "Use the supplied logo at brand/logo.svg; if unavailable, ask before using a temporary wordmark.",
+      source: "user",
+      evidence: "Client supplied the logo reference during brand discovery",
+    }, state.revision);
+    assert.equal((await runWorkflow(root, "status")).question.key, "audience");
+    assert.equal((await runWorkflow(root, "status")).decisions.brand.source, "user");
+    state = await runWorkflow(root, "answer", {
+      key: "brand",
+      value: "Client explicitly defers the logo and approves a temporary text wordmark.",
+      source: "user",
+      evidence: "Client explicitly chose deferment for this revision",
+    }, state.revision);
+    assert.match((await runWorkflow(root, "status")).decisions.brand.value, /defers/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test("client questions stay one-at-a-time and free of implementation jargon", async () => {
+  const forbidden = /\b(schema|cli|three\.js|gsap|qa|runtime)\b/i;
+  for (const text of Object.values(QUESTIONS)) assert.equal(forbidden.test(text), false, text);
+  const root = await mkdtemp(path.join(os.tmpdir(), "workflow-questions-"));
+  try {
+    let state = await runWorkflow(root, "start");
+    assert.equal(state.question.key, "audience");
+    state = await runWorkflow(root, "answer", {
+      key: "audience", value: "Primary school learners", source: "user", evidence: "Client supplied audience"
+    }, state.revision);
+    assert.equal((await runWorkflow(root, "status")).question.key, "brand");
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test("topic preflight requires explicit current acceptance and invalidates edited preview scopes", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "workflow-accept-"));
   try {

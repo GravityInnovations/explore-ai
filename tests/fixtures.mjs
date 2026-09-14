@@ -1,18 +1,27 @@
 export function fixture() {
   const config = {
-    schemaVersion: "1.0.0",
+    schemaVersion: "2.0.0",
     paths: {
       design: "design/profile.json",
       content: "content",
       assetLibrary: "asset-library",
       publicAssets: "public/explain-ai",
       runtime: "explain-ai.runtime.json",
+      catalog: "catalog/index.json",
     },
   };
   const design = {
-    schemaVersion: "1.0.0",
+    schemaVersion: "2.0.0",
     id: "test-profile",
     audience: "Technical test fixture",
+    lessonColorStrategyDefault: "theme",
+    shell: {
+      catalogNavigation: "level-subject-lesson",
+      lessonPresentation: "continuous-stage",
+      inheritTypography: true,
+      inheritSpacing: true,
+      inheritControls: true,
+    },
     evidence: [
       {
         source: "test input",
@@ -58,13 +67,13 @@ export function fixture() {
     },
     accessibility: {
       reducedMotion: "static-steps",
-      fallback: "text-and-diagram",
+      fallback: "text",
       minimumContrast: 4.5,
     },
   };
-  const index = { schemaVersion: "1.0.0", assets: [] };
+  const index = { schemaVersion: "2.0.0", assets: [] };
   const runtime = {
-    schemaVersion: "1.0.0",
+    schemaVersion: "2.0.0",
     actions: ["highlight", "focus", "compare", "hide", "reveal", "cutaway"],
     cameraModes: ["wide", "close", "best"],
     components: [
@@ -75,7 +84,7 @@ export function fixture() {
     ],
   };
   const lesson = {
-    schemaVersion: "1.0.0",
+    schemaVersion: "2.0.0",
     lessonId: "k1/maths/shape",
     level: "k1",
     subject: "maths",
@@ -85,9 +94,12 @@ export function fixture() {
     designId: design.id,
     metadata: {
       summary: "A fixture showing a part",
+      contentKind: "illustrative",
       objectives: ["Identify the marked part"],
       sources: [],
+      colorStrategy: "imitated",
     },
+    quiz: { enabled: false, drawCount: 3, questions: [] },
     objects: [
       {
         id: "shape",

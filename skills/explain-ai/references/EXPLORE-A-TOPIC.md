@@ -8,13 +8,31 @@ Run the inspector and `node <installed-skill>/scripts/workflow.mjs preflight --p
 
 After preflight succeeds, record the accepted design SHA-256 and ID. Read configuration, design, local asset index and implemented runtime/component registry. A topic request is not permission to redesign the project.
 
-Use the project's level taxonomy and curriculum notes. `k5` is a catalog key, not a universal age standard. If scope can be inferred reasonably, record it; otherwise clarify the level once. Inspect the user's references, verify factual claims against suitable sources and label intentional simplifications. Avoid unsupported educational assertions, invented curriculum alignment or made-up citations.
+Use the project's level taxonomy and curriculum notes. `k5` is a catalog key, not a universal age standard. If scope can be inferred reasonably, record it; otherwise clarify the level once. For factual lessons, assign stable IDs to reviewed `metadata.sources` and put those IDs in each substantive step's `sourceRefs`; use `simplificationNote` for intentional level-appropriate wording. Avoid unsupported educational assertions, invented curriculum alignment or made-up citations. Keep source provenance in metadata rather than adding academic citations to child-facing copy.
+
+Reuse the accepted design's lesson colour strategy by default. Ask for a lesson override only when the topic has a clear educational reason; record `imitated` or `theme` declaratively and keep the interface palette inherited from the design.
 
 ## 2. Plan the educational and visual story
 
-Create a compact working table with: learning objective, explanation, exact semantic target, visual teaching technique, asset/component choice and fallback. Keep planning notes small and task-local; do not introduce required duplicate lesson manifests.
+Create a compact working table with: learning objective, explanation, exact semantic target, visual teaching technique, asset/component choice and fallback. Apply the grade-band guardrails in [PEDAGOGY.md](PEDAGOGY.md), including one learning point per step, ordered vocabulary and a final recap. Keep planning notes small and task-local; do not introduce required duplicate lesson manifests.
 
 Choose an order that builds understanding: orient the learner, introduce the relevant whole, examine its parts or process, compare where helpful, then reconnect the detail to the whole and conclude. Sequence depends on the subject; this is not a fixed slide formula. Dissection, extraction, magnification, flow and scale are teaching tools, not decoration. Do not use the same effect for every concept merely because its handler already exists.
+
+Compose the lesson with one persistent visual stage and short copy sections around it. Use `LessonStage.tsx` and the shared controller for scroll, direct anchors and Next/Previous navigation. Do not turn teaching steps into bordered cards; reserve cards for genuine controls, catalog entries or quiz choices.
+
+Keep each story step to one teaching point, one short heading and at most two short copy blocks. The general critic warns above 65 words or three prose sentences in a step; it preserves the source copy for revision and does not truncate it. Coordinate tighter grade-band thresholds with the pedagogy guidance.
+
+Choose emphasis by teaching intent and available anatomy:
+
+| Intent | Preferred registered technique |
+| --- | --- |
+| Identify a target | `focus` or `highlight` |
+| Inspect an interior | `xray` or an explicit geometry adapter for `cutaway` |
+| Separate related parts | `extract` or `explode` |
+| Inspect detail | `magnify` |
+| Show a relationship or direction | `compare` or `flow` |
+
+Keep `highlight` when it is the clearest choice. Avoid three or more consecutive highlight-only teaching steps when another registered technique fits; the critic reports a warning, not an automatic failure.
 
 Use the roles in AGENT-ROLES.md when useful. Asset planning precedes final scene/choreography: search local components and metadata, assess semantic anatomy, then decide reuse/procedural/new/reference. Creating new reusable geometry is allowed when required; keep its behavior in target-project components rather than executable lesson JSON.
 
@@ -29,6 +47,8 @@ content/<level>/<subject>/<topicKey>/assets/   only when needed
 
 `lessonId` is `level/subject/topicKey`. Preserve the user's explicit topic key; otherwise derive a readable lowercase hyphenated key. `slug` is the route-facing name and can differ. Repeated topics across levels must coexist. The route tuple is `level/subject/slug`; validate the full catalog for collisions.
 
+The project root remains the existing home/catalog route. A generated lesson must use its nested `level/subject/slug` route, and adding another lesson is additive. Preserve existing root and layout files; never mount a lesson at `/` or replace a compatible shell.
+
 Build semantic object paths and immediate parents before writing actions. Resolve each object to a reviewed component and optional asset/material preset. Write level-appropriate concise copy. For every exact object/part mentioned, include it in that step's `explains`, then make it visually unmistakable with emphasis, framing or a suitable technique. A parent highlight is not automatically enough for a tiny child.
 
 Each step describes its own state starting from the canonical scene baseline. Do not depend on a prior step having revealed/extracted an object. Supply camera intent and meaningful `alt` text. Optional precise vectors express geometry, never code. Use profile pacing/durations by default and per-step overrides only where pedagogically justified. Narration hooks reference local audio assets; audio must not be necessary to understand the content.
@@ -37,7 +57,7 @@ Each step describes its own state starting from the canonical scene baseline. Do
 
 Check needed actions against actual component anatomy/handlers. Extend a missing runtime using RUNTIME.md and the adaptable templates; do not mark an action implemented by merely putting it in the capability manifest. If an alternative is educationally equivalent, use it and state the tradeoff. JSON schema validity does not imply renderer compatibility.
 
-Adapt to the existing Next.js App Router. Prefer server-side filesystem loading and a client scene boundary. A project lacking catalog routes may get levels → subjects → topics → lesson routes. Do not rebuild an existing application or add storage services. Preserve nearby layouts and styling. Use configured paths and public asset mapping.
+Adapt to the existing Next.js App Router. Prefer server-side filesystem loading and a client scene boundary. The primary interactive lesson must create a real Three.js scene and use GSAP ScrollTrigger for scroll state; package declarations and manifest names are insufficient evidence. A project lacking catalog routes may get levels → subjects → topics → lesson routes. Consume the accepted shared shell for every catalog and lesson entrypoint; keep lesson-specific composition inside the educational stage and do not create a second header, button language or page shell. Do not rebuild an existing application or add storage services. Preserve nearby layouts and styling. Use configured paths and public asset mapping.
 
 Run structural and full project validation, then integrated copy checks where applicable. Fix failures. Preview explained targets, backward scrolling, resize/mobile, keyboard navigation, reduced motion and no-WebGL output. Confirm copy remains available without the canvas. Compare the design fingerprint with the initial value; if it changed unexpectedly, reconcile only your unintended changes before delivery.
 

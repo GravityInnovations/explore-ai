@@ -2,8 +2,9 @@ import path from "node:path";
 import { readdir, readFile, realpath } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { readContract, validateData } from "./contracts.mjs";
-import { resolveLocal, lessonIdentity } from "./paths.mjs";
+import { resolveLocal, lessonIdentity, lessonRoute, assertLessonRoute } from "./paths.mjs";
 import { workflowStatus } from "./workflow-actions.mjs";
+import { critiquePedagogy } from "./pedagogy.mjs";
 
 const emphasis = new Set([
   "focus",
@@ -15,7 +16,38 @@ const emphasis = new Set([
   "compare",
 ]);
 const under = (id, parent) => id === parent || id.startsWith(`${parent}.`);
-export function validateSemantics(lesson, design, index, runtime) {
+export function validateQuiz(lesson) {
+  const quiz = lesson.quiz;
+  if (!quiz.enabled) return [];
+  const errors = [];
+  const add = (path, message) => errors.push({ path, message });
+  if (quiz.questions.length < quiz.drawCount)
+    add("/quiz/questions", "Question pool must contain at least drawCount questions");
+  const objectiveIds = lesson.metadata.objectives.map((_, index) => `objective-${index + 1}`);
+  const covered = new Set();
+  const questionIds = new Set();
+  quiz.questions.forEach((question, index) => {
+    if (questionIds.has(question.id)) add(`/quiz/questions/${index}/id`, `Duplicate question ID: ${question.id}`);
+    questionIds.add(question.id);
+    question.objectiveIds.forEach((objectiveId) => {
+      if (!objectiveIds.includes(objectiveId)) add(`/quiz/questions/${index}/objectiveIds`, `Unknown objective ID: ${objectiveId}`);
+      covered.add(objectiveId);
+    });
+    const answerIds = new Set();
+    let correct = 0;
+    question.answers.forEach((answer, answerIndex) => {
+      if (answerIds.has(answer.id)) add(`/quiz/questions/${index}/answers/${answerIndex}/id`, `Duplicate answer ID: ${answer.id}`);
+      answerIds.add(answer.id);
+      if (answer.correct) correct++;
+    });
+    if (correct !== 1) add(`/quiz/questions/${index}/answers`, "Each question must have exactly one correct answer");
+  });
+  objectiveIds.forEach((objectiveId) => {
+    if (!covered.has(objectiveId)) add("/quiz/questions", `Quiz does not cover ${objectiveId}`);
+  });
+  return errors;
+}
+export function validateSemantics(lesson, design, index, runtime, { integrated = false } = {}) {
   const errors = [];
   const add = (p, message) => errors.push({ path: p, message });
   for (const [kind, data] of [
@@ -40,6 +72,31 @@ export function validateSemantics(lesson, design, index, runtime) {
   unique(lesson.steps, "/steps");
   const components = unique(runtime.components, "/runtime/components");
   const assets = unique([...index.assets, ...(lesson.assets ?? [])], "/assets");
+  errors.push(...validateQuiz(lesson));
+  const sourceIds = new Set();
+  lesson.metadata.sources.forEach((source, i) => {
+    if (sourceIds.has(source.id)) add(`/metadata/sources/${i}/id`, `Duplicate source ID: ${source.id}`);
+    sourceIds.add(source.id);
+  });
+  lesson.steps.forEach((step, i) => {
+    const refs = step.sourceRefs ?? [];
+    refs.forEach((ref, j) => {
+      if (!sourceIds.has(ref)) add(`/steps/${i}/sourceRefs/${j}`, `Unknown source ID: ${ref}`);
+    });
+    if (lesson.metadata.contentKind === "factual" && refs.length === 0)
+      add(`/steps/${i}/sourceRefs`, "Factual teaching steps require source references");
+  });
+  const blockedForDistribution = new Set(["reference-only", "restricted", "unknown"]);
+  for (const [i, asset] of [...index.assets, ...(lesson.assets ?? [])].entries()) {
+    const p = `/assets/${i}`;
+    if (integrated && (blockedForDistribution.has(asset.provenanceStatus) || asset.redistribution === "denied"))
+      add(p, "Asset provenance or redistribution status blocks public/integrated output");
+  }
+  for (const shared of index.assets) {
+    const local = (lesson.assets ?? []).find((asset) => asset.id === shared.id);
+    if (local && (local.provenanceStatus !== shared.provenanceStatus || local.redistribution !== shared.redistribution || local.source !== shared.source))
+      add(`/assets/${shared.id}`, "Reused asset must retain shared provenance metadata");
+  }
   if (
     lesson.lessonId !==
     lessonIdentity(lesson.level, lesson.subject, lesson.topicKey)
@@ -181,6 +238,52 @@ export function validateSemantics(lesson, design, index, runtime) {
   return errors;
 }
 
+export function critiqueEmphasis(lesson, runtime) {
+  const warnings = [];
+  const alternatives = new Set([
+    "focus", "isolate", "extract", "explode", "xray", "magnify", "compare", "flow",
+  ]);
+  const hasAlternative = [...alternatives].some((action) => runtime.actions.includes(action));
+  let run = [];
+  const report = () => {
+    if (run.length >= 3)
+      warnings.push({
+        path: `/steps/${run[0]}/actions`,
+        code: "EMPHASIS_REPETITION",
+        message: `${run.length} consecutive teaching steps use highlight only; consider a compatible registered technique such as focus, isolate, extract, magnify, compare or flow`,
+      });
+  };
+  lesson.steps.forEach((step, index) => {
+    const teaching = step.explains.length > 0;
+    const highlightOnly = teaching && step.actions.length > 0 && step.actions.every((action) => action.action === "highlight");
+    if (hasAlternative && highlightOnly) run.push(index);
+    else {
+      report();
+      run = [];
+    }
+  });
+  report();
+  return warnings;
+}
+
+export function critiqueCopy(lesson) {
+  return lesson.steps.flatMap((step, index) => {
+    const text = step.text.trim();
+    const words = text ? text.split(/\s+/).length : 0;
+    const sentences = text ? (text.match(/[.!?]+(?=\s|$)/g) ?? []).length : 0;
+    if (words <= 65 && sentences <= 3) return [];
+    return [{
+      path: `/steps/${index}/text`,
+      code: "COPY_DENSITY",
+      message: `Step copy is dense (${words} words, ${sentences} sentences); keep one teaching point with short progressive blocks`,
+    }];
+  });
+}
+
+export function resolveColorStrategy(lesson, design) {
+  return lesson.metadata.colorStrategy ?? design.lessonColorStrategyDefault;
+}
+
 function luminance(hex) {
   const channels = hex
     .slice(1)
@@ -209,12 +312,14 @@ export async function loadProject(root) {
   const config = await readContract(
     "project",
     await resolveLocal(root, "explain-ai.config.json", { file: true }),
+    { project: root },
   );
   for (const relative of Object.values(config.paths))
     await resolveLocal(root, relative, { mustExist: false });
   const design = await readContract(
     "design",
     await resolveLocal(root, config.paths.design, { file: true }),
+    { project: root },
   );
   const designErrors = validateDesign(design);
   if (designErrors.length)
@@ -226,10 +331,12 @@ export async function loadProject(root) {
     await resolveLocal(root, `${config.paths.assetLibrary}/index.json`, {
       file: true,
     }),
+    { project: root },
   );
   const runtime = await readContract(
     "runtime",
     await resolveLocal(root, config.paths.runtime, { file: true }),
+    { project: root },
   );
   return { root, config, design, index, runtime };
 }
@@ -261,6 +368,7 @@ export async function validateProject(
   }
   const { root, config, design, index, runtime } = await loadProject(project);
   const errors = [];
+  const warnings = [];
   const add = (p, message) => errors.push({ path: p, message });
   const lessons = requested
     ? [requested]
@@ -299,20 +407,39 @@ export async function validateProject(
       const lesson = await readContract(
         "lesson",
         await resolveLocal(root, relative, { file: true }),
+        { project: root },
       );
       const expected = `${config.paths.content}/${lessonIdentity(lesson.level, lesson.subject, lesson.topicKey)}/lesson.json`;
       if (relative !== expected)
         add(relative, `Expected catalog path: ${expected}`);
-      const route = `${lesson.level}/${lesson.subject}/${lesson.slug}`;
+      const route = assertLessonRoute(lessonRoute(lesson.level, lesson.subject, lesson.slug));
       if (routes.has(route)) add(relative, `Duplicate route: ${route}`);
       routes.add(route);
       if (ids.has(lesson.lessonId))
         add(relative, `Duplicate lesson ID: ${lesson.lessonId}`);
       ids.add(lesson.lessonId);
       errors.push(
-        ...validateSemantics(lesson, design, index, runtime).map((e) => ({
+        ...validateSemantics(lesson, design, index, runtime, { integrated }).map((e) => ({
           ...e,
           path: `${relative}${e.path}`,
+        })),
+      );
+      warnings.push(
+        ...critiqueEmphasis(lesson, runtime).map((warning) => ({
+          ...warning,
+          path: `${relative}${warning.path}`,
+        })),
+      );
+      warnings.push(
+        ...critiqueCopy(lesson).map((warning) => ({
+          ...warning,
+          path: `${relative}${warning.path}`,
+        })),
+      );
+      warnings.push(
+        ...critiquePedagogy(lesson).map((warning) => ({
+          ...warning,
+          path: `${relative}${warning.path}`,
         })),
       );
       const base = path.posix.dirname(relative);
@@ -337,6 +464,7 @@ export async function validateProject(
     valid: errors.length === 0,
     lessons: lessons.length,
     errors,
+    warnings,
     integrated,
   };
 }

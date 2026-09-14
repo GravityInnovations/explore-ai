@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "lessonId": "k2/maths/equal-parts",
   "level": "k2",
   "subject": "maths",
@@ -9,16 +9,23 @@
   "designId": "example-only",
   "metadata": {
     "summary": "A minimal declarative example comparing equal parts of a rectangle.",
+    "contentKind": "illustrative",
     "objectives": [
       "Relate one of two equal parts to one half"
     ],
     "sources": [
       {
+        "id": "example-mathematics",
         "title": "Original mathematical example",
         "reference": "Project-authored rectangle divided at its midpoint",
         "note": "Illustrative fixture; level codes are examples, not curriculum claims."
       }
     ]
+  },
+  "quiz": {
+    "enabled": false,
+    "drawCount": 3,
+    "questions": []
   },
   "objects": [
     {

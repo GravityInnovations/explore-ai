@@ -64,3 +64,16 @@ export function lessonIdentity(level, subject, topicKey) {
       throw new Error(`Invalid catalog key: ${value}`);
   return [level, subject, topicKey].join("/");
 }
+
+export function lessonRoute(level, subject, slug) {
+  for (const value of [level, subject, slug])
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value))
+      throw new Error(`Invalid lesson route key: ${value}`);
+  return [level, subject, slug].join("/");
+}
+
+export function assertLessonRoute(route) {
+  if (typeof route !== "string" || !route || route === "/" || route.startsWith("/"))
+    throw new Error("Lessons must use a nested level/subject/slug route; the root route belongs to the project catalog");
+  return route;
+}

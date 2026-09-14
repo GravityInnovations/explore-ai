@@ -1,5 +1,88 @@
 /* Generated from JSON Schema. Run npm run types:generate; do not edit. */
 
+export type Lesson = {
+  [k: string]: unknown;
+} & {
+  schemaVersion: "2.0.0";
+  lessonId: string;
+  level: string;
+  subject: string;
+  topicKey: string;
+  slug: string;
+  title: string;
+  designId: string;
+  metadata: {
+    summary: string;
+    contentKind: "factual" | "illustrative";
+    /**
+     * @minItems 1
+     */
+    objectives: [string, ...string[]];
+    /**
+     * @minItems 0
+     */
+    sources: Source[];
+    scopeNote?: string;
+    colorStrategy?: "imitated" | "theme";
+  };
+  /**
+   * @minItems 0
+   */
+  assets?: Asset[];
+  quiz: Quiz;
+  /**
+   * @minItems 1
+   */
+  objects: [SceneObject, ...SceneObject[]];
+  /**
+   * @minItems 1
+   */
+  steps: [Step, ...Step[]];
+  accessibility: {
+    summary: string;
+    staticDiagramAssetId?: string;
+  };
+};
+export type Asset = {
+  [k: string]: unknown;
+} & {
+  id: string;
+  type: "model" | "image" | "texture" | "audio" | "component";
+  path: string;
+  /**
+   * @minItems 0
+   */
+  tags: string[];
+  description: string;
+  license?: string;
+  source: string;
+  provenanceStatus: "original" | "permissive" | "customer-supplied" | "reference-only" | "restricted" | "unknown";
+  redistribution: "allowed" | "attribution-required" | "denied";
+  attribution?: string;
+  authorizationEvidence?: string;
+  /**
+   * @minItems 0
+   */
+  semanticTargets?: string[];
+};
+export type Answer = {
+  [k: string]: unknown;
+} & {
+  id: string;
+  text: string;
+  correct: boolean;
+  explanation?: string;
+} & {
+  id: string;
+  text: string;
+  correct: boolean;
+  explanation?: string;
+} & {
+  id: string;
+  text: string;
+  correct: boolean;
+  explanation?: string;
+};
 export type Action =
   | Focus
   | Highlight
@@ -21,64 +104,31 @@ export type Action =
   | Flow
   | Transform;
 
-export interface Lesson {
-  schemaVersion: "1.0.0";
-  lessonId: string;
-  level: string;
-  subject: string;
-  topicKey: string;
-  slug: string;
-  title: string;
-  designId: string;
-  metadata: {
-    summary: string;
-    /**
-     * @minItems 1
-     */
-    objectives: [string, ...string[]];
-    /**
-     * @minItems 0
-     */
-    sources: Source[];
-    scopeNote?: string;
-  };
-  /**
-   * @minItems 0
-   */
-  assets?: Asset[];
-  /**
-   * @minItems 1
-   */
-  objects: [SceneObject, ...SceneObject[]];
-  /**
-   * @minItems 1
-   */
-  steps: [Step, ...Step[]];
-  accessibility: {
-    summary: string;
-    staticDiagramAssetId?: string;
-  };
-}
 export interface Source {
+  id: string;
   title: string;
   reference: string;
   note?: string;
 }
-export interface Asset {
+export interface Quiz {
+  enabled: boolean;
+  drawCount: number;
+  /**
+   * @minItems 0
+   */
+  questions: Question[];
+}
+export interface Question {
   id: string;
-  type: "model" | "image" | "texture" | "audio" | "component";
-  path: string;
   /**
-   * @minItems 0
+   * @minItems 1
    */
-  tags: string[];
-  description: string;
-  license: string;
-  source: string;
+  objectiveIds: [string, ...string[]];
+  prompt: string;
   /**
-   * @minItems 0
+   * @minItems 2
    */
-  semanticTargets?: string[];
+  answers: [Answer, Answer, ...Answer[]];
 }
 export interface SceneObject {
   id: string;
@@ -110,6 +160,19 @@ export interface Step {
   actions: [Action, ...Action[]];
   camera: Camera;
   alt: string;
+  /**
+   * @minItems 1
+   */
+  sourceRefs?: [string, ...string[]];
+  simplificationNote?: string;
+  /**
+   * @minItems 1
+   */
+  introduces?: [string, ...string[]];
+  /**
+   * @minItems 1
+   */
+  uses?: [string, ...string[]];
   narrationAssetId?: string;
   scrollUnits?: number;
 }

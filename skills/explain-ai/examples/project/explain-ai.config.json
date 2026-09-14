@@ -1,10 +1,11 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "paths": {
     "design": "design/profile.json",
     "content": "content",
     "assetLibrary": "asset-library",
     "publicAssets": "public/explain-ai",
-    "runtime": "explain-ai.runtime.json"
+    "runtime": "explain-ai.runtime.json",
+    "catalog": "catalog/index.json"
   }
 }

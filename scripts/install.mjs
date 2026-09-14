@@ -27,19 +27,23 @@ export async function install(project) {
       throw new Error("Installation directory escapes target project");
   }
   const destination = path.join(parent, "explain-ai");
-  // Exclusive creation prevents accidental replacement and concurrent installers.
-  await mkdir(destination);
-  await cp(source, destination, {
-    recursive: true,
-    force: false,
-    errorOnExist: true,
-    filter: async (entry) => {
-      if (path.basename(entry) === "node_modules") return false;
-      if ((await lstat(entry)).isSymbolicLink())
-        throw new Error(`Package symlinks are not supported: ${entry}`);
-      return true;
-    },
-  });
+  // Exclusive copy creation prevents accidental replacement and concurrent installers.
+  try {
+    await cp(source, destination, {
+      recursive: true,
+      force: false,
+      errorOnExist: true,
+      filter: async (entry) => {
+        if (path.basename(entry) === "node_modules") return false;
+        if ((await lstat(entry)).isSymbolicLink())
+          throw new Error(`Package symlinks are not supported: ${entry}`);
+        return true;
+      },
+    });
+  } catch (error) {
+    if (error.code === "ERR_FS_CP_EEXIST") error.code = "EEXIST";
+    throw error;
+  }
   return destination;
 }
 
