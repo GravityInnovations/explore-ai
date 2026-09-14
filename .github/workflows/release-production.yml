@@ -1,0 +1,60 @@
+name: Publish production release
+
+on:
+  push:
+    branches: [production]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: production-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Validate and publish release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            skills/explain-ai/package-lock.json
+
+      - name: Install development dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Install packaged skill dependencies
+        run: npm ci --prefix skills/explain-ai --ignore-scripts --no-audit --no-fund
+
+      - name: Run release validation
+        run: npm run check
+
+      - name: Build the installable skill archive
+        run: npm pack --prefix skills/explain-ai --pack-destination "$RUNNER_TEMP"
+
+      - name: Publish the versioned GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          version="$(node -p "require('./skills/explain-ai/package.json').version")"
+          tag="v${version}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists; bump skills/explain-ai/package.json before publishing again."
+            exit 1
+          fi
+          archive="$RUNNER_TEMP/explain-ai-skill-${version}.tgz"
+          gh release create "$tag" "$archive" \
+            --target "$GITHUB_SHA" \
+            --title "ExplainAI $tag" \
+            --generate-notes
