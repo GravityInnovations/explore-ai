@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { buildCatalog } from "../skills/explore-ai/scripts/build-catalog.mjs";
@@ -43,6 +43,23 @@ test("catalog builder rejects route collisions and scans only configured content
     value.lessonId = "k1/maths/duplicate";
     await writeFile(duplicate, `${JSON.stringify(value, null, 2)}\n`);
     await assert.rejects(buildCatalog(root), /Catalog route collision/);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("catalog builder writes a real empty catalog without fabricated lessons", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-empty-catalog-"));
+  try {
+    await cp(example, root, { recursive: true });
+    await rm(path.join(root, "content"), { recursive: true, force: true });
+    await mkdir(path.join(root, "content"), { recursive: true });
+    const written = await buildCatalog(root, { write: true });
+    assert.deepEqual(written.entries, []);
+    assert.deepEqual(JSON.parse(await readFile(path.join(root, "catalog/index.json"), "utf8")), {
+      schemaVersion: "2.0.0",
+      entries: [],
+    });
   } finally {
     await rm(root, { recursive: true, force: true });
   }

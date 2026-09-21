@@ -7,6 +7,7 @@ Run `npm test` after installing both root and skill dependencies. Run `npm run c
 | `install.test.mjs` | Complete copying, overwrite refusal and destination containment |
 | `schemas.test.mjs` | Strict Draft 2020-12 compilation |
 | `structural.test.mjs` | Versions, fields, portable paths, junctions and catalog identity |
+| `catalog-routes.test.mjs` | Shared Home, Catalog, level, subject and nested lesson route contract |
 | `semantic.test.mjs` | Targets, hierarchy, capabilities, emphasis, contrast and ordered visibility/opacity state |
 | `inspect.test.mjs` | Existing-profile discovery and byte preservation |
 | `assets.test.mjs` | Indexed reuse search and missing sources |

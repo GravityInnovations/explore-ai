@@ -7,10 +7,14 @@ export type AppShellProps = {
   navigation: readonly { label: string; href: string }[];
 };
 
+export const HOME_ROUTE = "/" as const;
+export const CATALOG_ROUTE = "/catalog" as const;
+
 /**
- * Shared target-project shell for catalog and lesson entrypoints.
+ * Shared target-project shell for Home, catalog and lesson entrypoints.
  * Apply the accepted project's typography, spacing and control tokens here;
- * lesson-specific composition belongs inside `children` only.
+ * route-specific composition belongs inside `children` only. Keep Home and
+ * Catalog as separate pages when composing the application router.
  */
 export function AppShell({
   title,

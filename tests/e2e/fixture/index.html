@@ -14,22 +14,39 @@
 <body data-runtime="ready">
   <div id="phone-block" role="alert">This lesson is designed for a wider screen.</div>
   <div id="app">
-    <header><nav aria-label="Primary"><a data-route="catalog" href="/catalog">ExploreAI</a><a data-route="grade" href="/grade-2">Grade 2</a></nav><h1 id="title">Catalog</h1></header>
+    <header><nav aria-label="Primary"><a data-route="home" href="/">Home</a><a data-route="catalog" href="/catalog">Catalog</a></nav><h1 id="title">Home</h1></header>
     <main id="content"></main>
   </div>
   <script>
-    const lessons = [{ slug: 'equal-parts', title: 'Equal parts', level: 'grade-2', subject: 'maths' }, { slug: 'plant-parts', title: 'Plant parts', level: 'grade-7', subject: 'science' }];
+    const lessons = [
+      { slug: 'equal-parts', title: 'Equal parts', level: 'grade-2', subject: 'maths' },
+      { slug: 'fractions', title: 'Fractions', level: 'grade-2', subject: 'maths' },
+      { slug: 'plant-parts', title: 'Plant parts', level: 'grade-7', subject: 'science' },
+    ];
     let step = 0;
     const content = document.querySelector('#content');
     function route(path = location.pathname) {
-      if (path === '/catalog' || path === '/') {
+      if (path === '/') {
+        document.querySelector('#title').textContent = 'Home';
+        content.innerHTML = '<section><h2>Welcome to ExploreAI</h2><p>Choose a lesson when you are ready to learn.</p><a data-route="catalog" href="/catalog">Explore lessons</a></section>';
+      } else if (path === '/catalog') {
         document.querySelector('#title').textContent = 'Catalog';
-        content.innerHTML = '<section><h2>Choose a level</h2><a data-route="grade" href="/grade-2">Grade 2</a><a data-route="grade" href="/grade-7">Grade 7</a></section>';
-      } else if (path.startsWith('/grade-')) {
-        const level = path.slice(1); document.querySelector('#title').textContent = level;
-        content.innerHTML = `<section><h2>Maths</h2><a data-route="lesson" href="/lesson/${level}/maths/equal-parts">Equal parts</a></section>`;
+        const levels = [...new Set(lessons.map(item => item.level))];
+        content.innerHTML = `<section><h2>Choose a level</h2>${levels.map(level => `<a data-route="level" href="/catalog/${level}">${level === 'grade-2' ? 'Grade 2' : 'Grade 7'}</a>`).join(' ')}</section>`;
+      } else if (path.startsWith('/catalog/')) {
+        const [, , level, subject] = path.split('/');
+        if (!subject) {
+          document.querySelector('#title').textContent = level;
+          const subjects = [...new Set(lessons.filter(item => item.level === level).map(item => item.subject))];
+          content.innerHTML = `<section><h2>Choose a subject</h2>${subjects.map(item => `<a data-route="subject" href="/catalog/${level}/${item}">${item}</a>`).join(' ')}</section>`;
+        } else {
+          document.querySelector('#title').textContent = subject;
+          const available = lessons.filter(item => item.level === level && item.subject === subject);
+          content.innerHTML = `<section><h2>Choose a lesson</h2>${available.map(item => `<a data-route="lesson" href="/lesson/${item.level}/${item.subject}/${item.slug}">${item.title}</a>`).join(' ')}</section>`;
+        }
       } else {
-        const lesson = lessons.find(item => path.includes(item.level)) ?? lessons[0];
+        const [, , level, subject, slug] = path.split('/');
+        const lesson = lessons.find(item => item.level === level && item.subject === subject && item.slug === slug) ?? lessons[0];
         document.querySelector('#title').textContent = lesson.title;
         step = location.hash === '#step-1' ? 1 : 0;
         content.innerHTML = `<canvas id="lesson-canvas" aria-label="Lesson visual"></canvas><div id="steps"><section id="step-0"><h2>See the whole</h2><p>Identify the marked part.</p><button data-next>Next</button></section><section id="step-1"><h2>Recap the idea</h2><p>Recap what you learned.</p><button data-back>Back</button><button data-next>Next</button></section></div><section id="quiz"><h2>Knowledge check</h2><fieldset><legend>Which part is marked?</legend><label><input type="radio" name="answer" value="correct"> The marked part</label><label><input type="radio" name="answer" value="wrong"> Another part</label><p role="status" id="feedback"></p></fieldset><p id="score"></p></section>`;
