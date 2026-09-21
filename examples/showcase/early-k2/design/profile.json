@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "2.0.0",
+  "id": "showcase-early-k2",
+  "audience": "Early learners in Kindergarten through Grade 2 (approximately ages 5–7); adult and teacher viewers are secondary.",
+  "lessonColorStrategyDefault": "theme",
+  "shell": {
+    "catalogNavigation": "level-subject-lesson",
+    "lessonPresentation": "continuous-stage",
+    "inheritTypography": true,
+    "inheritSpacing": true,
+    "inheritControls": true
+  },
+  "evidence": [
+    {
+      "source": "GitHub issue #51 fixed ExploreAI showcase specification",
+      "observation": "Prescribed early-learner showcase direction; implementation must not redesign it.",
+      "kind": "user-choice"
+    }
+  ],
+  "typography": {
+    "headingFamily": "Fredoka",
+    "bodyFamily": "Nunito Sans",
+    "baseSize": 20,
+    "lineHeight": 1.65
+  },
+  "spacing": {
+    "unit": 12,
+    "contentWidth": 760
+  },
+  "colors": {
+    "background": "#FFF8F2",
+    "text": "#2D2538",
+    "accent": "#7C3AED",
+    "muted": "#6B6475"
+  },
+  "materials": {
+    "primary": {
+      "color": "#8B5CF6",
+      "roughness": 0.78,
+      "metalness": 0,
+      "opacity": 1
+    }
+  },
+  "lighting": {
+    "style": "soft warm studio",
+    "intensity": 1,
+    "shadows": false
+  },
+  "shape": {
+    "style": "friendly chunky forms",
+    "edges": "very rounded",
+    "realism": "illustrated"
+  },
+  "motion": {
+    "duration": 0.85,
+    "easing": "sine.inOut",
+    "ambient": true,
+    "scrollUnits": 1.25
+  },
+  "camera": {
+    "default": "best",
+    "expressiveness": "moderate"
+  },
+  "highlighting": {
+    "color": "#7C3AED",
+    "surroundingOpacity": 0.18,
+    "useLabels": true
+  },
+  "labels": {
+    "size": 20,
+    "style": "large rounded high-clarity labels"
+  },
+  "mobile": {
+    "priority": "very large readable text and simple controls",
+    "maxPixelRatio": 1.25,
+    "simplifyEffects": true
+  },
+  "accessibility": {
+    "reducedMotion": "static-steps",
+    "fallback": "text-and-diagram",
+    "minimumContrast": 4.5
+  }
+}

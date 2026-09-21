@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "2.0.0",
+  "paths": {
+    "design": "design/profile.json",
+    "content": "content",
+    "assetLibrary": "asset-library",
+    "publicAssets": "public/explore-ai",
+    "runtime": "explore-ai.runtime.json",
+    "catalog": "catalog/index.json"
+  }
+}
