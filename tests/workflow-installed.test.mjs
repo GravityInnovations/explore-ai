@@ -53,9 +53,9 @@ test("installed CLI completes an isolated customer journey, detects drift and pr
     assert.equal(current.question.key, "audience");
     assert.deepEqual(current.decisions, {});
     assert.equal(current.topicReady, false);
-    const archived = await readdir(path.join(root, ".explain-ai/history"));
+    const archived = await readdir(path.join(root, ".explore-ai/history"));
     assert.equal(archived.length, 1);
-    assert.equal(JSON.parse(await readFile(path.join(root, ".explain-ai/history", archived[0]), "utf8")).session, oldSession);
+    assert.equal(JSON.parse(await readFile(path.join(root, ".explore-ai/history", archived[0]), "utf8")).session, oldSession);
     assert.deepEqual(await readFile(path.join(root, "design/profile.json")), originalProfile);
     assert.equal(await readFile(path.join(root, "preview.html"), "utf8"), "changed");
   } finally { await rm(root, { recursive: true, force: true }); }
@@ -66,7 +66,7 @@ test("workflow state cannot escape through an ancestor junction", async () => {
   try {
     const project = path.join(root, "project"), outside = path.join(root, "outside");
     await mkdir(project); await mkdir(outside);
-    await symlink(outside, path.join(project, ".explain-ai"), "junction");
+    await symlink(outside, path.join(project, ".explore-ai"), "junction");
     await assert.rejects(runWorkflow(project, "start"), /escapes root/);
     assert.deepEqual(await readdir(outside), []);
   } finally { await rm(root, { recursive: true, force: true }); }

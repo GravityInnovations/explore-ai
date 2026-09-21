@@ -38,7 +38,7 @@ async function findTemporaryFiles(root) {
     for (const entry of await readdir(folder, { withFileTypes: true })) {
       const child = path.join(folder, entry.name);
       if (entry.isDirectory()) await visit(child);
-      else if (entry.name.endsWith(".explain-ai-migrate.tmp")) matches.push(child);
+      else if (entry.name.endsWith(".explore-ai-migrate.tmp")) matches.push(child);
     }
   }
   await visit(root);
@@ -54,7 +54,7 @@ test("migration plans first, writes atomically, preserves other files, and is id
     assert.equal(plan.status, "planned");
     assert.deepEqual(plan.files.map((file) => file.path), owned);
     assert.deepEqual(await readFile(path.join(root, owned[0])), before);
-    await assert.rejects(readFile(path.join(root, ".explain-ai/migrations/1.0.0-to-2.0.0/backup/explain-ai.config.json")));
+    await assert.rejects(readFile(path.join(root, ".explore-ai/migrations/1.0.0-to-2.0.0/backup/explain-ai.config.json")));
 
     const result = await migrateProject(root, { write: true });
     assert.equal(result.status, "migrated");
@@ -75,7 +75,7 @@ test("migration plans first, writes atomically, preserves other files, and is id
       assert.equal(migratedIndex.assets[0].redistribution, "allowed");
     }
     assert.deepEqual(
-      await readFile(path.join(root, ".explain-ai/migrations/1.0.0-to-2.0.0/backup", owned[0])),
+      await readFile(path.join(root, ".explore-ai/migrations/1.0.0-to-2.0.0/backup", owned[0])),
       before,
     );
     assert.equal(await readFile(unrelated, "utf8"), "keep me\n");
@@ -123,7 +123,7 @@ test("migration marks legacy assets without provenance as unknown and denied", a
 
 test("migration refuses a backup collision before changing contracts", async () => {
   await trial(async (root) => {
-    const collision = path.join(root, ".explain-ai/migrations/1.0.0-to-2.0.0/backup/explain-ai.config.json");
+    const collision = path.join(root, ".explore-ai/migrations/1.0.0-to-2.0.0/backup/explain-ai.config.json");
     await mkdir(path.dirname(collision), { recursive: true });
     await writeFile(collision, "different\n");
     const before = await readFile(path.join(root, "explain-ai.config.json"));
@@ -149,6 +149,6 @@ test("migration validates transformed output before creating backups", async () 
     delete value.id;
     await writeFile(file, `${JSON.stringify(value, null, 2)}\n`);
     await assert.rejects(migrateProject(root, { write: true }), /migrated output is invalid/);
-    await assert.rejects(readdir(path.join(root, ".explain-ai")));
+    await assert.rejects(readdir(path.join(root, ".explore-ai")));
   });
 });

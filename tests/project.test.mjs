@@ -30,7 +30,7 @@ async function edit(root, file, change) {
 const first = "content/k1/maths/equal-parts/lesson.json";
 test("topic and integrated validation reject missing or stale acceptance while draft checks remain usable", async () => {
   await trial(async root => {
-    await rm(path.join(root, ".explain-ai/workflow.json"));
+    await rm(path.join(root, ".explore-ai/workflow.json"));
     for (const options of [{ integrated: true }, { lesson: first }]) {
       const result = await validateProject(root, options);
       assert.equal(result.valid, false);

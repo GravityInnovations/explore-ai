@@ -17,7 +17,7 @@ async function collectLessons(root, relative) {
 }
 
 async function atomicWrite(file, value) {
-  const temporary = `${file}.explain-ai-catalog.tmp`;
+  const temporary = `${file}.explore-ai-catalog.tmp`;
   await rm(temporary, { force: true });
   try {
     await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { flag: "wx" });
