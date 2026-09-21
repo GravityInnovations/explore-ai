@@ -4,7 +4,7 @@ The journey is **questions → agreed brief → design preview → QA/revisions 
 
 ## Client-facing conversation rules
 
-Keep the client conversation in this order: audience, brand/logo, typography, colours, layout, visual style, motion, accessibility and constraints. Ask only the first unresolved decision in plain language, and reuse answers already recorded in the current session. When several choices arrive together, record them and continue with the next unresolved area. Keep workflow state, schema names, CLI commands, Three.js, GSAP and QA labels behind the conversation.
+Keep the client conversation in this order: audience, brand/logo, typography, colours, layout, visual style, motion, accessibility and constraints. Ask only the first unresolved decision in plain language, and reuse relevant evidence already supplied in the current session. When several choices arrive together, carry each concrete preference to its matching later area without marking that area resolved. When that area becomes current, acknowledge what is known and ask only for genuinely missing detail. Keep workflow state, schema names, CLI commands, Three.js, GSAP and QA labels behind the conversation.
 
 For typography, show a small set of actual rendered font samples with friendly descriptions, or accept a brand font name, link or supplied file. For colours and layout, use swatches or compact visual examples when the host supports them; otherwise ask one concise question at a time and keep the same conversational fallback. A form interaction is a focused choice, never blanket approval of the brief or preview.
 
@@ -41,6 +41,8 @@ Resolve these areas before submitting the brief:
 For brand/logo discovery, ask one of three plain-language paths: reuse a logo the client already supplied; ask them to provide an existing logo file or reference; or record that they explicitly want a temporary text wordmark/deferment. Reuse a recorded `brand` answer instead of asking again. Never inherit explore.ai's wordmark or logo deferral into another client, and never invent an asset or silently defer the decision.
 
 Customers may delegate choices. Record their delegation and a concrete recommendation; do not pretend they picked the recommendation. Proposed subordinate defaults are allowed but must appear in the brief for agreement. Do not invent the audience, theme or topic from examples, or interrogate every schema field.
+
+Earlier evidence can be carried to future areas with the workflow's candidate path. Confirm an exact candidate only when the customer confirms it; reject or supersede it when they disagree. If earlier evidence conflicts, surface the conflict and ask one focused clarification instead of choosing silently. The final decision value must contain the concrete design direction, while the earlier wording remains evidence.
 
 Inspect references before claiming their properties. Separate observations, inferences and customer choices. A screenshot cannot establish an exact typeface or 3D lighting rig. Clarify conflicts that materially affect the design.
 
