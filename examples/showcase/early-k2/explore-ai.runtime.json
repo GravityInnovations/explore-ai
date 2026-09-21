@@ -1,6 +1,15 @@
 {
   "schemaVersion": "2.0.0",
-  "components": [],
-  "actions": [],
-  "cameraModes": ["best"]
+  "components": [
+    {"id": "butterfly-life-cycle-world", "actions": ["focus", "highlight", "hide", "reveal", "magnify"]},
+    {"id": "plant", "actions": ["focus", "highlight", "hide", "reveal", "magnify"]},
+    {"id": "twig", "actions": ["focus", "highlight", "hide", "reveal", "magnify"]},
+    {"id": "leaf", "actions": ["focus", "highlight", "hide", "reveal", "magnify"]},
+    {"id": "egg", "actions": ["focus", "highlight", "hide", "reveal", "magnify"]},
+    {"id": "caterpillar", "actions": ["focus", "highlight", "hide", "reveal", "magnify"]},
+    {"id": "chrysalis", "actions": ["focus", "highlight", "hide", "reveal", "magnify"]},
+    {"id": "butterfly", "actions": ["focus", "highlight", "hide", "reveal", "magnify"]}
+  ],
+  "actions": ["focus", "highlight", "hide", "reveal", "magnify"],
+  "cameraModes": ["wide", "medium", "close", "best"]
 }

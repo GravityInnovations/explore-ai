@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "2.0.0",
+  "lessonId": "grade-2/science/butterfly-life-cycle",
+  "level": "grade-2",
+  "subject": "science",
+  "topicKey": "butterfly-life-cycle",
+  "slug": "butterfly-life-cycle",
+  "title": "The Butterfly Life Cycle",
+  "designId": "showcase-early-k2",
+  "metadata": {
+    "summary": "Explore the four stages of a butterfly's life: egg, caterpillar, chrysalis, and adult butterfly.",
+    "contentKind": "factual",
+    "objectives": [
+      "Identify the four stages of a butterfly life cycle.",
+      "Order the stages from egg to adult butterfly.",
+      "Explain that a chrysalis is the pupa stage before the adult butterfly.",
+      "Explain that an adult female butterfly lays an egg to begin a new cycle."
+    ],
+    "sources": [
+      {
+        "id": "smithsonian-gardens-about-butterflies",
+        "title": "About Butterflies",
+        "reference": "https://gardens.si.edu/learn/for-educators/cultivating-habitat/butterfly-gardening/about-butterflies/"
+      },
+      {
+        "id": "smithsonian-nmnh-butterflies-beyond",
+        "title": "Butterflies and Beyond",
+        "reference": "https://naturalhistory.si.edu/education/teaching-resources/life-science/butterflies-and-beyond/"
+      }
+    ],
+    "scopeNote": "This lesson names the common four-stage butterfly life cycle without adding species-specific timing, egg counts, host plants, or other details.",
+    "colorStrategy": "imitated"
+  },
+  "quiz": {
+    "enabled": true,
+    "drawCount": 5,
+    "questions": [
+      {
+        "id": "name-the-first-stage",
+        "objectiveIds": ["objective-1"],
+        "prompt": "Which stage comes first?",
+        "answers": [
+          {"id": "egg", "text": "Egg", "correct": true, "explanation": "The life cycle starts with an egg."},
+          {"id": "adult", "text": "Adult butterfly", "correct": false},
+          {"id": "chrysalis", "text": "Chrysalis", "correct": false}
+        ]
+      },
+      {
+        "id": "order-the-stages",
+        "objectiveIds": ["objective-2"],
+        "prompt": "Which order shows the life cycle?",
+        "answers": [
+          {"id": "right-order", "text": "Egg → caterpillar → chrysalis → adult butterfly", "correct": true, "explanation": "That is the four-stage order."},
+          {"id": "wrong-order-one", "text": "Caterpillar → egg → adult butterfly → chrysalis", "correct": false},
+          {"id": "wrong-order-two", "text": "Adult butterfly → chrysalis → egg → caterpillar", "correct": false}
+        ]
+      },
+      {
+        "id": "after-chrysalis",
+        "objectiveIds": ["objective-3"],
+        "prompt": "What comes out of the chrysalis?",
+        "answers": [
+          {"id": "adult-butterfly", "text": "An adult butterfly", "correct": true, "explanation": "The adult butterfly emerges from the chrysalis."},
+          {"id": "new-egg", "text": "A new egg", "correct": false},
+          {"id": "leaf", "text": "A leaf", "correct": false}
+        ]
+      },
+      {
+        "id": "new-cycle",
+        "objectiveIds": ["objective-4"],
+        "prompt": "How does a new cycle begin?",
+        "answers": [
+          {"id": "female-lays-egg", "text": "An adult female lays an egg", "correct": true, "explanation": "The new egg begins another life cycle."},
+          {"id": "caterpillar-flies", "text": "The caterpillar flies away", "correct": false},
+          {"id": "chrysalis-lays-egg", "text": "The chrysalis lays an egg", "correct": false}
+        ]
+      },
+      {
+        "id": "stage-before-adult",
+        "objectiveIds": ["objective-1", "objective-2"],
+        "prompt": "Which stage is right before the adult butterfly?",
+        "answers": [
+          {"id": "pupa", "text": "Chrysalis (pupa)", "correct": true, "explanation": "The chrysalis, or pupa, comes before the adult butterfly."},
+          {"id": "larva", "text": "Caterpillar (larva)", "correct": false},
+          {"id": "egg", "text": "Egg", "correct": false}
+        ]
+      }
+    ]
+  },
+  "objects": [
+    {"id": "world", "component": "butterfly-life-cycle-world", "label": "Butterfly life cycle world", "description": "A persistent procedural scene with a plant and the four butterfly stages."},
+    {"id": "world.plant", "parent": "world", "component": "plant", "label": "Plant", "description": "The quiet plant that holds the leaves and twig."},
+    {"id": "world.plant.twig", "parent": "world.plant", "component": "twig", "label": "Twig", "description": "A twig near the top center where the chrysalis is attached."},
+    {"id": "world.plant.leafA", "parent": "world.plant", "component": "leaf", "label": "First leaf", "description": "The lower-left leaf that holds the first egg."},
+    {"id": "world.plant.leafB", "parent": "world.plant", "component": "leaf", "label": "Second leaf", "description": "The lower-right leaf that holds the new egg."},
+    {"id": "world.egg", "parent": "world", "component": "egg", "label": "Egg", "description": "A small ribbed egg on the first leaf."},
+    {"id": "world.caterpillar", "parent": "world", "component": "caterpillar", "label": "Caterpillar (larva)", "description": "A segmented caterpillar, also called the larva stage."},
+    {"id": "world.chrysalis", "parent": "world", "component": "chrysalis", "label": "Chrysalis (pupa)", "description": "A ridged chrysalis, also called the pupa stage, attached beneath the twig."},
+    {"id": "world.butterfly", "parent": "world", "component": "butterfly", "label": "Adult butterfly", "description": "An adult butterfly with a body, antennae, legs, and rounded wing lobes."},
+    {"id": "world.newEgg", "parent": "world", "component": "egg", "label": "New egg", "description": "A distinct new egg on the second leaf that starts another cycle."}
+  ],
+  "steps": [
+    {
+      "id": "egg",
+      "title": "1. Egg",
+      "text": "An adult female butterfly lays a tiny egg on a leaf. This egg is the first stage of the life cycle.",
+      "explains": ["world.egg", "world.plant.leafA"],
+      "actions": [
+        {"action": "hide", "target": "world.caterpillar"},
+        {"action": "hide", "target": "world.chrysalis"},
+        {"action": "hide", "target": "world.butterfly"},
+        {"action": "hide", "target": "world.newEgg"},
+        {"action": "focus", "target": "world.egg"},
+        {"action": "highlight", "target": "world.egg"},
+        {"action": "highlight", "target": "world.plant.leafA"}
+      ],
+      "camera": {"mode": "close", "target": "world.egg"},
+      "alt": "A small egg is shown on the first leaf at the lower left.",
+      "sourceRefs": ["smithsonian-gardens-about-butterflies", "smithsonian-nmnh-butterflies-beyond"],
+      "simplificationNote": "The word tiny helps children notice the stage without adding a species-specific egg size.",
+      "introduces": ["egg"],
+      "scrollUnits": 1.1
+    },
+    {
+      "id": "caterpillar",
+      "title": "2. Caterpillar (larva)",
+      "text": "The egg hatches. A caterpillar comes out. Caterpillar is the child-friendly name for the larva stage.",
+      "explains": ["world.caterpillar"],
+      "actions": [
+        {"action": "hide", "target": "world.egg"},
+        {"action": "hide", "target": "world.chrysalis"},
+        {"action": "hide", "target": "world.butterfly"},
+        {"action": "hide", "target": "world.newEgg"},
+        {"action": "focus", "target": "world.caterpillar"},
+        {"action": "magnify", "target": "world.caterpillar", "factor": 1.2},
+        {"action": "highlight", "target": "world.caterpillar"}
+      ],
+      "camera": {"mode": "close", "target": "world.caterpillar"},
+      "alt": "A segmented caterpillar with a head and little legs is shown below the leaf.",
+      "sourceRefs": ["smithsonian-gardens-about-butterflies", "smithsonian-nmnh-butterflies-beyond"],
+      "simplificationNote": "Caterpillar and larva are introduced together so the scientific word is available without replacing the familiar word.",
+      "introduces": ["caterpillar"],
+      "uses": ["egg"],
+      "scrollUnits": 1.2
+    },
+    {
+      "id": "chrysalis",
+      "title": "3. Chrysalis (pupa)",
+      "text": "The caterpillar forms a chrysalis. Chrysalis is the name for the pupa stage before the adult butterfly.",
+      "explains": ["world.chrysalis", "world.plant.twig"],
+      "actions": [
+        {"action": "hide", "target": "world.egg"},
+        {"action": "hide", "target": "world.caterpillar"},
+        {"action": "hide", "target": "world.butterfly"},
+        {"action": "hide", "target": "world.newEgg"},
+        {"action": "focus", "target": "world.chrysalis"},
+        {"action": "highlight", "target": "world.chrysalis"},
+        {"action": "highlight", "target": "world.plant.twig"}
+      ],
+      "camera": {"mode": "close", "target": "world.chrysalis"},
+      "alt": "A ridged chrysalis hangs under the twig near the top center.",
+      "sourceRefs": ["smithsonian-gardens-about-butterflies", "smithsonian-nmnh-butterflies-beyond"],
+      "simplificationNote": "Chrysalis and pupa are introduced together as two names for the same stage.",
+      "introduces": ["chrysalis"],
+      "uses": ["caterpillar"],
+      "scrollUnits": 1.2
+    },
+    {
+      "id": "adult",
+      "title": "4. Adult butterfly",
+      "text": "An adult butterfly emerges from the chrysalis. This is the fourth stage of the life cycle.",
+      "explains": ["world.butterfly"],
+      "actions": [
+        {"action": "hide", "target": "world.egg"},
+        {"action": "hide", "target": "world.caterpillar"},
+        {"action": "hide", "target": "world.chrysalis"},
+        {"action": "hide", "target": "world.newEgg"},
+        {"action": "focus", "target": "world.butterfly"},
+        {"action": "magnify", "target": "world.butterfly", "factor": 1.15},
+        {"action": "highlight", "target": "world.butterfly"}
+      ],
+      "camera": {"mode": "medium", "target": "world.butterfly"},
+      "alt": "An adult butterfly with rounded wings, antennae, and legs is shown at the center.",
+      "sourceRefs": ["smithsonian-gardens-about-butterflies", "smithsonian-nmnh-butterflies-beyond"],
+      "simplificationNote": "The visible body parts are named without adding details that are not needed for the cycle objective.",
+      "introduces": ["adult butterfly"],
+      "uses": ["chrysalis"],
+      "scrollUnits": 1.2
+    },
+    {
+      "id": "new-cycle",
+      "title": "5. New cycle recap",
+      "text": "An adult female butterfly lays a distinct new egg on a second leaf. Remember the four stages: egg, caterpillar, chrysalis, and adult butterfly.",
+      "explains": ["world.butterfly", "world.newEgg", "world.plant.leafB"],
+      "actions": [
+        {"action": "hide", "target": "world.egg"},
+        {"action": "hide", "target": "world.caterpillar"},
+        {"action": "hide", "target": "world.chrysalis"},
+        {"action": "focus", "target": "world.newEgg"},
+        {"action": "highlight", "target": "world.newEgg"},
+        {"action": "highlight", "target": "world.butterfly"},
+        {"action": "highlight", "target": "world.plant.leafB"}
+      ],
+      "camera": {"mode": "wide", "target": "world"},
+      "alt": "The adult butterfly and a distinct new egg on the second leaf show how the four-stage cycle starts again.",
+      "sourceRefs": ["smithsonian-gardens-about-butterflies", "smithsonian-nmnh-butterflies-beyond"],
+      "simplificationNote": "The final step recaps all four stages and shows a distinct new egg without claiming a timing or egg count.",
+      "uses": ["egg", "caterpillar", "chrysalis", "adult butterfly"],
+      "scrollUnits": 1.4
+    }
+  ],
+  "accessibility": {
+    "summary": "A readable five-step lesson shows an egg on a leaf, a caterpillar, a chrysalis under a twig, an adult butterfly, and a new egg that begins the cycle again."
+  }
+}

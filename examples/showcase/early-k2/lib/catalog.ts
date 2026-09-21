@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import config from "@/explore-ai.config.json";
 import { buildCatalogRoutes, type CatalogEntry } from "../.agents/skills/explore-ai/assets/templates/CatalogRoutes";
+import type { Lesson } from "../.agents/skills/explore-ai/types/lesson";
 
 export { catalogLessonRoute } from "../.agents/skills/explore-ai/assets/templates/CatalogRoutes";
 
@@ -9,6 +10,14 @@ export { catalogLessonRoute } from "../.agents/skills/explore-ai/assets/template
 export async function getCatalog() {
   const catalog: { entries: CatalogEntry[] } = JSON.parse(await readFile(path.join(process.cwd(), config.paths.catalog), "utf8"));
   return { entries: catalog.entries, ...buildCatalogRoutes(catalog.entries) };
+}
+
+export async function getLesson(level: string, subject: string, slug: string): Promise<Lesson | null> {
+  const catalog = await getCatalog();
+  const entry = catalog.entries.find((item) => item.level === level && item.subject === subject && item.slug === slug);
+  if (!entry || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry.level) || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry.subject) || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry.topicKey)) return null;
+  const relative = path.join(process.cwd(), config.paths.content, entry.level, entry.subject, entry.topicKey, "lesson.json");
+  return JSON.parse(await readFile(relative, "utf8")) as Lesson;
 }
 
 export function displayKey(key: string) {
