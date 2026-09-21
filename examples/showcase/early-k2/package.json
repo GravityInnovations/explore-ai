@@ -1,0 +1,28 @@
+{
+  "name": "explore-ai-showcase-early-k2",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource/fredoka": "^5.2.6",
+    "@fontsource/nunito-sans": "^5.2.6",
+    "explore-ai-development": "file:../../..",
+    "gsap": "3.13.0",
+    "next": "^15.5.7",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.30",
+    "@types/react": "19.1.10",
+    "@types/react-dom": "19.1.7",
+    "@types/three": "0.180.0",
+    "typescript": "5.9.3"
+  }
+}
