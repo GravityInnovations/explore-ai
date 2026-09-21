@@ -46,7 +46,7 @@ Default project outputs:
 
 ```text
 explain-ai.config.json
-.explain-ai/workflow.json
+.explore-ai/workflow.json
 design/profile.json
 asset-library/index.json
 content/<level>/<subject>/<topicKey>/lesson.json
