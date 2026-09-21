@@ -13,9 +13,9 @@ const mime = new Map([
 const server = http.createServer(async (request, response) => {
   try {
     const requestPath = decodeURIComponent(new URL(request.url, "http://localhost").pathname);
-    const relative = requestPath === "/" || requestPath === "/runtime-probe.html"
+    const relative = requestPath === "/runtime-probe.html"
       ? "tests/e2e/runtime-probe.html"
-      : ["/catalog", "/grade-2", "/grade-7"].some((prefix) => requestPath === prefix) || requestPath.startsWith("/lesson/")
+      : requestPath === "/" || requestPath === "/catalog" || requestPath.startsWith("/catalog/") || requestPath.startsWith("/lesson/")
         ? "tests/e2e/fixture/index.html"
         : requestPath.slice(1);
     const file = path.resolve(root, relative);

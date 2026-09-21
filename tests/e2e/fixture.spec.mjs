@@ -1,14 +1,21 @@
 import { test, expect } from "@playwright/test";
 
-test("catalog to lesson navigation, controls, deep links, quiz and phone gate remain usable", async ({ page }) => {
+test("Home stays separate while Catalog routes level, subject and lesson additively", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto("/catalog");
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Welcome to ExploreAI" })).toBeVisible();
+  await page.getByRole("link", { name: "Explore lessons" }).click();
   await expect(page.getByRole("heading", { name: "Catalog" })).toBeVisible();
   await page.getByRole("link", { name: "Grade 2" }).first().click();
-  await expect(page).toHaveURL(/grade-2$/);
+  await expect(page).toHaveURL(/catalog\/grade-2$/);
+  await expect(page.getByRole("heading", { name: "Choose a subject" })).toBeVisible();
+  await page.getByRole("link", { name: "maths" }).click();
+  await expect(page).toHaveURL(/catalog\/grade-2\/maths$/);
+  await expect(page.getByRole("heading", { name: "Choose a lesson" })).toBeVisible();
   await page.getByRole("link", { name: "Equal parts" }).click();
   await expect(page).toHaveURL(/lesson\/grade-2\/maths\/equal-parts$/);
   await expect(page.locator("#lesson-canvas")).toBeVisible();
@@ -25,6 +32,11 @@ test("catalog to lesson navigation, controls, deep links, quiz and phone gate re
   await expect(page.getByRole("status")).toContainText("Correction");
   await page.locator('input[value="correct"]').check();
   await expect(page.locator("#score")).toHaveText("Score: 100%");
+  await page.goto("/catalog/grade-2/maths");
+  await expect(page.getByRole("link", { name: "Equal parts" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Fractions" })).toBeVisible();
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
   await page.goto("/lesson/grade-7/science/plant-parts");
   await expect(page.getByRole("heading", { name: "Plant parts" })).toBeVisible();
   await page.setViewportSize({ width: 600, height: 800 });

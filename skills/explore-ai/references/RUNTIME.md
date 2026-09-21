@@ -4,7 +4,7 @@ The package includes adaptable TypeScript building blocks, not a production app 
 
 ## Integration sequence
 
-1. Load and validate filesystem JSON on the server. Resolve catalog keys through the configured root; never pass an unchecked route parameter directly to filesystem APIs. The route hierarchy is levels → subjects → topics → lesson. Resolve route `slug` to its validated lesson record rather than assuming it equals `topicKey`.
+1. Load and validate filesystem JSON on the server. Resolve catalog keys through the configured root; never pass an unchecked route parameter directly to filesystem APIs. The product route hierarchy is Home `/` → Catalog `/catalog` → level `/catalog/<level>` → subject `/catalog/<level>/<subject>` → lesson `/lesson/<level>/<subject>/<slug>`. Resolve route `slug` to its validated lesson record rather than assuming it equals `topicKey`.
 2. Pass only serialisable lesson/design data to a client scene component. Keep filesystem modules out of client bundles. Render `LessonText.tsx` (or adapt existing semantic markup) on the server so content survives canvas or JavaScript failure. Its anchor navigation provides a keyboard route through the steps.
 3. Build reviewed component instances and a `Map<string, Object3D>` for semantic IDs. Check exact nested anatomy against source models; register every declared object. Snapshot owned baseline transforms, visibility, material settings, clipping and camera once. Reuse material presets from the project design.
 4. Implement the `SceneAdapter` and only the handlers the lesson needs. Check actual maps and handlers against the runtime manifest before rendering. Use discriminated action types, not dynamic evaluation or arbitrary JSON callbacks.

@@ -47,7 +47,7 @@ content/<level>/<subject>/<topicKey>/assets/   only when needed
 
 `lessonId` is `level/subject/topicKey`. Preserve the user's explicit topic key; otherwise derive a readable lowercase hyphenated key. `slug` is the route-facing name and can differ. Repeated topics across levels must coexist. The route tuple is `level/subject/slug`; validate the full catalog for collisions.
 
-The project root remains the existing home/catalog route. A generated lesson must use its nested `level/subject/slug` route, and adding another lesson is additive. Preserve existing root and layout files; never mount a lesson at `/` or replace a compatible shell.
+The project root remains the permanent Home route `/`, separate from the Catalog route `/`. A generated lesson must use its nested `/lesson/<level>/<subject>/<slug>` route, and adding another lesson is additive. Preserve existing Home, Catalog, level and subject pages; never mount a lesson at `/`, replace Catalog with a lesson, skip the subject page, or replace a compatible shell. The catalog hierarchy is `/catalog` → `/catalog/<level>` → `/catalog/<level>/<subject>` → lesson.
 
 Build semantic object paths and immediate parents before writing actions. Resolve each object to a reviewed component and optional asset/material preset. Write level-appropriate concise copy. For every exact object/part mentioned, include it in that step's `explains`, then make it visually unmistakable with emphasis, framing or a suitable technique. A parent highlight is not automatically enough for a tiny child.
 

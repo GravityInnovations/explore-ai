@@ -1,6 +1,6 @@
 # Local designer CLI
 
-Use Node.js 22+ and the installed skill's dependencies. Always supply the explicit customer root. One operational record, `.explore-ai/workflow.json`, holds resumable progress. Keep it with project design work; it is application state, not a duplicate project-management plan. Existing `.explore-ai/` state is migrated once to `.explore-ai/`; if both roots exist, stop and resolve the conflict without choosing one silently.
+Use Node.js 22+ and the installed skill's dependencies. Always supply the explicit customer root. One operational record, `.explore-ai/workflow.json`, holds resumable progress. Keep it with project design work; it is application state, not a duplicate project-management plan. The canonical workflow state root is `.explore-ai/`; do not create a second workflow root.
 
 ```text
 node <installed-skill>/scripts/workflow.mjs <command> --project <root> [--input <relative.json>] [--expect <revision>] [--json]
@@ -66,7 +66,7 @@ Result: `pass`, `fail`, or `not-applicable`. Only fallback/app-check allow not-a
 
 - STALE_REVISION: another mutation won; read status and reconcile.
 - BUSY: a writer holds the lock; retry after it finishes. A crash can leave `.explore-ai/workflow.lock`; verify no writer remains before removing only that lock. No automatic lock stealing.
-- STALE_PREVIEW / DESIGN_NOT_ACCEPTED: follow blockers and revise; missing legacy state is unreviewed.
+- STALE_PREVIEW / DESIGN_NOT_ACCEPTED: follow blockers and revise; missing workflow state is unreviewed.
 - INVALID_STATE: preserve and repair the record; never silently replace it with accepted state.
 - Restart is for an explicit customer request. It archives under `.explore-ai/history/` and leaves the app/profile untouched. Existing designs still require discussion.
 
