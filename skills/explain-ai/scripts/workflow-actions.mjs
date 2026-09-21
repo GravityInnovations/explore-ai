@@ -3,15 +3,96 @@ import { readContract } from "./contracts.mjs";
 import { resolveLocal } from "./paths.mjs";
 
 export const QUESTIONS = {
-  audience: "Who is this experience for, and what should it help them do?",
-  brand: "Do you have brand rules or references to follow, and anything to avoid?",
-  typography: "What should the typography feel like, or would you like a recommendation?",
-  palette: "What colour direction should we explore, or should I propose options?",
-  layout: "How should the explanation and visual share the page on desktop and mobile?",
-  visuals: "Should the visuals feel schematic, illustrated or realistic, and what material character fits?",
-  motion: "How should people move through the experience, and how much motion feels right?",
-  accessibility: "What accessibility, device or low-performance needs should the design address?",
-  constraints: "What other requirements or constraints should the design respect?",
+  audience: {
+    prompt: "Who will mainly use this?",
+    answerMode: "choices",
+    choices: [
+      { id: "learners", label: "Kids learning on their own", description: "The experience should guide individual learners." },
+      { id: "teacher", label: "A teacher showing a class", description: "The experience should work well when presented to a group." },
+      { id: "family", label: "Parents and kids together", description: "The experience should support shared exploration." },
+      { id: "showcase", label: "General visitors or a showcase", description: "The experience should quickly demonstrate its value." },
+      { id: "other", label: "Something else", description: "Describe the audience in your own words." },
+    ],
+  },
+  brand: {
+    prompt: "Do you already have a look I should follow?",
+    answerMode: "choices",
+    choices: [
+      { id: "supplied", label: "Yes, I have a logo or brand reference", description: "Share the reference and I will use it as evidence." },
+      { id: "current", label: "Keep the current project style", description: "Carry forward the style already established here." },
+      { id: "recommend", label: "No, propose a direction", description: "I will recommend a concrete visual direction." },
+      { id: "later", label: "I will provide branding later", description: "Record the deferral without inventing a logo." },
+    ],
+  },
+  typography: {
+    prompt: "What kind of text style feels right?",
+    answerMode: "choices",
+    choices: [
+      { id: "friendly", label: "Friendly and rounded", description: "Warm, approachable letterforms." },
+      { id: "clean", label: "Clean and modern", description: "Simple, clear and contemporary text." },
+      { id: "playful", label: "Bold and playful", description: "Expressive text with extra personality." },
+      { id: "editorial", label: "More serious or editorial", description: "A composed, publication-like tone." },
+      { id: "recommend", label: "Recommend one for me", description: "I will choose a concrete readable direction." },
+    ],
+  },
+  palette: {
+    prompt: "What kind of colour mood do you prefer?",
+    answerMode: "choices",
+    choices: [
+      { id: "bright", label: "Bright and playful", description: "Energetic accents with clear contrast." },
+      { id: "calm", label: "Calm and clean", description: "A focused palette with restrained accents." },
+      { id: "dark", label: "Dark and high-contrast", description: "A deeper background with strong readable contrast." },
+      { id: "soft", label: "Soft and pastel", description: "Gentle colours with a lighter mood." },
+      { id: "options", label: "Show me palette options", description: "I will present concrete palettes with colour roles." },
+    ],
+  },
+  layout: {
+    prompt: "What should get most of the screen?",
+    answerMode: "choices",
+    choices: [
+      { id: "explanation", label: "Mostly explanation", description: "Give the written guidance the most space." },
+      { id: "balanced", label: "A balance of text and visual", description: "Give both parts comparable attention." },
+      { id: "visual", label: "Mostly visual", description: "Let the visual lead with a short explanation." },
+    ],
+  },
+  visuals: {
+    prompt: "Which look feels closest?",
+    answerMode: "choices",
+    choices: [
+      { id: "diagram", label: "Simple diagram", description: "Very clear and educational." },
+      { id: "illustrated", label: "Illustrated", description: "Friendly, polished and expressive." },
+      { id: "realistic", label: "Realistic", description: "Closer to real objects and materials." },
+      { id: "recommend", label: "Recommend what fits", description: "I will choose what best suits the audience." },
+    ],
+  },
+  motion: {
+    prompt: "How lively should it feel?",
+    answerMode: "scale",
+    choices: [
+      { id: "1", label: "Calm", description: "Almost no extra movement." },
+      { id: "2", label: "Light", description: "Subtle transitions and highlights." },
+      { id: "3", label: "Balanced", description: "Motion when it helps explain." },
+      { id: "4", label: "Lively", description: "Lots of purposeful movement." },
+      { id: "5", label: "Highly animated", description: "Motion is a major part of the experience." },
+      { id: "recommend", label: "Recommend for me", description: "I will choose a useful level of motion." },
+    ],
+  },
+  accessibility: {
+    prompt: "Any specific accessibility needs I should know about?",
+    answerMode: "choices",
+    choices: [
+      { id: "defaults", label: "No, use the standard accessible defaults", description: "Keep readable text, focus, keyboard and fallback support." },
+      { id: "large-text", label: "Large or easier-to-read text", description: "Give extra attention to text size and spacing." },
+      { id: "reduced-motion", label: "Reduced motion is especially important", description: "Keep a useful stable alternative to motion." },
+      { id: "keyboard", label: "Keyboard-only use is important", description: "Give extra attention to focus and keyboard operation." },
+      { id: "other", label: "Something else", description: "Describe the need in your own words." },
+    ],
+  },
+  constraints: {
+    prompt: "Anything else I must keep, include or avoid?",
+    answerMode: "text",
+    choices: [],
+  },
 };
 
 const DECISION_SOURCES = ["user", "delegated", "proposed"];
@@ -35,6 +116,16 @@ function clearCandidate(state, key) {
 
 function concreteDecision(value, source, evidence) {
   return { value: textValue(value, "Decision"), source, evidence: textValue(evidence, "Decision evidence") };
+}
+
+function normalizeChoice(key, value) {
+  const text = textValue(value, "Answer");
+  const choices = QUESTIONS[key].choices;
+  const index = /^\d+$/.test(text) ? Number(text) - 1 : /^[A-Za-z]$/.test(text) ? text.toUpperCase().charCodeAt(0) - 65 : -1;
+  const choice = choices.find(candidate => candidate.id.toLowerCase() === text.toLowerCase() || candidate.label.toLowerCase() === text.toLowerCase()) ?? choices[index];
+  if (!choice) return text;
+  requireThat(!["recommend", "options"].includes(choice.id), "PENDING_CHOICE", "Present a concrete recommendation or options before resolving this request");
+  return `${choice.label}: ${choice.description}`;
 }
 
 function validateOptions(mode, options) {
@@ -71,7 +162,9 @@ export async function workflowStatus(root) {
       key: missing[0],
       text: candidateList(state, missing[0]).length
         ? `Earlier you shared: ${candidateList(state, missing[0]).map(candidate => candidate.value).join("; ")} Should I use this direction?`
-        : QUESTIONS[missing[0]],
+        : QUESTIONS[missing[0]].prompt,
+      answerMode: QUESTIONS[missing[0]].answerMode,
+      ...(QUESTIONS[missing[0]].choices.length ? { choices: QUESTIONS[missing[0]].choices } : {}),
       ...(candidateList(state, missing[0]).length ? { known: candidateList(state, missing[0]) } : {})
     } } : {}),
     pendingChoice: state.pendingChoice,
@@ -146,7 +239,7 @@ export async function runWorkflow(root, command, input = {}, expected) {
       requireThat(Object.hasOwn(QUESTIONS, input.key), "INVALID_INPUT", "Unknown interview decision");
       requireThat(DECISION_SOURCES.includes(input.source), "INVALID_INPUT", "Identify user, delegated or proposed decisions");
       requireThat(input.key === currentKey(state), "OUT_OF_ORDER", `Answer the current interview area: ${currentKey(state)}`);
-      state.decisions[input.key] = concreteDecision(input.value, input.source, input.evidence);
+      state.decisions[input.key] = concreteDecision(normalizeChoice(input.key, input.value), input.source, input.evidence);
       state.pendingChoice = null;
       clearCandidate(state, input.key);
       return state;

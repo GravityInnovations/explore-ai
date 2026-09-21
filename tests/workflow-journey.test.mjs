@@ -149,7 +149,7 @@ test("earlier preferences are carried to later questions and confirmation stores
 
 test("client questions stay one-at-a-time and free of implementation jargon", async () => {
   const forbidden = /\b(schema|cli|three\.js|gsap|qa|runtime)\b/i;
-  for (const text of Object.values(QUESTIONS)) assert.equal(forbidden.test(text), false, text);
+  for (const question of Object.values(QUESTIONS)) assert.equal(forbidden.test(question.prompt), false, question.prompt);
   const root = await mkdtemp(path.join(os.tmpdir(), "workflow-questions-"));
   try {
     let state = await runWorkflow(root, "start");
@@ -158,6 +158,26 @@ test("client questions stay one-at-a-time and free of implementation jargon", as
       key: "audience", value: "Primary school learners", source: "user", evidence: "Client supplied audience"
     }, state.revision);
     assert.equal((await runWorkflow(root, "status")).question.key, "brand");
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test("guided questions expose ordinary-language choices and a motion scale", async () => {
+  assert.equal(QUESTIONS.typography.answerMode, "choices");
+  assert.equal(QUESTIONS.palette.choices.at(-1).id, "options");
+  assert.equal(QUESTIONS.layout.prompt, "What should get most of the screen?");
+  assert.equal(QUESTIONS.visuals.prompt, "Which look feels closest?");
+  assert.equal(QUESTIONS.motion.answerMode, "scale");
+  assert.equal(QUESTIONS.motion.choices.find(choice => choice.id === "3").label, "Balanced");
+  assert.match(QUESTIONS.accessibility.prompt, /specific accessibility needs/i);
+  assert.equal(QUESTIONS.constraints.answerMode, "text");
+});
+
+test("choice answers are stored as concrete labels rather than bare numbers", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "workflow-choice-answer-"));
+  try {
+    let state = await runWorkflow(root, "start");
+    state = await runWorkflow(root, "answer", { key: "audience", value: "D", source: "user", evidence: "Customer chose the showcase audience" }, state.revision);
+    assert.match(state.decisions.audience.value, /^General visitors or a showcase:/);
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
