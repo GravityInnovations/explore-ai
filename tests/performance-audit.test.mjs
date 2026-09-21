@@ -10,7 +10,7 @@ let audit;
 before(async () => {
   const output = path.resolve(".tmp/performance-runtime");
   await mkdir(output, { recursive: true });
-  const source = await readFile(new URL("../skills/explain-ai/assets/runtime/performance-audit.ts", import.meta.url), "utf8");
+  const source = await readFile(new URL("../skills/explore-ai/assets/runtime/performance-audit.ts", import.meta.url), "utf8");
   await writeFile(path.join(output, "performance-audit.mjs"), ts.transpileModule(source, {
     compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 },
   }).outputText);

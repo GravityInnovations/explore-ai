@@ -53,8 +53,8 @@ export function restoreBaseline(baseline: BaselineState) {
       if (material.opacity !== undefined) material.material.opacity = material.opacity;
       if (material.transparent !== undefined) material.material.transparent = material.transparent;
     }
-    delete node.userData.explainAiFocus;
-    delete node.userData.explainAiHighlight;
+    delete node.userData.exploreAiFocus;
+    delete node.userData.exploreAiHighlight;
   }
 }
 
@@ -105,8 +105,8 @@ function isolate(action: PrimitiveAction, progress: number, context: PrimitiveCo
 
 export function createSemanticPrimitives(context: PrimitiveContext): ReadonlyMap<string, PrimitiveHandler> {
   return new Map([
-    ["focus", (action, progress) => emphasis(action, progress, context, 0.05, "explainAiFocus")],
-    ["highlight", (action, progress) => emphasis(action, progress, context, 0.12, "explainAiHighlight")],
+    ["focus", (action, progress) => emphasis(action, progress, context, 0.05, "exploreAiFocus")],
+    ["highlight", (action, progress) => emphasis(action, progress, context, 0.12, "exploreAiHighlight")],
     ["isolate", (action, progress) => isolate(action, progress, context)],
     ["extract", (action, progress) => {
       const object = target(context, action.target);

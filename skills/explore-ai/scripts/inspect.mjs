@@ -14,7 +14,7 @@ export async function inspectProject(project) {
   try {
     config = await readContract(
       "project",
-      await resolveLocal(root, "explain-ai.config.json", { file: true }),
+      await resolveLocal(root, "explore-ai.config.json", { file: true }),
     );
   } catch (error) {
     if (error.code !== "ENOENT") throw error;

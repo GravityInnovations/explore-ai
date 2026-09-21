@@ -1,6 +1,6 @@
 # Local designer CLI
 
-Use Node.js 22+ and the installed skill's dependencies. Always supply the explicit customer root. One operational record, `.explore-ai/workflow.json`, holds resumable progress. Keep it with project design work; it is application state, not a duplicate project-management plan. Existing `.explain-ai/` state is migrated once to `.explore-ai/`; if both roots exist, stop and resolve the conflict without choosing one silently.
+Use Node.js 22+ and the installed skill's dependencies. Always supply the explicit customer root. One operational record, `.explore-ai/workflow.json`, holds resumable progress. Keep it with project design work; it is application state, not a duplicate project-management plan. Existing `.explore-ai/` state is migrated once to `.explore-ai/`; if both roots exist, stop and resolve the conflict without choosing one silently.
 
 ```text
 node <installed-skill>/scripts/workflow.mjs <command> --project <root> [--input <relative.json>] [--expect <revision>] [--json]

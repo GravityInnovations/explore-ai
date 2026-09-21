@@ -5,16 +5,16 @@ import path from "node:path";
 import os from "node:os";
 import { spawnSync } from "node:child_process";
 import { install } from "../scripts/install.mjs";
-import { QUESTIONS, runWorkflow } from "../skills/explain-ai/scripts/workflow-actions.mjs";
-import { QA_CHECKS } from "../skills/explain-ai/scripts/workflow-store.mjs";
+import { QUESTIONS, runWorkflow } from "../skills/explore-ai/scripts/workflow-actions.mjs";
+import { QA_CHECKS } from "../skills/explore-ai/scripts/workflow-store.mjs";
 
 test("installed CLI completes an isolated customer journey, detects drift and preserves files on fresh start", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "workflow-installed-"));
   try {
-    await cp(new URL("../skills/explain-ai/examples/project/", import.meta.url), root, { recursive: true });
+    await cp(new URL("../skills/explore-ai/examples/project/", import.meta.url), root, { recursive: true });
     const originalProfile = await readFile(path.join(root, "design/profile.json"));
     const installed = await install(root);
-    await cp(new URL("../skills/explain-ai/node_modules/", import.meta.url), path.join(installed, "node_modules"), { recursive: true });
+    await cp(new URL("../skills/explore-ai/node_modules/", import.meta.url), path.join(installed, "node_modules"), { recursive: true });
     const script = path.join(installed, "scripts/workflow.mjs");
     let current;
     async function cli(command, input, error) {

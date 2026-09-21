@@ -50,7 +50,7 @@ const timeout = setTimeout(() => {
 }, 20000);
 try {
   await request("initialize", {
-    clientInfo: { name: "explain-ai-discovery", version: "0.1.0" },
+    clientInfo: { name: "explore-ai-discovery", version: "0.1.0" },
   });
   child.stdin.write(JSON.stringify({ method: "initialized" }) + "\n");
   const result = await request("skills/list", {
@@ -59,7 +59,7 @@ try {
   });
   const matches = (result.data ?? []).flatMap((entry) =>
     (entry.skills ?? [])
-      .filter((skill) => skill.name === "explain-ai")
+      .filter((skill) => skill.name === "explore-ai")
       .map((skill) => ({
         cwd: entry.cwd,
         name: skill.name,
@@ -70,17 +70,17 @@ try {
   );
   if (matches.length !== 1 || matches[0].enabled === false)
     throw new Error(
-      `Expected one enabled ExplainAI skill, found ${matches.length}`,
+      `Expected one enabled ExploreAI skill, found ${matches.length}`,
     );
   const expected = path.join(
     cwd,
     ".agents",
     "skills",
-    "explain-ai",
+    "explore-ai",
     "SKILL.md",
   );
   if (path.resolve(matches[0].path).toLowerCase() !== expected.toLowerCase())
-    throw new Error("Discovered a different ExplainAI installation");
+    throw new Error("Discovered a different ExploreAI installation");
   console.log(JSON.stringify({ discovered: true, ...matches[0] }, null, 2));
 } catch (error) {
   console.error(error.message);

@@ -30,13 +30,13 @@ jobs:
           cache: npm
           cache-dependency-path: |
             package-lock.json
-            skills/explain-ai/package-lock.json
+            skills/explore-ai/package-lock.json
 
       - name: Install development dependencies
         run: npm ci --ignore-scripts --no-audit --no-fund
 
       - name: Install packaged skill dependencies
-        run: npm ci --prefix skills/explain-ai --ignore-scripts --no-audit --no-fund
+        run: npm ci --prefix skills/explore-ai --ignore-scripts --no-audit --no-fund
 
       - name: Install Chromium for browser evidence
         run: npx playwright install --with-deps chromium

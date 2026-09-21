@@ -37,7 +37,7 @@ async function collectLessons(root, relative) {
 }
 
 async function ownedContracts(root) {
-  const configRelative = "explain-ai.config.json";
+  const configRelative = "explore-ai.config.json";
   const rawConfig = await readJson(await resolveLocal(root, configRelative, { file: true }));
   const config =
     rawConfig.schemaVersion === fromVersion

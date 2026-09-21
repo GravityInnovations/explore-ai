@@ -1,0 +1,4 @@
+interface:
+  display_name: "ExploreAI"
+  short_description: "Design and author interactive 3D learning experiences"
+  default_prompt: "Use $explore-ai to design or generate a lesson in this project."

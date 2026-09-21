@@ -4,20 +4,20 @@ import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/pr
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { migrateProject } from "../skills/explain-ai/scripts/migrate.mjs";
+import { migrateProject } from "../skills/explore-ai/scripts/migrate.mjs";
 
-const example = fileURLToPath(new URL("../skills/explain-ai/examples/project/", import.meta.url));
+const example = fileURLToPath(new URL("../skills/explore-ai/examples/project/", import.meta.url));
 const owned = [
   "asset-library/index.json",
   "content/k1/maths/equal-parts/lesson.json",
   "content/k2/maths/equal-parts/lesson.json",
   "design/profile.json",
-  "explain-ai.config.json",
-  "explain-ai.runtime.json",
+  "explore-ai.config.json",
+  "explore-ai.runtime.json",
 ];
 
 async function trial(run) {
-  const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-migration-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-migration-"));
   try {
     await cp(example, root, { recursive: true });
     for (const relative of owned) {
@@ -54,7 +54,7 @@ test("migration plans first, writes atomically, preserves other files, and is id
     assert.equal(plan.status, "planned");
     assert.deepEqual(plan.files.map((file) => file.path), owned);
     assert.deepEqual(await readFile(path.join(root, owned[0])), before);
-    await assert.rejects(readFile(path.join(root, ".explore-ai/migrations/1.0.0-to-2.0.0/backup/explain-ai.config.json")));
+    await assert.rejects(readFile(path.join(root, ".explore-ai/migrations/1.0.0-to-2.0.0/backup/explore-ai.config.json")));
 
     const result = await migrateProject(root, { write: true });
     assert.equal(result.status, "migrated");
@@ -93,7 +93,7 @@ test("migration plans first, writes atomically, preserves other files, and is id
 
 test("migration supplies the catalog path for legacy project configs", async () => {
   await trial(async (root) => {
-    const file = path.join(root, "explain-ai.config.json");
+    const file = path.join(root, "explore-ai.config.json");
     const value = JSON.parse(await readFile(file, "utf8"));
     delete value.paths.catalog;
     await writeFile(file, `${JSON.stringify(value, null, 2)}\n`);
@@ -123,18 +123,18 @@ test("migration marks legacy assets without provenance as unknown and denied", a
 
 test("migration refuses a backup collision before changing contracts", async () => {
   await trial(async (root) => {
-    const collision = path.join(root, ".explore-ai/migrations/1.0.0-to-2.0.0/backup/explain-ai.config.json");
+    const collision = path.join(root, ".explore-ai/migrations/1.0.0-to-2.0.0/backup/explore-ai.config.json");
     await mkdir(path.dirname(collision), { recursive: true });
     await writeFile(collision, "different\n");
-    const before = await readFile(path.join(root, "explain-ai.config.json"));
+    const before = await readFile(path.join(root, "explore-ai.config.json"));
     await assert.rejects(migrateProject(root, { write: true }), /Backup collision/);
-    assert.deepEqual(await readFile(path.join(root, "explain-ai.config.json")), before);
+    assert.deepEqual(await readFile(path.join(root, "explore-ai.config.json")), before);
   });
 });
 
 test("migration rejects unknown versions with an actionable command", async () => {
   await trial(async (root) => {
-    const file = path.join(root, "explain-ai.runtime.json");
+    const file = path.join(root, "explore-ai.runtime.json");
     const value = JSON.parse(await readFile(file, "utf8"));
     value.schemaVersion = "9.0.0";
     await writeFile(file, `${JSON.stringify(value, null, 2)}\n`);

@@ -3,16 +3,16 @@ import assert from "node:assert/strict";
 import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
-import { findAssets } from "../skills/explain-ai/scripts/find-assets.mjs";
-import { validateSemantics } from "../skills/explain-ai/scripts/validate.mjs";
-import { validateData } from "../skills/explain-ai/scripts/contracts.mjs";
+import { findAssets } from "../skills/explore-ai/scripts/find-assets.mjs";
+import { validateSemantics } from "../skills/explore-ai/scripts/validate.mjs";
+import { validateData } from "../skills/explore-ai/scripts/contracts.mjs";
 import { fixture } from "./fixtures.mjs";
 test("asset search reuses indexed local files and narrows by all query terms", async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-assets-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-assets-"));
   try {
     const f = fixture();
     await writeFile(
-      path.join(root, "explain-ai.config.json"),
+      path.join(root, "explore-ai.config.json"),
       JSON.stringify(f.config),
     );
     await mkdir(path.join(root, "asset-library"));

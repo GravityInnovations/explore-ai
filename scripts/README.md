@@ -4,8 +4,8 @@ These scripts maintain or install the package. They are not needed by the target
 
 | Script | Purpose | Writes |
 | --- | --- | --- |
-| `install.mjs <project>` | Copy the self-contained skill to the target's `.agents/skills/explain-ai` | A new installation only; refuses an existing destination |
-| `generate-types.mjs` | Generate five declarations from the authoritative schemas | `skills/explain-ai/types/` |
+| `install.mjs <project>` | Copy the self-contained skill to the target's `.agents/skills/explore-ai` | A new installation only; refuses an existing destination |
+| `generate-types.mjs` | Generate five declarations from the authoritative schemas | `skills/explore-ai/types/` |
 | `generate-types.mjs --check` | Detect declaration drift | None |
 | `check-discovery.mjs <project>` | Ask the local Codex app-server to confirm the exact installed skill | No project writes or model turn |
 | `check-package.mjs` | Check required files, MIT license, local documentation links and action vocabulary | None |

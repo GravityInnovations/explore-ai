@@ -12,7 +12,6 @@ export function requireThat(condition, code, message) {
 export const digest = value => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 export const briefDigest = state => digest({ decisions: state.decisions, summary: state.brief.summary });
 export const STATE_DIR = ".explore-ai";
-export const LEGACY_STATE_DIR = ".explain-ai";
 export const STATE_PATH = `${STATE_DIR}/workflow.json`;
 export const QA_CHECKS = ["contracts", "desktop", "mobile", "labels", "keyboard", "motion", "fallback", "app-check"];
 export const qaComplete = state => QA_CHECKS.every(check => state.qa.some(q => q.check === check && q.result !== "fail"));
@@ -62,14 +61,7 @@ async function existingStateRoot(root, relative) {
 }
 
 export async function ensureStateRoot(root) {
-  const current = await existingStateRoot(root, STATE_DIR);
-  const legacy = await existingStateRoot(root, LEGACY_STATE_DIR);
-  requireThat(!(current && legacy), "STATE_CONFLICT",
-    `Both ${STATE_DIR}/ and legacy ${LEGACY_STATE_DIR}/ project state exist; resolve the conflict without deleting either directory`);
-  if (legacy) {
-    await rename(legacy, await resolveLocal(root, STATE_DIR, { mustExist: false }));
-  }
-  return current || await resolveLocal(root, STATE_DIR, { mustExist: false });
+  return await resolveLocal(root, STATE_DIR, { mustExist: false });
 }
 
 export async function loadState(root) {
@@ -125,7 +117,7 @@ export async function archiveState(root, state) {
   return relative;
 }
 
-const excluded = new Set(["node_modules", ".git", ".agents", ".next", STATE_DIR, LEGACY_STATE_DIR, ".tmp"]);
+const excluded = new Set(["node_modules", ".git", ".agents", ".next", STATE_DIR, ".tmp"]);
 // Explicit preview scopes catch edits and added/removed files without hashing dependencies.
 export async function snapshot(root, paths) {
   const entries = new Map();

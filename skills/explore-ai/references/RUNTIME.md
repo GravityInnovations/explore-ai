@@ -41,7 +41,7 @@ const controller = createLessonController(lesson, design, {
 });
 ```
 
-The functions above are project-specific responsibilities, not exported helpers. Implement them against actual geometry. Populate `explain-ai.runtime.json` using `schemas/runtime.schema.json` only after handlers exist. A component supports an action only when it exposes the needed anatomy and semantics. A global cutaway handler does not make every asset dissectable.
+The functions above are project-specific responsibilities, not exported helpers. Implement them against actual geometry. Populate `explore-ai.runtime.json` using `schemas/runtime.schema.json` only after handlers exist. A component supports an action only when it exposes the needed anatomy and semantics. A global cutaway handler does not make every asset dissectable.
 
 ## Camera and animation decisions
 

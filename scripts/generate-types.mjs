@@ -1,7 +1,7 @@
 import { compileFromFile } from "json-schema-to-typescript";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-const base = new URL("../skills/explain-ai/", import.meta.url);
+const base = new URL("../skills/explore-ai/", import.meta.url);
 await mkdir(new URL("types/", base), { recursive: true });
 for (const name of ["project", "design", "asset-index", "runtime", "lesson", "catalog", "workflow"]) {
   const source = fileURLToPath(new URL(`schemas/${name}.schema.json`, base));

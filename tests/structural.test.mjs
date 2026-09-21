@@ -3,14 +3,14 @@ import assert from "node:assert/strict";
 import { mkdtemp, mkdir, symlink, rm } from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
-import { validateData } from "../skills/explain-ai/scripts/contracts.mjs";
+import { validateData } from "../skills/explore-ai/scripts/contracts.mjs";
 import {
   assertRelative,
   resolveLocal,
   lessonIdentity,
   lessonRoute,
   assertLessonRoute,
-} from "../skills/explain-ai/scripts/paths.mjs";
+} from "../skills/explore-ai/scripts/paths.mjs";
 
 const config = {
   schemaVersion: "2.0.0",
@@ -18,8 +18,8 @@ const config = {
     design: "design/profile.json",
     content: "content",
     assetLibrary: "asset-library",
-    publicAssets: "public/explain-ai",
-    runtime: "explain-ai.runtime.json",
+    publicAssets: "public/explore-ai",
+    runtime: "explore-ai.runtime.json",
     catalog: "catalog/index.json",
   },
 };
@@ -63,7 +63,7 @@ test("portable paths reject traversal, drive paths and device names", () => {
     assert.throws(() => assertRelative(value));
 });
 test("resolver rejects ancestor junction escapes for existing and future files", async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-path-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-path-"));
   try {
     await mkdir(path.join(root, "project"));
     await mkdir(path.join(root, "outside"));

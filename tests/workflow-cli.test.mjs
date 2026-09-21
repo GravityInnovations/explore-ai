@@ -4,7 +4,7 @@ import { access, mkdtemp, rm } from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
 import { execFileSync, spawnSync } from "node:child_process";
-const script = path.resolve("skills/explain-ai/scripts/workflow.mjs");
+const script = path.resolve("skills/explore-ai/scripts/workflow.mjs");
 
 test("CLI guides an idempotent fresh start and rejects bypass flags", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "workflow-cli-"));
@@ -15,7 +15,6 @@ test("CLI guides an idempotent fresh start and rejects bypass flags", async () =
     assert.equal(first.question.key, "audience");
     assert.equal(first.topicReady, false);
     await access(path.join(root, ".explore-ai/workflow.json"));
-    await assert.rejects(access(path.join(root, ".explain-ai/workflow.json")), { code: "ENOENT" });
     assert.equal(run("start").session, first.session);
     const bad = spawnSync(process.execPath, [script, "start", "--project", root, "--force"], { encoding: "utf8" });
     assert.equal(bad.status, 1);

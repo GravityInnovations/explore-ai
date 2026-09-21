@@ -64,7 +64,7 @@ async function contractCheck(root, state) {
   await requireCurrent(root, state);
   let errors = [];
   try {
-    const config = await readContract("project", await resolveLocal(root, "explain-ai.config.json", { file: true }));
+    const config = await readContract("project", await resolveLocal(root, "explore-ai.config.json", { file: true }));
     const design = await readContract("design", await resolveLocal(root, config.paths.design, { file: true }));
     const { validateDesign } = await import("./validate.mjs");
     errors = validateDesign(design);
@@ -132,10 +132,10 @@ export async function runWorkflow(root, command, input = {}, expected) {
         "INVALID_INPUT", "Use an HTTP preview URL without embedded credentials");
       requireThat(Array.isArray(input.paths) && input.paths.length > 0 && input.paths.every(p => typeof p === "string"),
         "INVALID_INPUT", "List the files/folders implementing the preview");
-      const config = await readContract("project", await resolveLocal(root, "explain-ai.config.json", { file: true }));
-      requireThat(input.paths.some(p => !["explain-ai.config.json", config.paths.design].includes(p)),
+      const config = await readContract("project", await resolveLocal(root, "explore-ai.config.json", { file: true }));
+      requireThat(input.paths.some(p => !["explore-ai.config.json", config.paths.design].includes(p)),
         "EMPTY_PREVIEW", "Include preview implementation files, not just the design profile");
-      const paths = [...new Set(["explain-ai.config.json", config.paths.design, ...input.paths])].sort();
+      const paths = [...new Set(["explore-ai.config.json", config.paths.design, ...input.paths])].sort();
       state.preview = { url: url.href, paths, fingerprint: await snapshot(root, paths) };
       state.qa = []; state.acceptance = null; state.stage = "qa";
       await contractCheck(root, state);

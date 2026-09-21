@@ -5,8 +5,8 @@ export function fixture() {
       design: "design/profile.json",
       content: "content",
       assetLibrary: "asset-library",
-      publicAssets: "public/explain-ai",
-      runtime: "explain-ai.runtime.json",
+      publicAssets: "public/explore-ai",
+      runtime: "explore-ai.runtime.json",
       catalog: "catalog/index.json",
     },
   };

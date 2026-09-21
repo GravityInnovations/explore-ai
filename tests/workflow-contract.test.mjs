@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { validateData } from "../skills/explain-ai/scripts/contracts.mjs";
+import { validateData } from "../skills/explore-ai/scripts/contracts.mjs";
 
 export function draftState() {
   return { schemaVersion: "1.0.0", session: "fixture", revision: 0,

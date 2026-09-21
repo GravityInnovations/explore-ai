@@ -311,7 +311,7 @@ export async function loadProject(root) {
   root = await realpath(root);
   const config = await readContract(
     "project",
-    await resolveLocal(root, "explain-ai.config.json", { file: true }),
+    await resolveLocal(root, "explore-ai.config.json", { file: true }),
     { project: root },
   );
   for (const relative of Object.values(config.paths))

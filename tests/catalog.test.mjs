@@ -3,12 +3,12 @@ import assert from "node:assert/strict";
 import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { buildCatalog } from "../skills/explain-ai/scripts/build-catalog.mjs";
+import { buildCatalog } from "../skills/explore-ai/scripts/build-catalog.mjs";
 
-const example = new URL("../skills/explain-ai/examples/project/", import.meta.url);
+const example = new URL("../skills/explore-ai/examples/project/", import.meta.url);
 
 test("catalog builder plans and writes a deterministic additive catalog", async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-catalog-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-catalog-"));
   try {
     await cp(example, root, { recursive: true });
     await writeFile(path.join(root, "home.html"), "existing home");
@@ -28,7 +28,7 @@ test("catalog builder plans and writes a deterministic additive catalog", async 
 });
 
 test("catalog builder rejects route collisions and scans only configured content", async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-catalog-collision-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-catalog-collision-"));
   try {
     await cp(example, root, { recursive: true });
     await cp(

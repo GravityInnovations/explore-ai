@@ -3,5 +3,5 @@
     "target": "ES2022", "module": "ESNext", "moduleResolution": "Bundler",
     "jsx": "react-jsx", "strict": true, "noEmit": true, "skipLibCheck": true
   },
-  "include": ["skills/explain-ai/assets/templates/**/*.ts", "skills/explain-ai/assets/templates/**/*.tsx", "skills/explain-ai/types/**/*.d.ts"]
+  "include": ["skills/explore-ai/assets/templates/**/*.ts", "skills/explore-ai/assets/templates/**/*.tsx", "skills/explore-ai/types/**/*.d.ts"]
 }

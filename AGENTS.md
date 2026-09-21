@@ -1,8 +1,8 @@
 # Repository maintenance
 
-ExplainAI is an installable agent skill. Use GitHub issues for work tracking, commit mappings and acceptance evidence. Keep repository documentation focused on current installation, usage and maintenance.
+ExploreAI is an installable agent skill. Use GitHub issues for work tracking, commit mappings and acceptance evidence. Keep repository documentation focused on current installation, usage and maintenance.
 
-- Keep the installable package self-contained in skills/explain-ai. Keep schemas authoritative and regenerate TypeScript when contracts change.
+- Keep the installable package self-contained in skills/explore-ai. Keep schemas authoritative and regenerate TypeScript when contracts change.
 - Preserve the MIT license, user changes and project-specific design choices. Ship only minimal examples, no production website, fixed theme, cloud backend or large asset library.
 - Test script behavior, semantic references, asset containment, design inheritance and installation. Distinguish structural, behavioral and rendered evidence.
 - Complete meaningful milestones with scoped local commits. Stage exact paths and inspect staged checks/diffs. Do not push unless Faik explicitly requests it.
