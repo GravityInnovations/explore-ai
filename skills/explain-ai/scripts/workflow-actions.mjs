@@ -99,7 +99,14 @@ const DECISION_SOURCES = ["user", "delegated", "proposed"];
 const PENDING_MODES = ["recommendation", "options", "clarification"];
 
 function decisionKeys(state) {
-  return Object.keys(QUESTIONS).filter(key => !state.decisions[key]);
+  return Object.keys(QUESTIONS).filter(key => !isResolvedDecision(state, key));
+}
+
+export function isResolvedDecision(state, key) {
+  const decision = state.decisions[key];
+  return Object.hasOwn(QUESTIONS, key) && decision && DECISION_SOURCES.includes(decision.source) &&
+    typeof decision.value === "string" && decision.value.trim().length > 0 &&
+    typeof decision.evidence === "string" && decision.evidence.trim().length > 0 && state.pendingChoice?.key !== key;
 }
 
 function currentKey(state) {

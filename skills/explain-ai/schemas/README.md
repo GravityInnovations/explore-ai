@@ -21,7 +21,7 @@ Data contracts are the project, design, asset-index, runtime and lesson document
 
 | Skill package | Data contracts | Workflow state |
 | --- | --- | --- |
-| `0.2.0` | `2.0.0` | `1.0.0` |
+| `0.2.0` | `2.0.0` | `1.2.0` |
 
 The package version and contract versions are independent. The v2 transition changes the explicit data-contract boundary; migrate v1 project data with `node scripts/migrate.mjs --project <root>` to inspect the plan, then repeat with `--write`. The workflow file is not rewritten. Its stored design fingerprint becomes stale after the design profile changes, so the customer must review and accept the migrated preview again.
 

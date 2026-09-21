@@ -14,6 +14,7 @@ export const digest = value => createHash("sha256").update(JSON.stringify(value)
 export const briefDigest = state => digest({ decisions: state.decisions, summary: state.brief.summary });
 export const STATE_PATH = ".explain-ai/workflow.json";
 export const QA_CHECKS = ["contracts", "desktop", "mobile", "labels", "keyboard", "motion", "fallback", "app-check"];
+export const INTERVIEW_KEYS = ["audience", "brand", "typography", "palette", "layout", "visuals", "motion", "accessibility", "constraints"];
 export const qaComplete = state => QA_CHECKS.every(check => state.qa.some(q => q.check === check && q.result !== "fail"));
 
 export function newState() {
@@ -35,6 +36,16 @@ export function assertState(state) {
   requireThat(new Set(state.qa.map(q => q.check)).size === state.qa.length, "INVALID_STATE", "Duplicate QA checks");
   requireThat(state.qa.every(q => q.fingerprint === state.preview?.fingerprint), "INVALID_STATE", "QA belongs to a different preview");
   requireThat(state.qa.every(q => q.result !== "not-applicable" || ["fallback", "app-check"].includes(q.check)), "INVALID_STATE", "Required visual and interaction checks cannot be waived");
+  const missing = INTERVIEW_KEYS.filter(key => !state.decisions[key]);
+  if (state.pendingChoice) {
+    requireThat(missing.includes(state.pendingChoice.key), "INVALID_STATE", "Pending choice must belong to an unresolved decision");
+    requireThat(state.pendingChoice.key === missing[0], "INVALID_STATE", "Pending choice must belong to the current decision");
+  }
+  for (const [key, candidates] of Object.entries(state.candidates)) {
+    requireThat(missing.includes(key), "INVALID_STATE", "Candidate context must belong to an unresolved decision");
+    requireThat(Array.isArray(candidates) && candidates.length > 0, "INVALID_STATE", "Candidate context cannot be empty");
+  }
+  if (state.brief) requireThat(!state.pendingChoice && Object.keys(state.candidates).length === 0, "INVALID_STATE", "Brief cannot contain unresolved interactions");
   requireThat(stage < 4 || qaComplete(state), "INVALID_STATE", "Review requires complete QA without blocking failures");
   requireThat(stage === 5 ? state.acceptance?.fingerprint === state.preview?.fingerprint : state.acceptance === null,
     "INVALID_STATE", "Acceptance must match the accepted preview stage");
