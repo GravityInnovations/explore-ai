@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
+    "catalog:build": "node .agents/skills/explore-ai/scripts/build-catalog.mjs --project . --write",
+    "predev": "npm run catalog:build",
+    "prebuild": "npm run catalog:build",
+    "prestart": "npm run catalog:build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

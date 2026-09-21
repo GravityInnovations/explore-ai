@@ -31,8 +31,8 @@ main { min-height: calc(100svh - 220px); }
 .button { border: 2px solid var(--accent); background: transparent; border-radius: 24px; min-height: 60px; display: inline-flex; align-items: center; justify-content: center; gap: calc(var(--unit) * 2); padding: var(--unit) calc(var(--unit) * 2); color: var(--accent); font-weight: 700; text-decoration: none; cursor: pointer; transition: transform var(--duration) var(--ease), background-color var(--duration) var(--ease); }
 .button.primary { background: var(--accent); color: white; }
 .button:hover:not(:disabled) { transform: translateY(-3px); background: var(--tint); }
-.button.primary:hover { background: #6525cf; }
-.button:disabled { cursor: default; color: var(--muted); border-color: var(--muted); border-style: dashed; }
+.button.primary:hover:not(:disabled) { background: #6525cf; }
+.button:disabled { cursor: default; color: var(--muted); background: var(--surface); border-color: var(--muted); border-style: dashed; }
 .illustration { display: block; width: min(100%, 640px); height: auto; margin: calc(var(--unit) * 2) auto 0; }
 .illustration.compact { width: 260px; margin: 0 auto var(--unit); }
 .illustration-float { transform-origin: center; animation: bob 6s var(--ease) infinite; }
