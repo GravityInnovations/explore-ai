@@ -1,13 +1,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
-import Ajv from "../skills/explain-ai/node_modules/ajv/dist/2020.js";
+import Ajv from "../skills/explore-ai/node_modules/ajv/dist/2020.js";
 import { fixture } from "./fixtures.mjs";
-import { validateData } from "../skills/explain-ai/scripts/contracts.mjs";
+import { validateData } from "../skills/explore-ai/scripts/contracts.mjs";
 
 test("all contracts compile in strict Draft 2020-12 mode", async () => {
   const ajv = new Ajv({ strict: true });
-  const folder = new URL("../skills/explain-ai/schemas/", import.meta.url);
+  const folder = new URL("../skills/explore-ai/schemas/", import.meta.url);
   const schemas = await Promise.all(
     (await readdir(folder))
       .filter((name) => name.endsWith(".schema.json"))

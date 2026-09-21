@@ -2,7 +2,7 @@
 
 ## 0.2.0
 
-This release moves the ExplainAI data contracts to `2.0.0` while keeping the workflow state contract at `1.0.0`. Existing `1.0.0` project data must be reviewed with the dry-run migration before writing; migration creates local backups and conservatively marks ambiguous asset provenance as unknown and denied.
+This release moves the ExploreAI data contracts to `2.0.0` while keeping the workflow state contract at `1.0.0`. Existing `1.0.0` project data must be reviewed with the dry-run migration before writing; migration creates local backups and conservatively marks ambiguous asset provenance as unknown and denied.
 
 User-visible changes:
 

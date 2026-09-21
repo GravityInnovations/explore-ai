@@ -3,14 +3,14 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm, mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { runWorkflow, QUESTIONS } from "../skills/explain-ai/scripts/workflow-actions.mjs";
+import { runWorkflow, QUESTIONS } from "../skills/explore-ai/scripts/workflow-actions.mjs";
 import { fixture } from "./fixtures.mjs";
-import { QA_CHECKS, loadState, assertState } from "../skills/explain-ai/scripts/workflow-store.mjs";
+import { QA_CHECKS, loadState, assertState } from "../skills/explore-ai/scripts/workflow-store.mjs";
 
 export async function previewFixture(root) {
   const f = fixture();
   await mkdir(path.join(root, "design"), { recursive: true });
-  await writeFile(path.join(root, "explain-ai.config.json"), JSON.stringify(f.config));
+  await writeFile(path.join(root, "explore-ai.config.json"), JSON.stringify(f.config));
   await writeFile(path.join(root, "design/profile.json"), JSON.stringify(f.design));
   await writeFile(path.join(root, "preview.html"), "<!doctype html><h1>Design fixture</h1>");
 }

@@ -21,7 +21,7 @@ import {
 } from "./migrations/1.0.0-to-2.0.0.mjs";
 import { validateProject } from "./validate.mjs";
 
-const backupRelative = `.explain-ai/migrations/${migrationId}/backup`;
+const backupRelative = `.explore-ai/migrations/${migrationId}/backup`;
 
 async function collectLessons(root, relative) {
   const directory = await resolveLocal(root, relative, { file: false });
@@ -37,7 +37,7 @@ async function collectLessons(root, relative) {
 }
 
 async function ownedContracts(root) {
-  const configRelative = "explain-ai.config.json";
+  const configRelative = "explore-ai.config.json";
   const rawConfig = await readJson(await resolveLocal(root, configRelative, { file: true }));
   const config =
     rawConfig.schemaVersion === fromVersion
@@ -62,7 +62,7 @@ function outputBytes(value) {
 }
 
 async function atomicWrite(file, bytes) {
-  const temporary = path.join(path.dirname(file), `.${path.basename(file)}.explain-ai-migrate.tmp`);
+      const temporary = path.join(path.dirname(file), `.${path.basename(file)}.explore-ai-migrate.tmp`);
   await rm(temporary, { force: true });
   try {
     await writeFile(temporary, bytes, { flag: "wx" });

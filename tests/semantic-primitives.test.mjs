@@ -12,7 +12,7 @@ before(async () => {
   const output = path.resolve(".tmp/semantic-runtime");
   await mkdir(output, { recursive: true });
   for (const name of ["semantic-primitives", "capability-registry"]) {
-    let source = await readFile(new URL(`../skills/explain-ai/assets/runtime/${name}.ts`, import.meta.url), "utf8");
+    let source = await readFile(new URL(`../skills/explore-ai/assets/runtime/${name}.ts`, import.meta.url), "utf8");
     source = source.replaceAll('"./semantic-primitives"', '"./semantic-primitives.mjs"');
     await writeFile(path.join(output, `${name}.mjs`), ts.transpileModule(source, {
       compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 },

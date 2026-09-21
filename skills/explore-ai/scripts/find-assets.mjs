@@ -5,7 +5,7 @@ import { resolveLocal } from "./paths.mjs";
 export async function findAssets(root, query = "") {
   const config = await readContract(
     "project",
-    await resolveLocal(root, "explain-ai.config.json", { file: true }),
+    await resolveLocal(root, "explore-ai.config.json", { file: true }),
   );
   const index = await readContract(
     "asset-index",

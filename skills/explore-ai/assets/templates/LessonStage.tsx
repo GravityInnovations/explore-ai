@@ -52,14 +52,14 @@ export function LessonStage({
     cursor.current = index;
   };
   return (
-    <div className="explain-ai-lesson-stage" ref={stageRef}>
-      <div className="explain-ai-lesson-visual" aria-label="Interactive lesson scene">
+    <div className="explore-ai-lesson-stage" ref={stageRef}>
+      <div className="explore-ai-lesson-visual" aria-label="Interactive lesson scene">
         <canvas ref={canvasRef} aria-label={`${lesson.title} 3D scene`} />
       </div>
-      <div className="explain-ai-lesson-content">
+      <div className="explore-ai-lesson-content">
         <LessonText lesson={lesson} diagramUrl={diagramUrl} runtimeError={runtimeError} />
         {controls && (
-          <nav className="explain-ai-lesson-controls" aria-label="Lesson navigation">
+          <nav className="explore-ai-lesson-controls" aria-label="Lesson navigation">
             <button type="button" onClick={() => move(-1)}>Previous</button>
             <button type="button" onClick={() => move(1)}>Next</button>
           </nav>

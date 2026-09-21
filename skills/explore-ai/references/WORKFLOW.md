@@ -1,12 +1,12 @@
 # Local designer CLI
 
-Use Node.js 22+ and the installed skill's dependencies. Always supply the explicit customer root. One operational record, `.explain-ai/workflow.json`, holds resumable progress. Keep it with project design work; it is application state, not a duplicate project-management plan.
+Use Node.js 22+ and the installed skill's dependencies. Always supply the explicit customer root. One operational record, `.explore-ai/workflow.json`, holds resumable progress. Keep it with project design work; it is application state, not a duplicate project-management plan. Existing `.explore-ai/` state is migrated once to `.explore-ai/`; if both roots exist, stop and resolve the conflict without choosing one silently.
 
 ```text
 node <installed-skill>/scripts/workflow.mjs <command> --project <root> [--input <relative.json>] [--expect <revision>] [--json]
 ```
 
-Every mutation after start requires `--expect` from status. Input is a JSON file inside the target project; a reusable `.explain-ai/request.json` is suitable. Never interpolate customer statements into shell code. Default output guides the next step; JSON output gives structured blockers. Errors return nonzero with a stable code. There is no force, skip or auto-accept option.
+Every mutation after start requires `--expect` from status. Input is a JSON file inside the target project; a reusable `.explore-ai/request.json` is suitable. Never interpolate customer statements into shell code. Default output guides the next step; JSON output gives structured blockers. Errors return nonzero with a stable code. There is no force, skip or auto-accept option.
 
 The CLI is an operational boundary, not client-facing language. The designer should present one unresolved choice at a time, reuse recorded decisions, and translate implementation details into what the client will see. If inline controls or rendered samples are unavailable, use the same short conversational questions; never imply that a host-specific applet exists everywhere.
 
@@ -65,10 +65,10 @@ Result: `pass`, `fail`, or `not-applicable`. Only fallback/app-check allow not-a
 ## Recovery and enforcement limits
 
 - STALE_REVISION: another mutation won; read status and reconcile.
-- BUSY: a writer holds the lock; retry after it finishes. A crash can leave `.explain-ai/workflow.lock`; verify no writer remains before removing only that lock. No automatic lock stealing.
+- BUSY: a writer holds the lock; retry after it finishes. A crash can leave `.explore-ai/workflow.lock`; verify no writer remains before removing only that lock. No automatic lock stealing.
 - STALE_PREVIEW / DESIGN_NOT_ACCEPTED: follow blockers and revise; missing legacy state is unreviewed.
 - INVALID_STATE: preserve and repair the record; never silently replace it with accepted state.
-- Restart is for an explicit customer request. It archives under `.explain-ai/history/` and leaves the app/profile untouched. Existing designs still require discussion.
+- Restart is for an explicit customer request. It archives under `.explore-ai/history/` and leaves the app/profile untouched. Existing designs still require discussion.
 
 The CLI enforces supported transitions and revision checks. It does not authenticate humans, establish the truth of manual observations, crawl previews, execute builds or sandbox an unrestricted agent. The skill requires real customer agreement and observed evidence. An actor able to rewrite all files can bypass local tooling; this is not tamper-proof enforcement.
 

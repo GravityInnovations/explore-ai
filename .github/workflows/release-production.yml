@@ -28,40 +28,40 @@ jobs:
           cache: npm
           cache-dependency-path: |
             package-lock.json
-            skills/explain-ai/package-lock.json
+            skills/explore-ai/package-lock.json
 
       - name: Install development dependencies
         run: npm ci --ignore-scripts --no-audit --no-fund
 
       - name: Install packaged skill dependencies
-        run: npm ci --prefix skills/explain-ai --ignore-scripts --no-audit --no-fund
+        run: npm ci --prefix skills/explore-ai --ignore-scripts --no-audit --no-fund
 
       - name: Run release validation
         run: npm run check
 
       - name: Build the installable skill archive
-        run: npm pack ./skills/explain-ai --pack-destination "$RUNNER_TEMP"
+        run: npm pack ./skills/explore-ai --pack-destination "$RUNNER_TEMP"
 
       - name: Publish the channel release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          version="$(node -p "require('./skills/explain-ai/package.json').version")"
+          version="$(node -p "require('./skills/explore-ai/package.json').version")"
           if [ "$GITHUB_REF_NAME" = "main" ]; then
             tag="v${version}-staging.${GITHUB_RUN_NUMBER}"
-            title="ExplainAI ${tag}"
+            title="ExploreAI ${tag}"
             prerelease="--prerelease"
           else
             tag="v${version}"
-            title="ExplainAI ${tag}"
+            title="ExploreAI ${tag}"
             prerelease=""
           fi
           if gh release view "$tag" >/dev/null 2>&1; then
             echo "Release $tag already exists; refusing to overwrite it."
             exit 1
           fi
-          archive="$RUNNER_TEMP/explain-ai-skill-${version}.tgz"
+          archive="$RUNNER_TEMP/explore-ai-skill-${version}.tgz"
           gh release create "$tag" "$archive" \
             --target "$GITHUB_SHA" \
             --title "$title" \

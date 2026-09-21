@@ -4,15 +4,15 @@ import { cp, mkdtemp, readFile, writeFile, rm, mkdir } from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
 import { spawnSync } from "node:child_process";
-import { validateProject } from "../skills/explain-ai/scripts/validate.mjs";
+import { validateProject } from "../skills/explore-ai/scripts/validate.mjs";
 import { install } from "../scripts/install.mjs";
 import { acceptedFixture } from "./workflow-fixtures.mjs";
 const example = new URL(
-  "../skills/explain-ai/examples/project/",
+  "../skills/explore-ai/examples/project/",
   import.meta.url,
 );
 async function trial(run) {
-  const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-project-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-project-"));
   try {
     await cp(example, root, { recursive: true });
     await acceptedFixture(root);
@@ -30,7 +30,7 @@ async function edit(root, file, change) {
 const first = "content/k1/maths/equal-parts/lesson.json";
 test("topic and integrated validation reject missing or stale acceptance while draft checks remain usable", async () => {
   await trial(async root => {
-    await rm(path.join(root, ".explain-ai/workflow.json"));
+    await rm(path.join(root, ".explore-ai/workflow.json"));
     for (const options of [{ integrated: true }, { lesson: first }]) {
       const result = await validateProject(root, options);
       assert.equal(result.valid, false);
@@ -95,7 +95,7 @@ for (const [name, change, match] of [
     "stale browser copy",
     (root) =>
       writeFile(
-        path.join(root, "public/explain-ai/library/diagrams/equal-parts.svg"),
+        path.join(root, "public/explore-ai/library/diagrams/equal-parts.svg"),
         "<svg/>",
       ),
     /differs/,
@@ -154,7 +154,7 @@ test("installed CLI runs independently from the development checkout", async () 
     const installed = await install(root);
     // Copy installed dependency closure to exercise offline runtime resolution.
     await cp(
-      new URL("../skills/explain-ai/node_modules/", import.meta.url),
+      new URL("../skills/explore-ai/node_modules/", import.meta.url),
       path.join(installed, "node_modules"),
       { recursive: true },
     );

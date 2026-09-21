@@ -9,8 +9,8 @@ import ts from "typescript";
 let directory;
 let quiz;
 before(async () => {
-  directory = await mkdtemp(path.join(os.tmpdir(), "explain-ai-quiz-"));
-  const source = await readFile(new URL("../skills/explain-ai/assets/templates/quiz-state.ts", import.meta.url), "utf8");
+  directory = await mkdtemp(path.join(os.tmpdir(), "explore-ai-quiz-"));
+  const source = await readFile(new URL("../skills/explore-ai/assets/templates/quiz-state.ts", import.meta.url), "utf8");
   await writeFile(path.join(directory, "quiz-state.mjs"), ts.transpileModule(source, {
     compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 },
   }).outputText);

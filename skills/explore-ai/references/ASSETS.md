@@ -44,6 +44,6 @@ New reusable material goes in a descriptive local category; topic-only material 
 
 ## Browser integration
 
-Filesystem content is not automatically browser-accessible. Copy library assets to `<publicAssets>/library/<asset.path>` and lesson assets to `<publicAssets>/lessons/<lessonId>/<asset.path>`; for the default `public/explain-ai` root, URLs begin `/explain-ai/`. Match Next.js `basePath` when configured. Keep originals and public copies in sync; `validate.mjs --project <root> --integrated` compares bytes. Source components use reviewed static imports and must not be copied into public assets.
+Filesystem content is not automatically browser-accessible. Copy library assets to `<publicAssets>/library/<asset.path>` and lesson assets to `<publicAssets>/lessons/<lessonId>/<asset.path>`; for the default `public/explore-ai` root, URLs begin `/explore-ai/`. Match Next.js `basePath` when configured. Keep originals and public copies in sync; `validate.mjs --project <root> --integrated` compares bytes. Source components use reviewed static imports and must not be copied into public assets.
 
 Procedural visuals need no external files; nevertheless record the component name and its actual action capabilities in the runtime manifest. New assets are complete only when semantic targeting, licensing, local resolution and fallback readability have been checked.

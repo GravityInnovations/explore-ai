@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, writeFile, readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
-import { newState, loadState, updateState, snapshot } from "../skills/explain-ai/scripts/workflow-store.mjs";
+import { newState, loadState, updateState, snapshot } from "../skills/explore-ai/scripts/workflow-store.mjs";
 
 test("workflow writes are atomic, revision-checked and fail closed", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "workflow-store-"));
@@ -15,9 +15,9 @@ test("workflow writes are atomic, revision-checked and fail closed", async () =>
     assert.equal((await loadState(root)).revision, 0);
     const results = await Promise.allSettled([updateState(root, 0, s => s), updateState(root, 0, s => s)]);
     assert.equal(results.filter(r => r.status === "fulfilled").length, 1);
-    await writeFile(path.join(root, ".explain-ai/workflow.json"), "broken");
+    await writeFile(path.join(root, ".explore-ai/workflow.json"), "broken");
     await assert.rejects(loadState(root), { code: "INVALID_STATE" });
-    assert.equal(await readFile(path.join(root, ".explain-ai/workflow.json"), "utf8"), "broken");
+    assert.equal(await readFile(path.join(root, ".explore-ai/workflow.json"), "utf8"), "broken");
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 

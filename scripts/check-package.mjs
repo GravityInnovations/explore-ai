@@ -2,7 +2,7 @@ import { readFile, readdir, lstat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
-const skill = path.join(root, "skills/explain-ai");
+const skill = path.join(root, "skills/explore-ai");
 const required = [
   "SKILL.md",
   "agents/openai.yaml",
@@ -29,7 +29,7 @@ if (
 )
   throw new Error("Installed MIT license differs");
 const entry = await readFile(path.join(skill, "SKILL.md"), "utf8");
-if (!/^---\r?\nname: explain-ai\r?\ndescription: .+\r?\n---/.test(entry))
+if (!/^---\r?\nname: explore-ai\r?\ndescription: .+\r?\n---/.test(entry))
   throw new Error("Invalid skill frontmatter");
 const dependencies = JSON.parse(
   await readFile(path.join(skill, "package.json"), "utf8"),

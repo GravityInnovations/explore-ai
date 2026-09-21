@@ -311,7 +311,7 @@ export async function loadProject(root) {
   root = await realpath(root);
   const config = await readContract(
     "project",
-    await resolveLocal(root, "explain-ai.config.json", { file: true }),
+    await resolveLocal(root, "explore-ai.config.json", { file: true }),
     { project: root },
   );
   for (const relative of Object.values(config.paths))
@@ -364,7 +364,7 @@ export async function validateProject(
   if (integrated || requested) {
     const progress = await workflowStatus(project);
     if (!progress.topicReady) return { valid: false, lessons: 0, integrated,
-      errors: [{ path: "/.explain-ai/workflow.json", code: "DESIGN_NOT_ACCEPTED", message: progress.blockers.join("; ") }] };
+      errors: [{ path: "/.explore-ai/workflow.json", code: "DESIGN_NOT_ACCEPTED", message: progress.blockers.join("; ") }] };
   }
   const { root, config, design, index, runtime } = await loadProject(project);
   const errors = [];

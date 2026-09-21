@@ -11,7 +11,8 @@ export function requireThat(condition, code, message) {
 }
 export const digest = value => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 export const briefDigest = state => digest({ decisions: state.decisions, summary: state.brief.summary });
-export const STATE_PATH = ".explain-ai/workflow.json";
+export const STATE_DIR = ".explore-ai";
+export const STATE_PATH = `${STATE_DIR}/workflow.json`;
 export const QA_CHECKS = ["contracts", "desktop", "mobile", "labels", "keyboard", "motion", "fallback", "app-check"];
 export const qaComplete = state => QA_CHECKS.every(check => state.qa.some(q => q.check === check && q.result !== "fail"));
 
@@ -46,7 +47,25 @@ async function localFile(root, relative, mustExist = true) {
   return file;
 }
 
+async function existingStateRoot(root, relative) {
+  const path = await resolveLocal(root, relative, { mustExist: false });
+  try {
+    const info = await lstat(path);
+    requireThat(!info.isSymbolicLink(), "UNSAFE_PATH", `Workflow state root cannot be a symlink: ${relative}`);
+    requireThat(info.isDirectory(), "UNSAFE_PATH", `Workflow state root must be a directory: ${relative}`);
+    return path;
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
+export async function ensureStateRoot(root) {
+  return await resolveLocal(root, STATE_DIR, { mustExist: false });
+}
+
 export async function loadState(root) {
+  await ensureStateRoot(root);
   try {
     const raw = await readFile(await localFile(root, STATE_PATH), "utf8");
     let state;
@@ -58,13 +77,13 @@ export async function loadState(root) {
 
 // Serialize writers and compare revisions under the lock. Never auto-delete another writer's lock.
 export async function updateState(root, expected, change) {
-  const folder = await resolveLocal(root, ".explain-ai", { mustExist: false });
+  const folder = await ensureStateRoot(root);
   await mkdir(folder, { recursive: true });
-  const lockPath = await localFile(root, ".explain-ai/workflow.lock", false);
+  const lockPath = await localFile(root, `${STATE_DIR}/workflow.lock`, false);
   let lock;
   try { lock = await open(lockPath, "wx"); }
   catch (e) { if (e.code === "EEXIST") throw new WorkflowError("BUSY", "Another workflow write is active; retry status after it finishes"); throw e; }
-  const temporary = `.explain-ai/workflow-${randomUUID()}.tmp`;
+  const temporary = `${STATE_DIR}/workflow-${randomUUID()}.tmp`;
   let tempPath;
   try {
     const current = await loadState(root);
@@ -88,16 +107,17 @@ export async function updateState(root, expected, change) {
 
 // Called under the workflow writer lock; never archive outside the target project.
 export async function archiveState(root, state) {
-  const folder = await resolveLocal(root, ".explain-ai/history", { mustExist: false });
+  await ensureStateRoot(root);
+  const folder = await resolveLocal(root, `${STATE_DIR}/history`, { mustExist: false });
   await mkdir(folder, { recursive: true });
-  const relative = `.explain-ai/history/workflow-${randomUUID()}.json`;
+  const relative = `${STATE_DIR}/history/workflow-${randomUUID()}.json`;
   const handle = await open(await localFile(root, relative, false), "wx");
   try { await handle.writeFile(JSON.stringify(state, null, 2) + "\n"); await handle.sync(); }
   finally { await handle.close(); }
   return relative;
 }
 
-const excluded = new Set(["node_modules", ".git", ".agents", ".next", ".explain-ai", ".tmp"]);
+const excluded = new Set(["node_modules", ".git", ".agents", ".next", STATE_DIR, ".tmp"]);
 // Explicit preview scopes catch edits and added/removed files without hashing dependencies.
 export async function snapshot(root, paths) {
   const entries = new Map();

@@ -2,7 +2,7 @@ import { cp, lstat, mkdir, realpath } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const source = fileURLToPath(new URL("../skills/explain-ai/", import.meta.url));
+const source = fileURLToPath(new URL("../skills/explore-ai/", import.meta.url));
 const within = (root, child) => {
   const rel = path.relative(root, child);
   return (
@@ -26,7 +26,7 @@ export async function install(project) {
     if (!within(root, await realpath(parent)))
       throw new Error("Installation directory escapes target project");
   }
-  const destination = path.join(parent, "explain-ai");
+  const destination = path.join(parent, "explore-ai");
   // Exclusive copy creation prevents accidental replacement and concurrent installers.
   try {
     await cp(source, destination, {
@@ -58,7 +58,7 @@ if (
       );
     const destination = await install(process.argv[2]);
     console.log(
-      `Installed: ${destination}\nRun npm ci --ignore-scripts --no-audit --no-fund in that folder.\nSelect $explain-ai in the target project; restart Codex if discovery has not refreshed.`,
+      `Installed: ${destination}\nRun npm ci --ignore-scripts --no-audit --no-fund in that folder.\nSelect $explore-ai in the target project; restart Codex if discovery has not refreshed.`,
     );
   } catch (error) {
     console.error(`Installation failed: ${error.message}`);

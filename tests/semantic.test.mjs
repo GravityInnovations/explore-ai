@@ -8,9 +8,9 @@ import {
   critiqueCopy,
   resolveColorStrategy,
   validateQuiz,
-} from "../skills/explain-ai/scripts/validate.mjs";
-import { critiquePedagogy } from "../skills/explain-ai/scripts/pedagogy.mjs";
-import { selectQuizQuestions, shuffleQuizAnswers } from "../skills/explain-ai/scripts/quiz.mjs";
+} from "../skills/explore-ai/scripts/validate.mjs";
+import { critiquePedagogy } from "../skills/explore-ai/scripts/pedagogy.mjs";
+import { selectQuizQuestions, shuffleQuizAnswers } from "../skills/explore-ai/scripts/quiz.mjs";
 const check = (f) => validateSemantics(f.lesson, f.design, f.index, f.runtime);
 test("coherent semantic package passes", () =>
   assert.deepEqual(check(fixture()), []));

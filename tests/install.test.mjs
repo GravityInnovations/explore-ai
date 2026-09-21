@@ -13,12 +13,12 @@ import path from "node:path";
 import { install } from "../scripts/install.mjs";
 
 test("installation is self-contained, excludes dependencies and refuses replacement", async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-install-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-install-"));
   try {
     const installed = await install(root);
     assert.match(
       await readFile(path.join(installed, "SKILL.md"), "utf8"),
-      /name: explain-ai/,
+      /name: explore-ai/,
     );
     assert.match(
       await readFile(path.join(installed, "package-lock.json"), "utf8"),
@@ -36,7 +36,7 @@ test("installation is self-contained, excludes dependencies and refuses replacem
 });
 
 test("installer rejects a linked destination escaping the project", async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-link-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-link-"));
   try {
     const project = path.join(root, "project");
     const outside = path.join(root, "outside");

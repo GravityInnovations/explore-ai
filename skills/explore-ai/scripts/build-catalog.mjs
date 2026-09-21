@@ -17,7 +17,7 @@ async function collectLessons(root, relative) {
 }
 
 async function atomicWrite(file, value) {
-  const temporary = `${file}.explain-ai-catalog.tmp`;
+  const temporary = `${file}.explore-ai-catalog.tmp`;
   await rm(temporary, { force: true });
   try {
     await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { flag: "wx" });
@@ -29,7 +29,7 @@ async function atomicWrite(file, value) {
 
 export async function buildCatalog(project, { write = false } = {}) {
   const root = await realpath(project);
-  const config = await readContract("project", await resolveLocal(root, "explain-ai.config.json", { file: true }), { project: root });
+  const config = await readContract("project", await resolveLocal(root, "explore-ai.config.json", { file: true }), { project: root });
   const entries = [];
   for (const relative of await collectLessons(root, config.paths.content)) {
     const lesson = await readContract("lesson", await resolveLocal(root, relative, { file: true }), { project: root });

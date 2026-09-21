@@ -3,10 +3,10 @@ import assert from "node:assert/strict";
 import { mkdtemp, mkdir, writeFile, readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
-import { inspectProject } from "../skills/explain-ai/scripts/inspect.mjs";
+import { inspectProject } from "../skills/explore-ai/scripts/inspect.mjs";
 import { fixture } from "./fixtures.mjs";
 test("inspection distinguishes valid profiles from customer acceptance without rewriting", async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "explain-ai-inspect-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "explore-ai-inspect-"));
   try {
     assert.equal((await inspectProject(root)).design.status, "missing");
     const f = fixture();
@@ -16,7 +16,7 @@ test("inspection distinguishes valid profiles from customer acceptance without r
     await writeFile(profile, bytes);
     assert.equal((await inspectProject(root)).design.status, "unconfigured");
     await writeFile(
-      path.join(root, "explain-ai.config.json"),
+      path.join(root, "explore-ai.config.json"),
       JSON.stringify(f.config),
     );
     const result = await inspectProject(root);

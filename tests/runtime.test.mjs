@@ -13,7 +13,7 @@ before(async () => {
   for (const name of ["controller", "camera"]) {
     const source = await readFile(
       new URL(
-        `../skills/explain-ai/assets/templates/${name}.ts`,
+        `../skills/explore-ai/assets/templates/${name}.ts`,
         import.meta.url,
       ),
       "utf8",

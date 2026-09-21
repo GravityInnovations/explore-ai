@@ -1,9 +1,9 @@
 ---
-name: explain-ai
+name: explore-ai
 description: Create project-specific design profiles and declarative, scroll-driven 3D educational lessons in Next.js projects. Use designer to establish the visual language and explore-a-topic to teach a supplied level, subject and topic using that design and local assets.
 ---
 
-# ExplainAI
+# ExploreAI
 
 Work inside the user's target project. This package supplies authoring workflows and validation; the target project's agent builds or extends its runtime. Keep design, lessons and assets local. Preserve the user's MIT licensing and explicit choices; do not add cloud services, accounts, paid APIs or publication steps.
 
@@ -13,7 +13,7 @@ Work inside the user's target project. This package supplies authoring workflows
 - `explore-a-topic`: read [EXPLORE-A-TOPIC.md](references/EXPLORE-A-TOPIC.md). Required inputs are level, subject and topic. The CLI must confirm current customer acceptance before topic authoring.
 - For existing lesson repair, inspect the lesson and validation failures, then use the relevant topic stages without rewriting unrelated content.
 
-These names select workflows, not shell commands. `$explain-ai designer` and `$explain-ai explore-a-topic` explicitly select this skill. Natural-language requests may also select it.
+These names select workflows, not shell commands. `$explore-ai designer` and `$explore-ai explore-a-topic` explicitly select this skill. Natural-language requests may also select it.
 
 A demo request, valid profile or passing tests does not establish design agreement. Obtain agreement to the concrete brief before implementing its design, then acceptance of the reviewed preview before topics. Reuse explicit agreement already given to that exact revision; do not ask twice. See [WORKFLOW.md](references/WORKFLOW.md) for CLI inputs and recovery. Never fabricate answers, observations or acceptance records to advance a stage.
 
@@ -23,7 +23,7 @@ When information conflicts, follow this order: system, developer and tool rules;
 
 ## Shared working contract
 
-1. Inspect target-project instructions, package configuration and existing assets before choosing output locations. Honour established paths via `explain-ai.config.json`.
+1. Inspect target-project instructions, package configuration and existing assets before choosing output locations. Honour established paths via `explore-ai.config.json`.
 2. Use the installed package's scripts by absolute path; resolve target content from the explicit project root, never from the skill folder. Run `npm ci --ignore-scripts --no-audit --no-fund` in this skill folder once when dependencies are absent.
 3. Validate the design and lesson with [VALIDATION.md](references/VALIDATION.md). Use [LESSON-SPEC.md](references/LESSON-SPEC.md) for authoritative semantics and bundled JSON schemas/types for exact field shapes.
 4. Text explaining an object must declare that semantic target and make it unmistakable in the same step. Validate references; visually inspect the result because JSON cannot prove readability or scientific accuracy.

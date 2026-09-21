@@ -1,7 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
-import { runWorkflow, QUESTIONS } from "../skills/explain-ai/scripts/workflow-actions.mjs";
-import { QA_CHECKS } from "../skills/explain-ai/scripts/workflow-store.mjs";
+import { runWorkflow, QUESTIONS } from "../skills/explore-ai/scripts/workflow-actions.mjs";
+import { QA_CHECKS } from "../skills/explore-ai/scripts/workflow-store.mjs";
 
 // Synthetic evidence is exclusively for isolated test projects, never a user acceptance record.
 export async function acceptedFixture(root) {
