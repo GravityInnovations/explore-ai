@@ -8,6 +8,8 @@ Keep the client conversation in this order: audience, brand/logo, typography, co
 
 For typography, show a small set of actual rendered font samples with friendly descriptions, or accept a brand font name, link or supplied file. For colours and layout, use swatches or compact visual examples when the host supports them; otherwise ask one concise question at a time and keep the same conversational fallback. A form interaction is a focused choice, never blanket approval of the brief or preview.
 
+Never treat an acknowledgement such as “sure”, “okay” or “yes” as the design value when it answers a request for a recommendation or options. Use the workflow's pending-choice path: create a concrete recommendation or bounded options with `propose`, stay on the same area, and use `select` only after the customer chooses an exact option. If the customer delegates, choose a concrete direction and record it with `delegate`; the delegation phrase is evidence, not the decision value. A pending recommendation, options list or clarification is not resolved and cannot enter the brief.
+
 ## Inspect, start or resume
 
 Run the installed inspector and workflow `status --project <root> --json`. Inspect project instructions, relevant layouts/styles/assets and supplied references; exclude vendor and build output.
@@ -44,7 +46,7 @@ Inspect references before claiming their properties. Separate observations, infe
 
 ## Agree the brief before implementing
 
-Use `answer` to record each decision and provenance, then `brief` to submit the concise design specification. Present concrete choices, delegated recommendations, scope, exclusions and what the preview will demonstrate. Associate the version shown with the CLI fingerprint.
+Use `answer` to record each direct concrete decision and provenance, then `brief` to submit the concise design specification. Present concrete choices, delegated recommendations, scope, exclusions and what the preview will demonstrate. Associate the version shown with the CLI fingerprint.
 
 Ask for agreement to that brief and wait. Do not implement the design while this decision is pending. The customer may answer naturally; no magic phrase is required. An earlier instruction to build a demo or proceed with repository work is not agreement to an unseen brief. Record the actual explicit agreement with `agree`. Feedback goes through `revise` and back to unresolved decisions. Reuse explicit agreement already given to that exact revision rather than asking twice.
 

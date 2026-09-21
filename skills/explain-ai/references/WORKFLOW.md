@@ -16,7 +16,10 @@ The CLI is an operational boundary, not client-facing language. The designer sho
 | --- | --- | --- |
 | `start` | none | Start only if absent; otherwise resume unchanged |
 | `status` | none | Read progress, decisions, fingerprints and blockers |
-| `answer` | key, value, source, evidence | Interview; record a decision |
+| `answer` | key, value, source, evidence | Interview; record the current concrete decision |
+| `propose` | key, mode, options | Interview; record one recommendation, 2–4 options or a clarification without resolving the key |
+| `select` | option, evidence | Interview; resolve the current key from the active recommendation/options proposal |
+| `delegate` | value, evidence | Interview; record the designer's concrete recommendation as a delegated decision |
 | `brief` | summary | All decision keys required; enter brief review |
 | `agree` | fingerprint, statement | Record explicit brief agreement; permit design work |
 | `preview` | url, paths | Design; fingerprint preview and enter QA; run contracts |
@@ -28,7 +31,11 @@ The CLI is an operational boundary, not client-facing language. The designer sho
 | `restart` | reason | Archive prior workflow, clear interview, preserve authored files |
 | `preflight` | none | Nonzero unless acceptance and preview files remain current |
 
+Workflow contract version is `1.1.0`. Existing `1.0.0` workflow records are not silently reinterpreted; preserve them and restart or migrate them explicitly before continuing.
+
 Decision keys: `audience`, `brand`, `typography`, `palette`, `layout`, `visuals`, `motion`, `accessibility`, `constraints`. Source: `user`, `delegated` or `proposed`. Brief agreement covers all recorded decisions; source tags alone are not approval.
+
+`pendingChoice` represents a recommendation/options/clarification round for the current unresolved key. It never counts as a decision. Use `select` only against an exact active option; use `delegate` when the customer asks the designer to choose, and store the concrete chosen direction rather than the delegation phrase.
 
 Example answer:
 
