@@ -112,6 +112,41 @@ test("delegation stores a concrete choice and proposals cannot target another ar
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 
+test("earlier preferences are carried to later questions and confirmation stores the real choice", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "workflow-candidates-"));
+  try {
+    let state = await runWorkflow(root, "start");
+    state = await runWorkflow(root, "carry", {
+      key: "typography", sourceKey: "audience", value: "A clean, modern font that children can read comfortably",
+      evidence: "Customer mentioned a kid-friendly modern font while describing the audience"
+    }, state.revision);
+    state = await runWorkflow(root, "carry", {
+      key: "layout", sourceKey: "audience", value: "An open and spacious layout",
+      evidence: "Customer requested open space while describing the showcase"
+    }, state.revision);
+    state = await runWorkflow(root, "answer", {
+      key: "audience", value: "Teachers, developers and general showcase visitors", source: "user", evidence: "Customer supplied the audience"
+    }, state.revision);
+    state = await runWorkflow(root, "answer", {
+      key: "brand", value: "Keep the existing explore.ai identity unified", source: "user", evidence: "Customer supplied the brand direction"
+    }, state.revision);
+    assert.equal(state.question.key, "typography");
+    assert.match(state.question.text, /clean, modern font/);
+    state = await runWorkflow(root, "confirm", { key: "typography", index: 0, evidence: "Customer confirmed the earlier typography direction" }, state.revision);
+    assert.equal(state.decisions.typography.value, "A clean, modern font that children can read comfortably");
+    assert.equal(state.decisions.typography.source, "user");
+    assert.equal(state.question.key, "palette");
+    state = await runWorkflow(root, "answer", {
+      key: "palette", value: "A calm light palette with one clear accent", source: "user", evidence: "Customer supplied palette"
+    }, state.revision);
+    assert.equal(state.question.key, "layout");
+    assert.equal(state.question.known[0].value, "An open and spacious layout");
+    state = await runWorkflow(root, "reject", { key: "layout", index: 0, evidence: "Customer wants to decide layout after seeing the options" }, state.revision);
+    assert.equal((await runWorkflow(root, "status")).question.key, "layout");
+    assert.equal((await runWorkflow(root, "status")).question.known, undefined);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
 test("client questions stay one-at-a-time and free of implementation jargon", async () => {
   const forbidden = /\b(schema|cli|three\.js|gsap|qa|runtime)\b/i;
   for (const text of Object.values(QUESTIONS)) assert.equal(forbidden.test(text), false, text);

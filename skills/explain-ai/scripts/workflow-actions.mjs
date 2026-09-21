@@ -25,6 +25,14 @@ function currentKey(state) {
   return decisionKeys(state)[0];
 }
 
+function candidateList(state, key) {
+  return state.candidates[key] ?? [];
+}
+
+function clearCandidate(state, key) {
+  delete state.candidates[key];
+}
+
 function concreteDecision(value, source, evidence) {
   return { value: textValue(value, "Decision"), source, evidence: textValue(evidence, "Decision evidence") };
 }
@@ -59,7 +67,13 @@ export async function workflowStatus(root) {
     design: "preview", qa: qaComplete(state) ? "review" : "qa", "design-review": "accept", accepted: "preflight" })[state.stage];
   return { session: state.session, stage: state.stage, revision: state.revision,
     topicReady: blockers.length === 0, blockers, next,
-    ...(missing.length ? { question: { key: missing[0], text: QUESTIONS[missing[0]] } } : {}),
+    ...(missing.length ? { question: {
+      key: missing[0],
+      text: candidateList(state, missing[0]).length
+        ? `Earlier you shared: ${candidateList(state, missing[0]).map(candidate => candidate.value).join("; ")} Should I use this direction?`
+        : QUESTIONS[missing[0]],
+      ...(candidateList(state, missing[0]).length ? { known: candidateList(state, missing[0]) } : {})
+    } } : {}),
     pendingChoice: state.pendingChoice,
     brief: state.brief, preview: state.preview, qa: state.qa,
     pendingChecks: QA_CHECKS.filter(check => !state.qa.some(q => q.check === check && q.result !== "fail")),
@@ -134,6 +148,7 @@ export async function runWorkflow(root, command, input = {}, expected) {
       requireThat(input.key === currentKey(state), "OUT_OF_ORDER", `Answer the current interview area: ${currentKey(state)}`);
       state.decisions[input.key] = concreteDecision(input.value, input.source, input.evidence);
       state.pendingChoice = null;
+      clearCandidate(state, input.key);
       return state;
     },
     propose(state) {
@@ -152,9 +167,11 @@ export async function runWorkflow(root, command, input = {}, expected) {
       requireThat(["recommendation", "options"].includes(state.pendingChoice.mode), "INVALID_TRANSITION", "A clarification must be answered directly");
       const option = state.pendingChoice.options.find(candidate => candidate.id === input.option);
       requireThat(option, "UNKNOWN_OPTION", "Select an option from the current proposal");
-      state.decisions[state.pendingChoice.key] = concreteDecision(option.value, "user",
+      const key = state.pendingChoice.key;
+      state.decisions[key] = concreteDecision(option.value, "user",
         `${textValue(input.evidence, "Selection evidence")} Selected ${option.id}: ${option.value}`);
       state.pendingChoice = null;
+      clearCandidate(state, key);
       return state;
     },
     delegate(state) {
@@ -164,6 +181,42 @@ export async function runWorkflow(root, command, input = {}, expected) {
       requireThat(key, "MISSING_DECISIONS", "All interview areas are already resolved");
       state.decisions[key] = concreteDecision(input.value, "delegated", input.evidence);
       state.pendingChoice = null;
+      clearCandidate(state, key);
+      return state;
+    },
+    carry(state) {
+      atStage(state, ["interview"]);
+      inputFields(input, ["key", "value", "evidence", "sourceKey"]);
+      requireThat(Object.hasOwn(QUESTIONS, input.key) && Object.hasOwn(QUESTIONS, input.sourceKey), "INVALID_INPUT", "Unknown candidate decision key");
+      requireThat(!state.decisions[input.key], "INVALID_TRANSITION", "A resolved decision cannot receive candidate context");
+      requireThat(input.key !== currentKey(state), "INVALID_INPUT", "Carry context to a later unresolved area, not the current question");
+      state.candidates[input.key] ??= [];
+      requireThat(state.candidates[input.key].length < 4, "INVALID_INPUT", "A decision cannot hold more than four candidates");
+      state.candidates[input.key].push({ value: textValue(input.value, "Candidate value"), evidence: textValue(input.evidence, "Candidate evidence"), sourceKey: input.sourceKey });
+      return state;
+    },
+    confirm(state) {
+      atStage(state, ["interview"]);
+      inputFields(input, ["key", "index", "evidence"]);
+      const key = currentKey(state);
+      requireThat(input.key === key, "OUT_OF_ORDER", `Confirm the current interview area: ${key}`);
+      const candidates = candidateList(state, key);
+      requireThat(Number.isInteger(input.index) && input.index >= 0 && input.index < candidates.length, "UNKNOWN_CANDIDATE", "Confirm a candidate from the current decision context");
+      const candidate = candidates[input.index];
+      state.decisions[key] = concreteDecision(candidate.value, "user", `${textValue(input.evidence, "Confirmation evidence")} Earlier evidence: ${candidate.evidence}`);
+      clearCandidate(state, key);
+      state.pendingChoice = null;
+      return state;
+    },
+    reject(state) {
+      atStage(state, ["interview"]);
+      inputFields(input, ["key", "index", "evidence"]);
+      requireThat(Object.hasOwn(QUESTIONS, input.key), "INVALID_INPUT", "Unknown candidate decision key");
+      const candidates = candidateList(state, input.key);
+      requireThat(Number.isInteger(input.index) && input.index >= 0 && input.index < candidates.length, "UNKNOWN_CANDIDATE", "Reject a candidate from the current decision context");
+      candidates.splice(input.index, 1);
+      if (!candidates.length) clearCandidate(state, input.key);
+      state.feedback.push({ stage: state.stage, note: `Rejected candidate for ${input.key}: ${textValue(input.evidence, "Rejection evidence")}`, at: new Date().toISOString() });
       return state;
     },
     brief(state) {
@@ -243,6 +296,7 @@ export async function runWorkflow(root, command, input = {}, expected) {
       state.feedback.push({ stage: state.stage, note: textValue(input.note, "Revision feedback"), at: new Date().toISOString() });
       state.preview = null; state.qa = []; state.acceptance = null;
       state.pendingChoice = null;
+      state.candidates = {};
       state.stage = input.target === "brief" ? "interview" : "design";
       if (input.target === "brief") state.brief = null;
       return state;

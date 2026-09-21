@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { validateData } from "../skills/explain-ai/scripts/contracts.mjs";
 
 export function draftState() {
-  return { schemaVersion: "1.1.0", session: "fixture", revision: 0,
-    stage: "interview", decisions: {}, pendingChoice: null, brief: null, preview: null,
+  return { schemaVersion: "1.2.0", session: "fixture", revision: 0,
+    stage: "interview", decisions: {}, pendingChoice: null, candidates: {}, brief: null, preview: null,
     qa: [], feedback: [], acceptance: null };
 }
 

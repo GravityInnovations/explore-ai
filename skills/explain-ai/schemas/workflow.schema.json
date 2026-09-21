@@ -5,7 +5,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.1.0"
+      "const": "1.2.0"
     },
     "session": {
       "type": "string",
@@ -304,6 +304,21 @@
         { "type": "null" }
       ]
     },
+    "candidates": {
+      "type": "object",
+      "properties": {
+        "audience": { "$ref": "#/$defs/candidateList" },
+        "brand": { "$ref": "#/$defs/candidateList" },
+        "typography": { "$ref": "#/$defs/candidateList" },
+        "palette": { "$ref": "#/$defs/candidateList" },
+        "layout": { "$ref": "#/$defs/candidateList" },
+        "visuals": { "$ref": "#/$defs/candidateList" },
+        "motion": { "$ref": "#/$defs/candidateList" },
+        "accessibility": { "$ref": "#/$defs/candidateList" },
+        "constraints": { "$ref": "#/$defs/candidateList" }
+      },
+      "additionalProperties": false
+    },
     "brief": {
       "anyOf": [
         {
@@ -500,11 +515,29 @@
     "stage",
     "decisions",
     "pendingChoice",
+    "candidates",
     "brief",
     "preview",
     "qa",
     "feedback",
     "acceptance"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "candidateList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": { "type": "string", "minLength": 1 },
+          "evidence": { "type": "string", "minLength": 1 },
+          "sourceKey": { "enum": ["audience", "brand", "typography", "palette", "layout", "visuals", "motion", "accessibility", "constraints"] }
+        },
+        "required": ["value", "evidence", "sourceKey"],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 4
+    }
+  }
 }

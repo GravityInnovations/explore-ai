@@ -2,8 +2,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const DATA_CONTRACT_VERSION = "2.0.0";
-export const WORKFLOW_CONTRACT_VERSION = "1.1.0";
-export const LEGACY_WORKFLOW_CONTRACT_VERSIONS = Object.freeze(["1.0.0"]);
+export const WORKFLOW_CONTRACT_VERSION = "1.2.0";
+export const LEGACY_WORKFLOW_CONTRACT_VERSIONS = Object.freeze(["1.0.0", "1.1.0"]);
 export const LEGACY_DATA_CONTRACT_VERSIONS = Object.freeze(["1.0.0"]);
 export const DATA_CONTRACT_KINDS = Object.freeze([
   "project",

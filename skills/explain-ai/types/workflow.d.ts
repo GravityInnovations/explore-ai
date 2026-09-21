@@ -1,7 +1,161 @@
 /* Generated from JSON Schema. Run npm run types:generate; do not edit. */
 
+/**
+ * @minItems 1
+ * @maxItems 4
+ */
+export type CandidateList =
+  | [
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      }
+    ]
+  | [
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      },
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      }
+    ]
+  | [
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      },
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      },
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      }
+    ]
+  | [
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      },
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      },
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      },
+      {
+        value: string;
+        evidence: string;
+        sourceKey:
+          | "audience"
+          | "brand"
+          | "typography"
+          | "palette"
+          | "layout"
+          | "visuals"
+          | "motion"
+          | "accessibility"
+          | "constraints";
+      }
+    ];
+
 export interface DesignerWorkflow {
-  schemaVersion: "1.1.0";
+  schemaVersion: "1.2.0";
   session: string;
   revision: number;
   stage: "interview" | "brief-review" | "design" | "qa" | "design-review" | "accepted";
@@ -55,6 +209,17 @@ export interface DesignerWorkflow {
   pendingChoice: {
     [k: string]: unknown;
   } | null;
+  candidates: {
+    audience?: CandidateList;
+    brand?: CandidateList;
+    typography?: CandidateList;
+    palette?: CandidateList;
+    layout?: CandidateList;
+    visuals?: CandidateList;
+    motion?: CandidateList;
+    accessibility?: CandidateList;
+    constraints?: CandidateList;
+  };
   brief: {
     summary: string;
     fingerprint: string;

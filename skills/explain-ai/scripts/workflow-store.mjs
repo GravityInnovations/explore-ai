@@ -18,7 +18,7 @@ export const qaComplete = state => QA_CHECKS.every(check => state.qa.some(q => q
 
 export function newState() {
   return { schemaVersion: WORKFLOW_CONTRACT_VERSION, session: randomUUID(), revision: 0,
-    stage: "interview", decisions: {}, pendingChoice: null, brief: null, preview: null,
+    stage: "interview", decisions: {}, pendingChoice: null, candidates: {}, brief: null, preview: null,
     qa: [], feedback: [], acceptance: null };
 }
 
