@@ -42,6 +42,8 @@ Decision keys: `audience`, `brand`, `typography`, `palette`, `layout`, `visuals`
 
 `candidates` preserves relevant customer evidence for later unresolved keys. Candidate context is not a decision. When that key becomes current, surface the known context; use `confirm` to promote an exact candidate, `reject` to remove one, or `answer` to supersede it with a new concrete choice. Do not silently resolve conflicts or ask the generic question again when relevant evidence already exists.
 
+The current question status also exposes ordinary-language `choices` and an `answerMode` in the installed action definition. Present those labels to the customer; do not expose internal command names or implementation vocabulary. Numeric/letter choices must be converted into their concrete labels before storage.
+
 Example answer:
 
 ```json
