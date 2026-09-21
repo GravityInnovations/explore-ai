@@ -2,7 +2,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const DATA_CONTRACT_VERSION = "2.0.0";
-export const WORKFLOW_CONTRACT_VERSION = "1.0.0";
+export const WORKFLOW_CONTRACT_VERSION = "1.1.0";
+export const LEGACY_WORKFLOW_CONTRACT_VERSIONS = Object.freeze(["1.0.0"]);
 export const LEGACY_DATA_CONTRACT_VERSIONS = Object.freeze(["1.0.0"]);
 export const DATA_CONTRACT_KINDS = Object.freeze([
   "project",
@@ -11,6 +12,14 @@ export const DATA_CONTRACT_KINDS = Object.freeze([
   "runtime",
   "lesson",
 ]);
+
+export function workflowMigrationRequiredError(actual) {
+  return {
+    path: "/schemaVersion",
+    code: "WORKFLOW_MIGRATION_REQUIRED",
+    message: `Unsupported workflow contract version ${JSON.stringify(actual)}; expected ${JSON.stringify(WORKFLOW_CONTRACT_VERSION)}. Existing workflow state must be restarted or migrated explicitly before continuing.`,
+  };
+}
 
 export function migrationCommand(project = "<project>") {
   const script = fileURLToPath(new URL("migrate.mjs", import.meta.url));

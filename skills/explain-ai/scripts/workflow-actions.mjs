@@ -14,11 +14,37 @@ export const QUESTIONS = {
   constraints: "What other requirements or constraints should the design respect?",
 };
 
+const DECISION_SOURCES = ["user", "delegated", "proposed"];
+const PENDING_MODES = ["recommendation", "options", "clarification"];
+
+function decisionKeys(state) {
+  return Object.keys(QUESTIONS).filter(key => !state.decisions[key]);
+}
+
+function currentKey(state) {
+  return decisionKeys(state)[0];
+}
+
+function concreteDecision(value, source, evidence) {
+  return { value: textValue(value, "Decision"), source, evidence: textValue(evidence, "Decision evidence") };
+}
+
+function validateOptions(mode, options) {
+  requireThat(Array.isArray(options), "INVALID_INPUT", "Options must be an array");
+  requireThat(options.every(option => option && typeof option === "object" && !Array.isArray(option)), "INVALID_INPUT", "Each option must be an object");
+  requireThat(options.every(option => typeof option.id === "string" && option.id.trim() && typeof option.value === "string" && option.value.trim() &&
+    typeof option.rationale === "string" && option.rationale.trim()), "INVALID_INPUT", "Each option needs an id, value and rationale");
+  requireThat(new Set(options.map(option => option.id)).size === options.length, "INVALID_INPUT", "Option ids must be unique");
+  const bounds = { recommendation: [1, 1], options: [2, 4], clarification: [0, 0] }[mode];
+  requireThat(options.length >= bounds[0] && options.length <= bounds[1], "INVALID_INPUT", `Invalid option count for ${mode}`);
+  return options.map(option => ({ id: option.id.trim(), value: option.value.trim(), rationale: option.rationale.trim() }));
+}
+
 export async function workflowStatus(root) {
   const state = await loadState(root);
   if (!state) return { stage: "unstarted", revision: null, topicReady: false,
     blockers: ["Start the designer interview; existing profiles are unreviewed"], next: "start" };
-  const missing = Object.keys(QUESTIONS).filter(k => !state.decisions[k]);
+  const missing = decisionKeys(state);
   let current = true;
   if (state.preview) {
     try { current = (await snapshot(root, state.preview.paths)) === state.preview.fingerprint; }
@@ -26,6 +52,7 @@ export async function workflowStatus(root) {
   }
   const blockers = [];
   if (missing.length) blockers.push(`Unresolved decisions: ${missing.join(", ")}`);
+  if (state.pendingChoice) blockers.push(`Pending ${state.pendingChoice.mode} interaction for ${state.pendingChoice.key}`);
   if (state.stage !== "accepted") blockers.push("The customer has not accepted this design revision");
   if (!current) blockers.push("Preview files changed or are missing; revise, rerun QA and request acceptance again");
   const next = !current ? "revise" : ({ interview: missing.length ? "answer" : "brief", "brief-review": "agree",
@@ -33,6 +60,7 @@ export async function workflowStatus(root) {
   return { session: state.session, stage: state.stage, revision: state.revision,
     topicReady: blockers.length === 0, blockers, next,
     ...(missing.length ? { question: { key: missing[0], text: QUESTIONS[missing[0]] } } : {}),
+    pendingChoice: state.pendingChoice,
     brief: state.brief, preview: state.preview, qa: state.qa,
     pendingChecks: QA_CHECKS.filter(check => !state.qa.some(q => q.check === check && q.result !== "fail")),
     decisions: state.decisions, acceptance: state.acceptance };
@@ -102,16 +130,48 @@ export async function runWorkflow(root, command, input = {}, expected) {
       atStage(state, ["interview"]);
       inputFields(input, ["key", "value", "source", "evidence"]);
       requireThat(Object.hasOwn(QUESTIONS, input.key), "INVALID_INPUT", "Unknown interview decision");
-      requireThat(["user", "delegated", "proposed"].includes(input.source), "INVALID_INPUT", "Identify user, delegated or proposed decisions");
-      state.decisions[input.key] = { value: textValue(input.value, "Answer"), source: input.source,
-        evidence: textValue(input.evidence, "Decision evidence") };
+      requireThat(DECISION_SOURCES.includes(input.source), "INVALID_INPUT", "Identify user, delegated or proposed decisions");
+      requireThat(input.key === currentKey(state), "OUT_OF_ORDER", `Answer the current interview area: ${currentKey(state)}`);
+      state.decisions[input.key] = concreteDecision(input.value, input.source, input.evidence);
+      state.pendingChoice = null;
+      return state;
+    },
+    propose(state) {
+      atStage(state, ["interview"]);
+      inputFields(input, ["key", "mode", "options"]);
+      requireThat(Object.hasOwn(QUESTIONS, input.key), "INVALID_INPUT", "Unknown interview decision");
+      requireThat(PENDING_MODES.includes(input.mode), "INVALID_INPUT", "Invalid pending interaction mode");
+      requireThat(input.key === currentKey(state), "OUT_OF_ORDER", `Propose for the current interview area: ${currentKey(state)}`);
+      state.pendingChoice = { key: input.key, mode: input.mode, options: validateOptions(input.mode, input.options) };
+      return state;
+    },
+    select(state) {
+      atStage(state, ["interview"]);
+      inputFields(input, ["option", "evidence"]);
+      requireThat(state.pendingChoice, "NO_PENDING_CHOICE", "Create a recommendation or options proposal first");
+      requireThat(["recommendation", "options"].includes(state.pendingChoice.mode), "INVALID_TRANSITION", "A clarification must be answered directly");
+      const option = state.pendingChoice.options.find(candidate => candidate.id === input.option);
+      requireThat(option, "UNKNOWN_OPTION", "Select an option from the current proposal");
+      state.decisions[state.pendingChoice.key] = concreteDecision(option.value, "user",
+        `${textValue(input.evidence, "Selection evidence")} Selected ${option.id}: ${option.value}`);
+      state.pendingChoice = null;
+      return state;
+    },
+    delegate(state) {
+      atStage(state, ["interview"]);
+      inputFields(input, ["value", "evidence"]);
+      const key = currentKey(state);
+      requireThat(key, "MISSING_DECISIONS", "All interview areas are already resolved");
+      state.decisions[key] = concreteDecision(input.value, "delegated", input.evidence);
+      state.pendingChoice = null;
       return state;
     },
     brief(state) {
       atStage(state, ["interview"]);
       inputFields(input, ["summary"]);
-      const missing = Object.keys(QUESTIONS).filter(k => !state.decisions[k]);
+      const missing = decisionKeys(state);
       requireThat(!missing.length, "MISSING_DECISIONS", `Resolve these decisions first: ${missing.join(", ")}`);
+      requireThat(!state.pendingChoice, "PENDING_CHOICE", "Resolve the pending recommendation/options interaction first");
       state.brief = { summary: textValue(input.summary, "Brief"), fingerprint: "", agreement: null };
       state.brief.fingerprint = briefDigest(state);
       state.stage = "brief-review";
@@ -182,6 +242,7 @@ export async function runWorkflow(root, command, input = {}, expected) {
       requireThat(input.target === "brief" || state.brief?.agreement, "INVALID_TRANSITION", "Agree the brief before revising its design");
       state.feedback.push({ stage: state.stage, note: textValue(input.note, "Revision feedback"), at: new Date().toISOString() });
       state.preview = null; state.qa = []; state.acceptance = null;
+      state.pendingChoice = null;
       state.stage = input.target === "brief" ? "interview" : "design";
       if (input.target === "brief") state.brief = null;
       return state;

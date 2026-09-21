@@ -2,6 +2,7 @@ import { mkdir, open, readFile, rename, unlink, readdir, lstat } from "node:fs/p
 import { createHash, randomUUID } from "node:crypto";
 import { resolveLocal } from "./paths.mjs";
 import { validateData } from "./contracts.mjs";
+import { WORKFLOW_CONTRACT_VERSION, workflowMigrationRequiredError } from "./contract-versions.mjs";
 
 export class WorkflowError extends Error {
   constructor(code, message) { super(message); this.code = code; }
@@ -16,8 +17,8 @@ export const QA_CHECKS = ["contracts", "desktop", "mobile", "labels", "keyboard"
 export const qaComplete = state => QA_CHECKS.every(check => state.qa.some(q => q.check === check && q.result !== "fail"));
 
 export function newState() {
-  return { schemaVersion: "1.0.0", session: randomUUID(), revision: 0,
-    stage: "interview", decisions: {}, brief: null, preview: null,
+  return { schemaVersion: WORKFLOW_CONTRACT_VERSION, session: randomUUID(), revision: 0,
+    stage: "interview", decisions: {}, pendingChoice: null, brief: null, preview: null,
     qa: [], feedback: [], acceptance: null };
 }
 
@@ -51,6 +52,10 @@ export async function loadState(root) {
     const raw = await readFile(await localFile(root, STATE_PATH), "utf8");
     let state;
     try { state = JSON.parse(raw); } catch { throw new WorkflowError("INVALID_STATE", "Malformed workflow JSON; preserve and repair the record"); }
+    if (state?.schemaVersion !== WORKFLOW_CONTRACT_VERSION) {
+      const error = workflowMigrationRequiredError(state?.schemaVersion);
+      throw new WorkflowError(error.code, error.message);
+    }
     assertState(state);
     return state;
   } catch (e) { if (e.code === "ENOENT") return null; throw e; }

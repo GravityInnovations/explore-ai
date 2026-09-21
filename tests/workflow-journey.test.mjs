@@ -46,20 +46,69 @@ test("brand onboarding records supplied, deferred or reusable logo decisions wit
   try {
     let state = await runWorkflow(root, "start");
     state = await runWorkflow(root, "answer", {
-      key: "brand",
-      value: "Use the supplied logo at brand/logo.svg; if unavailable, ask before using a temporary wordmark.",
-      source: "user",
-      evidence: "Client supplied the logo reference during brand discovery",
+      key: "audience", value: "Visitors evaluating the showcase", source: "user", evidence: "Client supplied audience"
     }, state.revision);
-    assert.equal((await runWorkflow(root, "status")).question.key, "audience");
-    assert.equal((await runWorkflow(root, "status")).decisions.brand.source, "user");
     state = await runWorkflow(root, "answer", {
       key: "brand",
       value: "Client explicitly defers the logo and approves a temporary text wordmark.",
       source: "user",
       evidence: "Client explicitly chose deferment for this revision",
     }, state.revision);
+    assert.equal((await runWorkflow(root, "status")).question.key, "typography");
+    assert.equal((await runWorkflow(root, "status")).decisions.brand.source, "user");
     assert.match((await runWorkflow(root, "status")).decisions.brand.value, /defers/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test("recommendations and options stay pending until the customer makes a concrete choice", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "workflow-resolution-"));
+  try {
+    let state = await runWorkflow(root, "start");
+    for (const [key, value] of [["audience", "Teachers and developers"], ["brand", "Minimal and modern"]]) {
+      state = await runWorkflow(root, "answer", { key, value, source: "user", evidence: "Customer supplied a concrete direction" }, state.revision);
+    }
+    assert.equal(state.question.key, "typography");
+    state = await runWorkflow(root, "propose", {
+      key: "typography", mode: "recommendation",
+      options: [{ id: "nunito", value: "Nunito Sans for a friendly, modern and readable interface", rationale: "Rounded details remain approachable without losing clarity." }]
+    }, state.revision);
+    assert.equal(state.question.key, "typography");
+    assert.equal(state.pendingChoice.mode, "recommendation");
+    assert.equal(state.decisions.typography, undefined);
+    await assert.rejects(runWorkflow(root, "brief", { summary: "Cannot submit yet" }, state.revision), { code: "MISSING_DECISIONS" });
+    state = await runWorkflow(root, "select", { option: "nunito", evidence: "Customer accepted the recommendation" }, state.revision);
+    assert.equal(state.decisions.typography.value, "Nunito Sans for a friendly, modern and readable interface");
+    assert.equal(state.question.key, "palette");
+    state = await runWorkflow(root, "propose", {
+      key: "palette", mode: "options",
+      options: [
+        { id: "bright", value: "Bright playful primary colours with a calm neutral background", rationale: "Energetic while keeping the page readable." },
+        { id: "calm", value: "Calm blue-green accents on a clean light background", rationale: "Modern and focused for longer explanations." },
+      ]
+    }, state.revision);
+    assert.equal(state.question.key, "palette");
+    assert.deepEqual(state.pendingChoice.options.map(option => option.id), ["bright", "calm"]);
+    await assert.rejects(runWorkflow(root, "select", { option: "missing", evidence: "No such choice" }, state.revision), { code: "UNKNOWN_OPTION" });
+    state = await runWorkflow(root, "select", { option: "calm", evidence: "Customer selected the calm direction" }, state.revision);
+    assert.equal(state.question.key, "layout");
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test("delegation stores a concrete choice and proposals cannot target another area", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "workflow-delegation-"));
+  try {
+    let state = await runWorkflow(root, "start");
+    await assert.rejects(runWorkflow(root, "propose", {
+      key: "palette", mode: "options", options: [
+        { id: "a", value: "A", rationale: "A" }, { id: "b", value: "B", rationale: "B" }
+      ]
+    }, state.revision), { code: "OUT_OF_ORDER" });
+    state = await runWorkflow(root, "delegate", {
+      value: "A general-audience showcase with a clear educational purpose", evidence: "Customer asked the designer to choose the audience direction"
+    }, state.revision);
+    assert.equal(state.decisions.audience.source, "delegated");
+    assert.notEqual(state.decisions.audience.value, "choose for me");
+    assert.equal(state.question.key, "brand");
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 

@@ -1,7 +1,7 @@
 /* Generated from JSON Schema. Run npm run types:generate; do not edit. */
 
 export interface DesignerWorkflow {
-  schemaVersion: "1.0.0";
+  schemaVersion: "1.1.0";
   session: string;
   revision: number;
   stage: "interview" | "brief-review" | "design" | "qa" | "design-review" | "accepted";
@@ -52,6 +52,9 @@ export interface DesignerWorkflow {
       evidence: string;
     };
   };
+  pendingChoice: {
+    [k: string]: unknown;
+  } | null;
   brief: {
     summary: string;
     fingerprint: string;

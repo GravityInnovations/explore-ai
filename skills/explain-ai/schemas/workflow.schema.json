@@ -5,7 +5,7 @@
   "type": "object",
   "properties": {
     "schemaVersion": {
-      "const": "1.0.0"
+      "const": "1.1.0"
     },
     "session": {
       "type": "string",
@@ -266,6 +266,44 @@
       "required": [],
       "additionalProperties": false
     },
+    "pendingChoice": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "key": {
+              "enum": ["audience", "brand", "typography", "palette", "layout", "visuals", "motion", "accessibility", "constraints"]
+            },
+            "mode": {
+              "enum": ["recommendation", "options", "clarification"]
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string", "minLength": 1 },
+                  "value": { "type": "string", "minLength": 1 },
+                  "rationale": { "type": "string", "minLength": 1 }
+                },
+                "required": ["id", "value", "rationale"],
+                "additionalProperties": false
+              },
+              "maxItems": 4,
+              "uniqueItems": true
+            }
+          },
+          "required": ["key", "mode", "options"],
+          "additionalProperties": false,
+          "allOf": [
+            { "if": { "properties": { "mode": { "const": "recommendation" } } }, "then": { "properties": { "options": { "type": "array", "minItems": 1, "maxItems": 1 } } } },
+            { "if": { "properties": { "mode": { "const": "options" } } }, "then": { "properties": { "options": { "type": "array", "minItems": 2, "maxItems": 4 } } } },
+            { "if": { "properties": { "mode": { "const": "clarification" } } }, "then": { "properties": { "options": { "type": "array", "maxItems": 0 } } } }
+          ]
+        },
+        { "type": "null" }
+      ]
+    },
     "brief": {
       "anyOf": [
         {
@@ -461,6 +499,7 @@
     "revision",
     "stage",
     "decisions",
+    "pendingChoice",
     "brief",
     "preview",
     "qa",

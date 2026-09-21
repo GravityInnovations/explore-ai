@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { validateData } from "../skills/explain-ai/scripts/contracts.mjs";
 
 export function draftState() {
-  return { schemaVersion: "1.0.0", session: "fixture", revision: 0,
-    stage: "interview", decisions: {}, brief: null, preview: null,
+  return { schemaVersion: "1.1.0", session: "fixture", revision: 0,
+    stage: "interview", decisions: {}, pendingChoice: null, brief: null, preview: null,
     qa: [], feedback: [], acceptance: null };
 }
 
@@ -14,6 +14,7 @@ test("workflow contracts reject unknown stages, decisions and evidence shapes", 
     { stage: "ready" }, { revision: -1 }, { force: true },
     { decisions: { audience: { value: "Everyone", source: "assumed", evidence: "guess" } } },
     { decisions: { logo: { value: "A", source: "user", evidence: "A" } } },
+    { pendingChoice: { key: "palette", mode: "options", options: [{ id: "only", value: "One", rationale: "Only one" }] } },
     { acceptance: { fingerprint: "not-a-hash", statement: "", at: "today" } },
   ]) assert.ok(validateData("workflow", { ...draftState(), ...change }).length);
 });
